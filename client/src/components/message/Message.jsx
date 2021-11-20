@@ -1,7 +1,8 @@
 import React from 'react'
+import { format } from 'timeago.js'
 import './message.css'
 
-const Message = ({ own }) => {
+const Message = ({ message, own }) => {
   return (
     <div className={`message ${own && 'own'}`}>
       <div className='messageTop'>
@@ -10,14 +11,9 @@ const Message = ({ own }) => {
           src='https://www.stepstherapy.com.au/wp-content/uploads/2018/10/Yazmin-profile-picture-square.jpg'
           alt='profileImage'
         />
-        <p className='messageText'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
+        <p className='messageText'>{message.text}</p>
       </div>
-      <div className='messageBottom'>1 hour ago</div>
+      <div className='messageBottom'>{format(message.createdAt)}</div>
     </div>
   )
 }

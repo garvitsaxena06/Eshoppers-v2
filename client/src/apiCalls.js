@@ -17,3 +17,11 @@ export const getUserById = async (id) => {
 export const getConversations = async (id) => {
   return await axios.get('/conversations/' + id)
 }
+
+export const getMessages = async (id) => {
+  return await axios.get('/messages/' + id)
+}
+
+export const sendNewMessage = async (payload) => {
+  return await axios.post('/messages', payload)
+}

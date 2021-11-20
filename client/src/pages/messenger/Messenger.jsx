@@ -5,10 +5,13 @@ import Conversation from '../../components/conversation/Conversation'
 import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
 import { AuthContext } from '../../context/AuthContext'
-import { getConversations } from '../../apiCalls'
+import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
 
 const Messenger = () => {
   const [conversations, setConversations] = useState([])
+  const [currentChat, setCurrentChat] = useState(null)
+  const [messages, setMessages] = useState([])
+  const [newMessage, setNewMessage] = useState('')
   const { user } = useContext(AuthContext)
 
   useEffect(() => {
@@ -18,6 +21,28 @@ const Messenger = () => {
       })
       .catch((err) => console.log(err))
   }, [user._id])
+
+  useEffect(() => {
+    getMessages(currentChat?._id)
+      .then((res) => {
+        setMessages(res.data)
+      })
+      .catch((err) => console.log(err))
+  }, [currentChat])
+
+  const sendMessageHandler = (e) => {
+    e.preventDefault()
+    sendNewMessage({
+      conversationId: currentChat._id,
+      sender: user._id,
+      text: newMessage,
+    })
+      .then((res) => {
+        console.log('Message sent')
+        setMessages([...messages, res.data])
+      })
+      .catch((err) => console.log(err))
+  }
 
   return (
     <>
@@ -31,38 +56,41 @@ const Messenger = () => {
               className='chatMenuInput'
             />
             {conversations.map((el) => (
-              <Conversation conversation={el} currentUser={user} />
+              <div onClick={() => setCurrentChat(el)}>
+                <Conversation conversation={el} currentUser={user} />
+              </div>
             ))}
           </div>
         </div>
         <div className='chatBox'>
           <div className='chatBoxWrapper'>
-            <div className='chatBoxTop'>
-              <Message />
-              <Message />
-              <Message own={true} />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-            </div>
-            <div className='chatBoxBottom'>
-              <textarea
-                className='chatMessageInput'
-                placeholder='Write something...'
-              ></textarea>
-              <button className='chatSubmitBtn'>Send</button>
-            </div>
+            {currentChat ? (
+              <>
+                <div className='chatBoxTop'>
+                  {messages.map((el) => (
+                    <Message message={el} own={el.sender === user._id} />
+                  ))}
+                </div>
+                <div className='chatBoxBottom'>
+                  <textarea
+                    className='chatMessageInput'
+                    placeholder='Write something...'
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    value={newMessage}
+                  ></textarea>
+                  <button
+                    className='chatSubmitBtn'
+                    onClick={sendMessageHandler}
+                  >
+                    Send
+                  </button>
+                </div>
+              </>
+            ) : (
+              <span className='noConversationText'>
+                Open a conversation to start a chat.
+              </span>
+            )}
           </div>
         </div>
         <div className='chatOnline'>
