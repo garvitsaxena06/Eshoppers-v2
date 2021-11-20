@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import './messenger.css'
 import Topbar from '../../components/topbar/Topbar'
 import Conversation from '../../components/conversation/Conversation'
 import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
+import { AuthContext } from '../../context/AuthContext'
+import { getConversations } from '../../apiCalls'
 
 const Messenger = () => {
+  const [conversations, setConversations] = useState([])
+  const { user } = useContext(AuthContext)
+
+  useEffect(() => {
+    getConversations(user._id)
+      .then((res) => {
+        setConversations(res.data)
+      })
+      .catch((err) => console.log(err))
+  }, [user._id])
+
   return (
     <>
       <Topbar />
@@ -17,10 +30,9 @@ const Messenger = () => {
               placeholder='Search for friends'
               className='chatMenuInput'
             />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
+            {conversations.map((el) => (
+              <Conversation conversation={el} currentUser={user} />
+            ))}
           </div>
         </div>
         <div className='chatBox'>
