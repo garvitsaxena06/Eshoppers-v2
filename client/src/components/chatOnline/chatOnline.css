@@ -24,7 +24,11 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: limegreen;
+  background-color: red;
   top: 2px;
   right: 2px;
+}
+
+.chatOnlineBadge.online {
+  background-color: limegreen;
 }

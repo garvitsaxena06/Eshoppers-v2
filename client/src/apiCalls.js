@@ -25,3 +25,11 @@ export const getMessages = async (id) => {
 export const sendNewMessage = async (payload) => {
   return await axios.post('/messages', payload)
 }
+
+export const getFriends = async (id) => {
+  return await axios.get('/users/friends/' + id)
+}
+
+export const getConversationByOfTwoUsers = async (us1, us2) => {
+  return await axios.get(`/conversations/find/${us1}/${us2}`)
+}

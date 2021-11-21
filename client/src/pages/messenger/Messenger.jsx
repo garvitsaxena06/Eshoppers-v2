@@ -14,6 +14,7 @@ const Messenger = () => {
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [arrivalMessage, setArrivalMessage] = useState(null)
+  const [onlineUsers, setOnlineUsers] = useState([])
   const socket = useRef()
   const { user } = useContext(AuthContext)
   const scrollRef = useRef()
@@ -38,7 +39,9 @@ const Messenger = () => {
   useEffect(() => {
     socket.current.emit('addUser', user._id)
     socket.current.on('getUsers', (users) => {
-      console.log({ users })
+      setOnlineUsers(
+        user.followings.filter((el) => users.some((u) => u.userId === el))
+      )
     })
   }, [user])
 
@@ -60,23 +63,25 @@ const Messenger = () => {
 
   const sendMessageHandler = (e) => {
     e.preventDefault()
-    sendNewMessage({
-      conversationId: currentChat._id,
-      sender: user._id,
-      text: newMessage,
-    })
-      .then((res) => {
-        setNewMessage('')
-        setMessages([...messages, res.data])
-
-        const receiverId = currentChat.members?.find((el) => el !== user._id)
-        socket.current.emit('sendMessage', {
-          senderId: user._id,
-          receiverId,
-          text: newMessage,
-        })
+    if (newMessage) {
+      sendNewMessage({
+        conversationId: currentChat._id,
+        sender: user._id,
+        text: newMessage,
       })
-      .catch((err) => console.log(err))
+        .then((res) => {
+          setNewMessage('')
+          setMessages([...messages, res.data])
+
+          const receiverId = currentChat.members?.find((el) => el !== user._id)
+          socket.current.emit('sendMessage', {
+            senderId: user._id,
+            receiverId,
+            text: newMessage,
+          })
+        })
+        .catch((err) => console.log(err))
+    }
   }
 
   useEffect(() => {
@@ -136,7 +141,11 @@ const Messenger = () => {
         </div>
         <div className='chatOnline'>
           <div className='chatOnlineWrapper'>
-            <ChatOnline />
+            <ChatOnline
+              onlineUsers={onlineUsers}
+              currentId={user._id}
+              setCurrentChat={setCurrentChat}
+            />
           </div>
         </div>
       </div>
