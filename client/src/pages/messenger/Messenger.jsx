@@ -6,14 +6,41 @@ import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
 import { AuthContext } from '../../context/AuthContext'
 import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
+import { io } from 'socket.io-client'
 
 const Messenger = () => {
   const [conversations, setConversations] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
+  const [arrivalMessage, setArrivalMessage] = useState(null)
+  const socket = useRef()
   const { user } = useContext(AuthContext)
   const scrollRef = useRef()
+
+  useEffect(() => {
+    socket.current = io('ws://localhost:8900')
+    socket.current.on('getMessage', ({ senderId, text }) => {
+      setArrivalMessage({
+        sender: senderId,
+        text,
+        createdAt: Date.now(),
+      })
+    })
+  }, [])
+
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage])
+  }, [arrivalMessage, currentChat])
+
+  useEffect(() => {
+    socket.current.emit('addUser', user._id)
+    socket.current.on('getUsers', (users) => {
+      console.log({ users })
+    })
+  }, [user])
 
   useEffect(() => {
     getConversations(user._id)
@@ -41,6 +68,13 @@ const Messenger = () => {
       .then((res) => {
         setNewMessage('')
         setMessages([...messages, res.data])
+
+        const receiverId = currentChat.members?.find((el) => el !== user._id)
+        socket.current.emit('sendMessage', {
+          senderId: user._id,
+          receiverId,
+          text: newMessage,
+        })
       })
       .catch((err) => console.log(err))
   }
@@ -60,8 +94,8 @@ const Messenger = () => {
               placeholder='Search for friends'
               className='chatMenuInput'
             />
-            {conversations.map((el) => (
-              <div onClick={() => setCurrentChat(el)}>
+            {conversations.map((el, i) => (
+              <div key={i} onClick={() => setCurrentChat(el)}>
                 <Conversation conversation={el} currentUser={user} />
               </div>
             ))}
@@ -72,8 +106,8 @@ const Messenger = () => {
             {currentChat ? (
               <>
                 <div className='chatBoxTop'>
-                  {messages.map((el) => (
-                    <div ref={scrollRef}>
+                  {messages.map((el, i) => (
+                    <div key={i} ref={scrollRef}>
                       <Message message={el} own={el.sender === user._id} />
                     </div>
                   ))}
