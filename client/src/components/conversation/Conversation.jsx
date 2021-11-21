@@ -7,7 +7,7 @@ const Conversation = ({ conversation, currentUser }) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
   useEffect(() => {
-    const friendId = conversation.member.find((el) => el !== currentUser._id)
+    const friendId = conversation.members?.find((el) => el !== currentUser._id)
 
     getUserById(friendId)
       .then((res) => {
@@ -20,10 +20,14 @@ const Conversation = ({ conversation, currentUser }) => {
     <div className='conversation'>
       <img
         className='conversationImg'
-        src={user.profilePicture ?? PF + 'person/noAvatar.png'}
+        src={
+          user?.profilePicture
+            ? user?.profilePicture
+            : PF + 'person/noAvatar.png'
+        }
         alt='profileImage'
       />
-      <span className='conversationName'>{user.username}</span>
+      <span className='conversationName'>{user?.username}</span>
     </div>
   )
 }

@@ -4,7 +4,7 @@ import './message.css'
 
 const Message = ({ message, own }) => {
   return (
-    <div className={`message ${own && 'own'}`}>
+    <div className={`message${own ? ' own' : ''}`}>
       <div className='messageTop'>
         <img
           className='messageImg'
