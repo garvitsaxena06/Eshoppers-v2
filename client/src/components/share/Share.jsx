@@ -10,7 +10,7 @@ import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 
-export default function Share() {
+export default function Share({fetchPosts}) {
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const desc = useRef();
@@ -35,7 +35,8 @@ export default function Share() {
     }
     try {
       await axios.post("/posts", newPost);
-      window.location.reload();
+      fetchPosts();
+      // window.location.reload();
     } catch (err) {}
   };
 
@@ -78,7 +79,7 @@ export default function Share() {
                 onChange={(e) => setFile(e.target.files[0])}
               />
             </label>
-            <div className="shareOption">
+            {/* <div className="shareOption">
               <Label htmlColor="blue" className="shareIcon" />
               <span className="shareOptionText">Tag</span>
             </div>
@@ -89,7 +90,7 @@ export default function Share() {
             <div className="shareOption">
               <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
               <span className="shareOptionText">Feelings</span>
-            </div>
+            </div> */}
           </div>
           <button className="shareButton" type="submit">
             Share

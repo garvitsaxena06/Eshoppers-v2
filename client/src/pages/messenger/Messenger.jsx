@@ -37,7 +37,7 @@ const Messenger = () => {
   }, [arrivalMessage, currentChat])
 
   useEffect(() => {
-    socket.current.emit('addUser', user._id)
+    // socket.current.emit('addUser', user._id)
     socket.current.on('getUsers', (users) => {
       setOnlineUsers(
         user.followings.filter((el) => users.some((u) => u.userId === el))
