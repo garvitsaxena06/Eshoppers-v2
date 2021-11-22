@@ -1,0 +1,9 @@
+.message-ctaBtn {
+  position: fixed !important;
+  bottom: 14px;
+  right: 14px;
+}
+
+a.message-ctaBtn:hover {
+  color: #bcc7d7;
+}

@@ -94,3 +94,60 @@
   object-fit: cover;
   cursor: pointer;
 }
+
+.searchbar .MuiAutocomplete-root {
+  width: 100%;
+  padding-left: 8px;
+}
+
+.searchbar .MuiAutocomplete-root .MuiFormControl-root label {
+  font-size: 12px;
+}
+
+.searchbar .MuiAutocomplete-root .MuiInput-underline:before,
+.searchbar .MuiAutocomplete-root .MuiInput-underline:after {
+  border-bottom: none;
+}
+
+.searchbar
+  .MuiAutocomplete-root
+  .MuiInput-underline:hover:not(.Mui-disabled):before {
+  border-bottom: none;
+}
+
+.searchbar .MuiAutocomplete-root .MuiInput-underline.Mui-focused:after {
+  transform: none;
+}
+
+.searchbar .MuiAutocomplete-root label + .MuiInput-formControl {
+  margin-top: 0;
+}
+
+.searchbar
+  .MuiAutocomplete-root
+  .MuiAutocomplete-inputRoot
+  .MuiAutocomplete-input {
+  font-size: 13px;
+  padding-top: 0;
+}
+
+.searchbar .MuiAutocomplete-root .MuiInputLabel-formControl {
+  top: -20px;
+}
+
+.searchbar .MuiInputLabel-shrink {
+  top: -6px !important;
+}
+
+.searchSuggestions {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchSuggestions .email {
+  font-size: 9px;
+}
+
+.searchSuggestions .username {
+  font-size: 13px;
+}

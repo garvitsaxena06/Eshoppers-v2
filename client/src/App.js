@@ -11,6 +11,7 @@ import {
 } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from './context/AuthContext'
+import Floating from './components/floatingMessage/Floating'
 
 function App() {
   const { user } = useContext(AuthContext)
@@ -31,6 +32,7 @@ function App() {
           <Profile />
         </Route>
       </Switch>
+      <Floating />
     </Router>
   )
 }

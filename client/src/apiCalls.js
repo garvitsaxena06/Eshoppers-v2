@@ -33,3 +33,7 @@ export const getFriends = async (id) => {
 export const getConversationByOfTwoUsers = async (us1, us2) => {
   return await axios.get(`/conversations/find/${us1}/${us2}`)
 }
+
+export const searchUserByUsername = async (q) => {
+  return await axios.get(`/users/search?q=${q}`)
+}
