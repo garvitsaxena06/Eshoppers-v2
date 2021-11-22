@@ -3,12 +3,13 @@ import { Search, Person, Chat, Notifications } from '@material-ui/icons'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 import { Link, useHistory } from 'react-router-dom'
+import { Menu, Dropdown, message } from 'antd'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { searchUserByUsername } from '../../apiCalls'
 
 export default function Topbar() {
-  const { user } = useContext(AuthContext)
+  const { user, dispatch } = useContext(AuthContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
@@ -29,6 +30,24 @@ export default function Topbar() {
     }
   }
 
+  const logoutHandler = () => {
+    localStorage.removeItem('user')
+    dispatch({ type: 'LOGOUT' })
+    message.success('Logout successfully')
+    history.push('/')
+  }
+
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link to={`/profile/${user.username}`}>Profile</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <div onClick={logoutHandler}>Logout</div>
+      </Menu.Item>
+    </Menu>
+  )
+
   return (
     <div className='topbarContainer'>
       <div className='topbarLeft'>
@@ -39,7 +58,6 @@ export default function Topbar() {
       <div className='topbarCenter'>
         <div className='searchbar'>
           <Search className='searchIcon' />
-
           <Autocomplete
             freeSolo
             id='free-solo-2-demo'
@@ -51,8 +69,21 @@ export default function Topbar() {
                 className='searchSuggestions'
                 onClick={() => history.push(`/profile/${option.username}`)}
               >
-                <div className='email'>{option.email}</div>
-                <div className='username'>{option.username}</div>
+                <div className='profilePicture'>
+                  <img
+                    src={
+                      option.profilePicture
+                        ? PF + option.profilePicture
+                        : PF + 'person/noAvatar.png'
+                    }
+                    alt=''
+                    className='topbarImg'
+                  />
+                </div>
+                <div className='searchContent'>
+                  <div className='email'>{option.email}</div>
+                  <div className='username'>{option.username}</div>
+                </div>
               </div>
             )}
             renderInput={(params) => (
@@ -69,8 +100,15 @@ export default function Topbar() {
       </div>
       <div className='topbarRight'>
         <div className='topbarLinks'>
-          <span className='topbarLink'>Homepage</span>
-          <span className='topbarLink'>Timeline</span>
+          <span className='topbarLink' onClick={() => history.push('/')}>
+            Homepage
+          </span>
+          <span
+            className='topbarLink'
+            onClick={() => history.push(`/profile/${user.username}`)}
+          >
+            Timeline
+          </span>
         </div>
         <div className='topbarIcons'>
           <div className='topbarIconItem'>
@@ -86,7 +124,7 @@ export default function Topbar() {
             <span className='topbarIconBadge'>1</span>
           </div>
         </div>
-        <Link to={`/profile/${user.username}`}>
+        <Dropdown overlay={menu}>
           <img
             src={
               user.profilePicture
@@ -96,7 +134,7 @@ export default function Topbar() {
             alt=''
             className='topbarImg'
           />
-        </Link>
+        </Dropdown>
       </div>
     </div>
   )

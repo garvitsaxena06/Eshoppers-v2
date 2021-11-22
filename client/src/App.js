@@ -32,7 +32,7 @@ function App() {
           <Profile />
         </Route>
       </Switch>
-      <Floating />
+      {user && <Floating />}
     </Router>
   )
 }
