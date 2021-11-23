@@ -22,6 +22,7 @@ export default function Feed({ username }) {
 
   useEffect(() => {
     fetchPosts()
+    // eslint-disable-next-line
   }, [username, user._id])
 
   return (

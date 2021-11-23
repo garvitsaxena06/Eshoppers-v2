@@ -1,44 +1,44 @@
-import "./share.css";
+import './share.css'
 import {
   PermMedia,
-  Label,
-  Room,
-  EmojiEmotions,
+  // Label,
+  // Room,
+  // EmojiEmotions,
   Cancel,
-} from "@material-ui/icons";
-import { useContext, useRef, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
+} from '@material-ui/icons'
+import { useContext, useRef, useState } from 'react'
+import { AuthContext } from '../../context/AuthContext'
+import axios from 'axios'
 
-export default function Share({fetchPosts}) {
-  const { user } = useContext(AuthContext);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const desc = useRef();
-  const [file, setFile] = useState(null);
+export default function Share({ fetchPosts }) {
+  const { user } = useContext(AuthContext)
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER
+  const desc = useRef()
+  const [file, setFile] = useState(null)
 
   const submitHandler = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const newPost = {
       userId: user._id,
       desc: desc.current.value,
-    };
+    }
     if (file) {
-      const data = new FormData();
-      const fileName = Date.now() + file.name;
-      data.append("name", fileName);
-      data.append("file", file);
-      newPost.img = fileName;
-      console.log(newPost);
+      const data = new FormData()
+      const fileName = Date.now() + file.name
+      data.append('name', fileName)
+      data.append('file', file)
+      newPost.img = fileName
+      console.log(newPost)
       try {
-        await axios.post("/upload", data);
+        await axios.post('/upload', data)
       } catch (err) {}
     }
     try {
-      await axios.post("/posts", newPost);
-      fetchPosts();
+      await axios.post('/posts', newPost)
+      fetchPosts()
       // window.location.reload();
     } catch (err) {}
-  };
+  }
 
   return (
     <div className="share">
@@ -49,12 +49,12 @@ export default function Share({fetchPosts}) {
             src={
               user.profilePicture
                 ? PF + user.profilePicture
-                : PF + "person/noAvatar.png"
+                : PF + 'person/noAvatar.png'
             }
             alt=""
           />
           <input
-            placeholder={"What's in your mind " + user.username + "?"}
+            placeholder={"What's in your mind " + user.username + '?'}
             className="shareInput"
             ref={desc}
           />
@@ -72,7 +72,7 @@ export default function Share({fetchPosts}) {
               <PermMedia htmlColor="tomato" className="shareIcon" />
               <span className="shareOptionText">Photo or Video</span>
               <input
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 type="file"
                 id="file"
                 accept=".png,.jpeg,.jpg"
@@ -98,5 +98,5 @@ export default function Share({fetchPosts}) {
         </form>
       </div>
     </div>
-  );
+  )
 }

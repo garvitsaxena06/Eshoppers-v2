@@ -15,6 +15,7 @@ export default function Home() {
     if (!user) {
       history.push('/')
     }
+    // eslint-disable-next-line
   }, [user])
 
   return (
