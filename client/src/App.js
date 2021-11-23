@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     socket.current = io('ws://localhost:8900')
-    socket.current.emit('addUser', user._id)
+    socket.current.emit('addUser', user?._id)
     // socket.current.on('getUsers', (users) => {
     //   setOnlineUsers(
     //     user.followings.filter((el) => users.some((u) => u.userId === el))

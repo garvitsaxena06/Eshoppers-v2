@@ -1,32 +1,44 @@
-import "./sidebar.css";
+import { useContext } from 'react'
+import './sidebar.css'
 import {
   RssFeed,
   Chat,
-  PlayCircleFilledOutlined,
-  Group,
-  Bookmark,
-  HelpOutline,
-  WorkOutline,
-  Event,
-  School,
-} from "@material-ui/icons";
-import { Users } from "../../dummyData";
-import CloseFriend from "../closeFriend/CloseFriend";
+  // PlayCircleFilledOutlined,
+  // Group,
+  // Bookmark,
+  // HelpOutline,
+  // WorkOutline,
+  // Event,
+  // School,
+} from '@material-ui/icons'
+// import { Users } from '../../dummyData'
+import CloseFriend from '../closeFriend/CloseFriend'
+import { useHistory } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
 
-export default function Sidebar() {
+export default function Sidebar({friends, onlineFriends}) {
+  const { user } = useContext(AuthContext)
+  const history = useHistory()
+
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
         <ul className="sidebarList">
-          <li className="sidebarListItem">
+          <li
+            className="sidebarListItem"
+            onClick={() => history.push(`/profile/${user.username}`)}
+          >
             <RssFeed className="sidebarIcon" />
             <span className="sidebarListItemText">Feed</span>
           </li>
-          <li className="sidebarListItem">
+          <li
+            className="sidebarListItem"
+            onClick={() => history.push('/messenger')}
+          >
             <Chat className="sidebarIcon" />
             <span className="sidebarListItemText">Chats</span>
           </li>
-          <li className="sidebarListItem">
+          {/* <li className="sidebarListItem">
             <PlayCircleFilledOutlined className="sidebarIcon" />
             <span className="sidebarListItemText">Videos</span>
           </li>
@@ -53,16 +65,16 @@ export default function Sidebar() {
           <li className="sidebarListItem">
             <School className="sidebarIcon" />
             <span className="sidebarListItemText">Courses</span>
-          </li>
+          </li> */}
         </ul>
-        <button className="sidebarButton">Show More</button>
+        {/* <button className="sidebarButton">Show More</button> */}
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
-          {Users.map((u) => (
-            <CloseFriend key={u.id} user={u} />
+          {friends.map((u) => (
+            <CloseFriend key={u._id} user={u} />
           ))}
         </ul>
       </div>
     </div>
-  );
+  )
 }
