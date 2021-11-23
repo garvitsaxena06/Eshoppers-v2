@@ -127,11 +127,11 @@ export default function Topbar() {
               onClick={() => history.push('/messenger')}
             >
               <Chat />
-              <span className="topbarIconBadge">2</span>
+              {/* <span className="topbarIconBadge">2</span> */}
             </div>
             <div className="topbarIconItem">
               <Notifications />
-              <span className="topbarIconBadge">1</span>
+              {/* <span className="topbarIconBadge">1</span> */}
             </div>
           </div>
           <Dropdown overlay={menu}>

@@ -38,6 +38,8 @@ export default function Share({ fetchPosts }) {
       fetchPosts()
       // window.location.reload();
     } catch (err) {}
+    desc.current.value = ''
+    setFile(null)
   }
 
   return (
