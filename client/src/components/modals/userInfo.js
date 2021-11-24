@@ -11,6 +11,7 @@ export default function UserInfo({ show, handleClose, handleSubmit, user }) {
 
   useEffect(() => {
     user && setState({ ...state, ...user })
+    // eslint-disable-next-line
   }, [user])
 
   const checkValidation = (event) => {

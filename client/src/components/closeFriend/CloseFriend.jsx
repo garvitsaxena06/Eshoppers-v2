@@ -13,7 +13,7 @@ export default function CloseFriend({ user }) {
         className="sidebarFriendImg"
         src={
           user.profilePicture !== ''
-            ? PF + user.profilePicture
+            ? user.profilePicture
             : PF + 'person/noAvatar.png'
         }
         alt=""

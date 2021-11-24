@@ -34,7 +34,7 @@
 }
 
 .editProfileImage {
-  background-color: #E4E6EB;
+  background-color: #e4e6eb;
   padding: 4px;
   border-radius: 50%;
   position: absolute;
@@ -43,6 +43,21 @@
   top: -12px;
   margin-left: 70px;
   cursor: pointer;
+}
+
+.editCoverImage {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #e4ebe6;
+  font-weight: 500;
+  margin-right: 20px;
+  cursor: pointer;
+  color: black;
+  margin-bottom: 6px;
+  position: absolute;
+  right: 2%;
+  bottom: 24%;
 }
 
 .profileInfo {

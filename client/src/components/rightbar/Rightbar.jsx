@@ -7,10 +7,12 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import { Add, Remove, Edit } from '@material-ui/icons'
 import UserInfoModal from '../modals/userInfo'
-import { updateUser } from '../../apiCalls'
-import { message } from 'antd'
 
-export default function Rightbar({ user, onlineFriends }) {
+export default function Rightbar({
+  user,
+  onlineFriends,
+  UpdateUserDetails = () => {},
+}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
   const [friends, setFriends] = useState([])
   const { user: currentUser, dispatch } = useContext(AuthContext)
@@ -94,17 +96,9 @@ export default function Rightbar({ user, onlineFriends }) {
     const handleSubmit = (state) => {
       console.log(state)
       try {
-        updateUser({ ...state, userId: user._id })
-          .then((res) => {
-            console.log(res)
-            handleClose()
-            dispatch({ type: 'UPDATE', payload: res.data.data })
-            message.success(res?.data?.message || 'Profile updated successfully')
-          })
-          .catch((err) => {
-            // console.log(err)
-            // message.error('Please try again later.')
-          })
+        UpdateUserDetails(state, (err) => {
+          if (!err) handleClose()
+        })
       } catch (error) {
         console.log(error)
       }
@@ -146,6 +140,7 @@ export default function Rightbar({ user, onlineFriends }) {
         <div className="rightbarFollowings">
           {friends.map((friend) => (
             <Link
+              key={friend.username}
               to={'/profile/' + friend.username}
               style={{ textDecoration: 'none' }}
             >
