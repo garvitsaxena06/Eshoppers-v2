@@ -38,6 +38,15 @@ io.on('connection', (socket) => {
     })
   })
 
+  // add conversation
+  socket.on('addConversation', ({ senderId, receiverId, conversation }) => {
+    const user = getUser(receiverId)
+    io.to(user?.socketId).emit('getConversation', {
+      senderId,
+      conversation,
+    })
+  })
+
   // disconnect a user
   socket.on('disconnect', () => {
     console.log('a user disconnected.')

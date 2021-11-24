@@ -78,7 +78,7 @@ export default function Topbar() {
                   <img
                     src={
                       option.profilePicture
-                        ? PF + option.profilePicture
+                        ? option.profilePicture
                         : PF + 'person/noAvatar.png'
                     }
                     alt=""

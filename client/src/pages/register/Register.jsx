@@ -65,7 +65,7 @@ export default function Register() {
               minLength='6'
             />
             <input
-              placeholder='Password Again'
+              placeholder='Confirm Password'
               required
               ref={passwordAgain}
               name='passwordAgain'

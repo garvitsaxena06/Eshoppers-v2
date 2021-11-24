@@ -9,6 +9,7 @@ import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
 import { io } from 'socket.io-client'
 
 const Messenger = () => {
+  const [AllConversations, setAllConversations] = useState([])
   const [conversations, setConversations] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
@@ -28,7 +29,12 @@ const Messenger = () => {
         createdAt: Date.now(),
       })
     })
+    socket.current.on('getConversation', ({ senderId, conversation }) => {
+      setConversations((prev) => [...prev, conversation])
+      setAllConversations((prev) => [...prev, conversation])
+    })
   }, [])
+
 
   useEffect(() => {
     arrivalMessage &&
@@ -37,10 +43,10 @@ const Messenger = () => {
   }, [arrivalMessage, currentChat])
 
   useEffect(() => {
-    // socket.current.emit('addUser', user._id)
+    socket.current.emit('addUser', user._id)
     socket.current.on('getUsers', (users) => {
       setOnlineUsers(
-        user.followings.filter((el) => users.some((u) => u.userId === el))
+        user.followings.filter((el) => users.some((u) => u.userId === el)),
       )
     })
   }, [user])
@@ -49,6 +55,7 @@ const Messenger = () => {
     getConversations(user._id)
       .then((res) => {
         setConversations(res.data)
+        setAllConversations(res.data)
       })
       .catch((err) => console.log(err))
   }, [user._id])
@@ -88,16 +95,33 @@ const Messenger = () => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const handleChange = (event) => {
+    const { value } = event.target.value
+    console.log({ conversations })
+    if (value === '') setConversations(AllConversations)
+    else {
+      const filteredConversations = AllConversations.filter((con) => {
+        return con
+      })
+      setConversations(filteredConversations)
+    }
+  }
+
+  const updateConversations = (data) => {
+    socket.current.emit('addConversation', data)
+  }
+
   return (
     <>
       <Topbar />
-      <div className='messenger'>
-        <div className='chatMenu'>
-          <div className='chatMenuWrapper'>
+      <div className="messenger">
+        <div className="chatMenu">
+          <div className="chatMenuWrapper">
             <input
-              type='text'
-              placeholder='Search for friends'
-              className='chatMenuInput'
+              type="text"
+              placeholder="Search for friends"
+              className="chatMenuInput"
+              onChange={handleChange}
             />
             {conversations.map((el, i) => (
               <div key={i} onClick={() => setCurrentChat(el)}>
@@ -106,26 +130,26 @@ const Messenger = () => {
             ))}
           </div>
         </div>
-        <div className='chatBox'>
-          <div className='chatBoxWrapper'>
+        <div className="chatBox">
+          <div className="chatBoxWrapper">
             {currentChat ? (
               <>
-                <div className='chatBoxTop'>
+                <div className="chatBoxTop">
                   {messages.map((el, i) => (
                     <div key={i} ref={scrollRef}>
                       <Message message={el} own={el.sender === user._id} />
                     </div>
                   ))}
                 </div>
-                <div className='chatBoxBottom'>
+                <div className="chatBoxBottom">
                   <textarea
-                    className='chatMessageInput'
-                    placeholder='Write something...'
+                    className="chatMessageInput"
+                    placeholder="Write something..."
                     onChange={(e) => setNewMessage(e.target.value)}
                     value={newMessage}
                   ></textarea>
                   <button
-                    className='chatSubmitBtn'
+                    className="chatSubmitBtn"
                     onClick={sendMessageHandler}
                   >
                     Send
@@ -133,18 +157,19 @@ const Messenger = () => {
                 </div>
               </>
             ) : (
-              <span className='noConversationText'>
+              <span className="noConversationText">
                 Open a conversation to start a chat.
               </span>
             )}
           </div>
         </div>
-        <div className='chatOnline'>
-          <div className='chatOnlineWrapper'>
+        <div className="chatOnline">
+          <div className="chatOnlineWrapper">
             <ChatOnline
               onlineUsers={onlineUsers}
               currentId={user._id}
               setCurrentChat={setCurrentChat}
+              updateConversations={updateConversations}
             />
           </div>
         </div>
