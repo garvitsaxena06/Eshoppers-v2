@@ -41,3 +41,7 @@ export const getConversationByOfTwoUsers = async (us1, us2) => {
 export const searchUserByUsername = async (q) => {
   return await axios.get(`/users/search?q=${q}`)
 }
+
+export const updateUser = async (data) => {
+  return await axios.put(`/users/${data.userId}`, data)
+}

@@ -86,12 +86,12 @@ export default function Post({ post, fetchPosts }) {
               onClick={likeHandler}
               alt=""
             />
-            <img
+            {/* <img
               className="likeIcon"
               src={`${PF}heart.png`}
               onClick={likeHandler}
               alt=""
-            />
+            /> */}
             <span className="postLikeCounter">{like} people like it</span>
           </div>
           {/* <div className="postBottomRight">

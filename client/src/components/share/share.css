@@ -74,6 +74,17 @@
     color: white;
 }
 
+.editButton{
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #E4EBE6;
+  font-weight: 500;
+  margin-right: 20px;
+  cursor: pointer;
+  color: black;
+  margin-bottom: 6px;
+}
 .shareImgContainer{
   padding: 0 20px 10px 20px;
   position: relative;

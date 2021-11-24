@@ -8,12 +8,13 @@ import axios from 'axios'
 import { useParams } from 'react-router'
 import { AuthContext } from '../../context/AuthContext'
 import { getFriends } from '../../apiCalls'
-
+import { CameraAlt } from '@material-ui/icons'
 export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
   const [user, setUser] = useState({})
   const { user: loggedInUser } = useContext(AuthContext)
   const [friends, setFriends] = useState([])
+  const [file, setFile] = useState(null)
   const username = useParams().username
 
   useEffect(() => {
@@ -49,15 +50,31 @@ export default function Profile() {
                 }
                 alt=""
               />
-              <img
-                className="profileUserImg"
-                src={
-                  user.profilePicture
-                    ? PF + user.profilePicture
-                    : PF + 'person/noAvatar.png'
-                }
-                alt=""
-              />
+              <div className="profileUserImgContainer">
+                <img
+                  className="profileUserImg"
+                  src={
+                    user.profilePicture
+                      ? PF + user.profilePicture
+                      : PF + 'person/noAvatar.png'
+                  }
+                  alt=""
+                />
+                <div>
+                  <label htmlFor="file" className="shareOption">
+                    <div className="editProfileImage">
+                      <CameraAlt style={{ fontSize: '20px' }}></CameraAlt>
+                    </div>
+                    <input
+                      style={{ display: 'none' }}
+                      type="file"
+                      id="file"
+                      accept=".png,.jpeg,.jpg"
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">{user.username}</h4>

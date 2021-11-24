@@ -5,7 +5,10 @@ import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
-import { Add, Remove } from '@material-ui/icons'
+import { Add, Remove, Edit } from '@material-ui/icons'
+import UserInfoModal from '../modals/userInfo'
+import { updateUser } from '../../apiCalls'
+import { message } from 'antd'
 
 export default function Rightbar({ user, onlineFriends }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
@@ -64,12 +67,12 @@ export default function Rightbar({ user, onlineFriends }) {
   const HomeRightbar = () => {
     return (
       <>
-        <div className="birthdayContainer">
+        {/* <div className="birthdayContainer">
           <img className="birthdayImg" src="assets/gift.png" alt="" />
           <span className="birthdayText">
             <b>Pola Foster</b> and <b>3 other friends</b> have a birhday today.
           </span>
-        </div>
+        </div> */}
         <img className="rightbarAd" src="assets/ad.png" alt="" />
         {onlineFriends.length > 0 && (
           <h4 className="rightbarTitle">Online Friends</h4>
@@ -84,6 +87,30 @@ export default function Rightbar({ user, onlineFriends }) {
   }
 
   const ProfileRightbar = () => {
+    const [show, setShow] = useState(false)
+
+    const handleClose = () => setShow(false)
+    const handleShow = () => setShow(true)
+    const handleSubmit = (state) => {
+      console.log(state)
+      try {
+        updateUser({ ...state, userId: user._id })
+          .then((res) => {
+            console.log(res)
+            handleClose()
+            dispatch({ type: 'UPDATE', payload: res.data.data })
+            message.success(res?.data?.message || 'Profile updated successfully')
+          })
+          .catch((err) => {
+            // console.log(err)
+            // message.error('Please try again later.')
+          })
+      } catch (error) {
+        console.log(error)
+      }
+      // const { firstName, lastName, city } = event.target
+    }
+
     return (
       <>
         {user.username !== currentUser.username && (
@@ -92,25 +119,27 @@ export default function Rightbar({ user, onlineFriends }) {
             {followed ? <Remove /> : <Add />}
           </button>
         )}
-        <h4 className="rightbarTitle">User information</h4>
+        <div className="d-flex justify-content-between">
+          <h4 className="rightbarTitle">User information</h4>
+          {user.username === currentUser.username && (
+            <button className="editButton" onClick={handleShow}>
+              <Edit />
+              {' Edit profile'}
+            </button>
+          )}
+        </div>
         <div className="rightbarInfo">
+          <div className="rightbarInfoItem">
+            <span className="rightbarInfoKey">First Name:</span>
+            <span className="rightbarInfoValue">{user.firstName}</span>
+          </div>
+          <div className="rightbarInfoItem">
+            <span className="rightbarInfoKey">Last Name:</span>
+            <span className="rightbarInfoValue">{user.lastName}</span>
+          </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">City:</span>
             <span className="rightbarInfoValue">{user.city}</span>
-          </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">{user.from}</span>
-          </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">Relationship:</span>
-            <span className="rightbarInfoValue">
-              {user.relationship === 1
-                ? 'Single'
-                : user.relationship === 1
-                ? 'Married'
-                : '-'}
-            </span>
           </div>
         </div>
         <h4 className="rightbarTitle">User friends</h4>
@@ -135,6 +164,12 @@ export default function Rightbar({ user, onlineFriends }) {
             </Link>
           ))}
         </div>
+        <UserInfoModal
+          show={show}
+          user={user}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+        />
       </>
     )
   }
