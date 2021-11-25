@@ -6,7 +6,7 @@ import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
 import { AuthContext } from '../../context/AuthContext'
 import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
-import { io } from 'socket.io-client'
+import { Socket } from '../../utils/socket'
 
 const Messenger = () => {
   const [AllConversations, setAllConversations] = useState([])
@@ -16,25 +16,32 @@ const Messenger = () => {
   const [newMessage, setNewMessage] = useState('')
   const [arrivalMessage, setArrivalMessage] = useState(null)
   const [onlineUsers, setOnlineUsers] = useState([])
-  const socket = useRef()
+  const socket = useRef(Socket).current
   const { user } = useContext(AuthContext)
   const scrollRef = useRef()
 
   useEffect(() => {
-    socket.current = io('ws://localhost:8900')
-    socket.current.on('getMessage', ({ senderId, text }) => {
+    const handleMessages = ({ senderId, text }) => {
       setArrivalMessage({
         sender: senderId,
         text,
         createdAt: Date.now(),
       })
-    })
-    socket.current.on('getConversation', ({ senderId, conversation }) => {
+    }
+
+    const handleConversations = ({ senderId, conversation }) => {
       setConversations((prev) => [...prev, conversation])
       setAllConversations((prev) => [...prev, conversation])
-    })
-  }, [])
+    }
 
+    // socket = io('ws://localhost:8900')
+    socket.on('getMessage', handleMessages)
+    socket.on('getConversation', handleConversations)
+    return () => {
+      socket.off('getMessage', handleMessages)
+      socket.off('receive_conversation', handleConversations)
+    }
+  }, [socket])
 
   useEffect(() => {
     arrivalMessage &&
@@ -43,13 +50,17 @@ const Messenger = () => {
   }, [arrivalMessage, currentChat])
 
   useEffect(() => {
-    socket.current.emit('addUser', user._id)
-    socket.current.on('getUsers', (users) => {
+    const handleUsers = (users) => {
       setOnlineUsers(
         user.followings.filter((el) => users.some((u) => u.userId === el)),
       )
-    })
-  }, [user])
+    }
+    socket.emit('addUser', user._id)
+    socket.on('getUsers', handleUsers)
+    return () => {
+      socket.off('getUsers', handleUsers)
+    }
+  }, [user, socket])
 
   useEffect(() => {
     getConversations(user._id)
@@ -81,7 +92,7 @@ const Messenger = () => {
           setMessages([...messages, res.data])
 
           const receiverId = currentChat.members?.find((el) => el !== user._id)
-          socket.current.emit('sendMessage', {
+          socket.emit('sendMessage', {
             senderId: user._id,
             receiverId,
             text: newMessage,
@@ -108,7 +119,7 @@ const Messenger = () => {
   }
 
   const updateConversations = (data) => {
-    socket.current.emit('addConversation', data)
+    socket.emit('addConversation', data)
   }
 
   return (
