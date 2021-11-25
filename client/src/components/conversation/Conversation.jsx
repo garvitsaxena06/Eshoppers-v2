@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { getUserById } from '../../apiCalls'
 import './conversation.css'
 
-const Conversation = ({ conversation, currentUser }) => {
+const Conversation = ({
+  conversation,
+  currentUser,
+  setAllConversations,
+  AllConversations,
+}) => {
   const [user, setUser] = useState(null)
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
@@ -12,22 +17,28 @@ const Conversation = ({ conversation, currentUser }) => {
     getUserById(friendId)
       .then((res) => {
         setUser(res.data)
+        const newConversations = AllConversations.map((el) => {
+          if (el.members.includes(res.data._id)) el.member = res.data
+          return el
+        })
+        setAllConversations(newConversations)
       })
       .catch((err) => console.log(err))
+    // eslint-disable-next-line
   }, [currentUser, conversation])
 
   return (
-    <div className='conversation'>
+    <div className="conversation">
       <img
-        className='conversationImg'
+        className="conversationImg"
         src={
           user?.profilePicture
             ? user?.profilePicture
             : PF + 'person/noAvatar.png'
         }
-        alt='profileImage'
+        alt="profileImage"
       />
-      <span className='conversationName'>{user?.username}</span>
+      <span className="conversationName">{user?.username}</span>
     </div>
   )
 }
