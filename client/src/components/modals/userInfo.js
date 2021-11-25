@@ -10,7 +10,11 @@ export default function UserInfo({ show, handleClose, handleSubmit, user }) {
   })
 
   useEffect(() => {
-    user && setState({ ...state, ...user })
+    user &&
+      setState((prev) => ({
+        ...prev,
+        ...user,
+      }))
   }, [user])
 
   const checkValidation = (event) => {
@@ -31,14 +35,14 @@ export default function UserInfo({ show, handleClose, handleSubmit, user }) {
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated} onSubmit={checkValidation}>
-          <Form.Group as={Col} className="mb-3" controlId="firstName">
+          <Form.Group as={Col} className='mb-3' controlId='firstName'>
             <Form.Label>First name</Form.Label>
             <Form.Control
               required
-              type="text"
+              type='text'
               minLength={5}
-              placeholder="First name"
-              name="firstName"
+              placeholder='First name'
+              name='firstName'
               value={state.firstName}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
@@ -46,18 +50,18 @@ export default function UserInfo({ show, handleClose, handleSubmit, user }) {
               //   defaultValue="Mark"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback type='invalid'>
               Please provide a valid First name.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} className="mb-3" controlId="lastName">
+          <Form.Group as={Col} className='mb-3' controlId='lastName'>
             <Form.Label>Last name</Form.Label>
             <Form.Control
               required
-              type="text"
+              type='text'
               minLength={5}
-              placeholder="Last name"
-              name="lastName"
+              placeholder='Last name'
+              name='lastName'
               value={state.lastName}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
@@ -65,35 +69,35 @@ export default function UserInfo({ show, handleClose, handleSubmit, user }) {
               //   defaultValue="Otto"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback type='invalid'>
               Please provide a valid First name.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} className="mb-3" controlId="city">
+          <Form.Group as={Col} className='mb-3' controlId='city'>
             <Form.Label>City</Form.Label>
             <Form.Control
-              name="city"
-              type="text"
-              placeholder="City"
+              name='city'
+              type='text'
+              placeholder='City'
               required
               value={state.city}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback type='invalid'>
               Please provide a valid city.
             </Form.Control.Feedback>
           </Form.Group>
-          <div className="d-flex">
-            <Button variant="secondary" onClick={handleClose}>
+          <div className='d-flex'>
+            <Button variant='secondary' onClick={handleClose}>
               Close
             </Button>
             <Button
-              variant="primary"
+              variant='primary'
               style={{ marginLeft: '12px' }}
               onClick={handleSubmit}
-              type="submit"
+              type='submit'
             >
               Save Changes
             </Button>

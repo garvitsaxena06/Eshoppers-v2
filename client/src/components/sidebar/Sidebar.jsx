@@ -14,29 +14,29 @@ import {
 // import { Users } from '../../dummyData'
 import CloseFriend from '../closeFriend/CloseFriend'
 import { useHistory } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
 
-export default function Sidebar({friends, onlineFriends}) {
+export default function Sidebar({ friends, onlineFriends }) {
   const { user } = useContext(AuthContext)
   const history = useHistory()
 
   return (
-    <div className="sidebar">
-      <div className="sidebarWrapper">
-        <ul className="sidebarList">
+    <div className='sidebar'>
+      <div className='sidebarWrapper'>
+        <ul className='sidebarList'>
           <li
-            className="sidebarListItem"
+            className='sidebarListItem'
             onClick={() => history.push(`/profile/${user.username}`)}
           >
-            <RssFeed className="sidebarIcon" />
-            <span className="sidebarListItemText">Feed</span>
+            <RssFeed className='sidebarIcon' />
+            <span className='sidebarListItemText'>Feed</span>
           </li>
           <li
-            className="sidebarListItem"
+            className='sidebarListItem'
             onClick={() => history.push('/messenger')}
           >
-            <Chat className="sidebarIcon" />
-            <span className="sidebarListItemText">Chats</span>
+            <Chat className='sidebarIcon' />
+            <span className='sidebarListItemText'>Chats</span>
           </li>
           {/* <li className="sidebarListItem">
             <PlayCircleFilledOutlined className="sidebarIcon" />
@@ -68,8 +68,8 @@ export default function Sidebar({friends, onlineFriends}) {
           </li> */}
         </ul>
         {/* <button className="sidebarButton">Show More</button> */}
-        <hr className="sidebarHr" />
-        <ul className="sidebarFriendList">
+        <hr className='sidebarHr' />
+        <ul className='sidebarFriendList'>
           {friends.map((u) => (
             <CloseFriend key={u._id} user={u} />
           ))}

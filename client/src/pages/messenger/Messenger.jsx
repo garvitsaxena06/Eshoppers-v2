@@ -4,46 +4,26 @@ import Topbar from '../../components/topbar/Topbar'
 import Conversation from '../../components/conversation/Conversation'
 import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
+import { SocketContext } from '../../context/Socket'
+import useSocket from '../../socket'
 import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
-import { io } from 'socket.io-client'
 
 const Messenger = () => {
+  const { socket } = useSocket()
   const [conversations, setConversations] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
-  const [arrivalMessage, setArrivalMessage] = useState(null)
-  const [onlineUsers, setOnlineUsers] = useState([])
-  const socket = useRef()
   const { user } = useContext(AuthContext)
+  const { onlineUsers, arrivalMessage } = useContext(SocketContext)
   const scrollRef = useRef()
-
-  useEffect(() => {
-    socket.current = io('ws://localhost:8900')
-    socket.current.on('getMessage', ({ senderId, text }) => {
-      setArrivalMessage({
-        sender: senderId,
-        text,
-        createdAt: Date.now(),
-      })
-    })
-  }, [])
 
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage])
   }, [arrivalMessage, currentChat])
-
-  useEffect(() => {
-    // socket.current.emit('addUser', user._id)
-    socket.current.on('getUsers', (users) => {
-      setOnlineUsers(
-        user.followings.filter((el) => users.some((u) => u.userId === el))
-      )
-    })
-  }, [user])
 
   useEffect(() => {
     getConversations(user._id)

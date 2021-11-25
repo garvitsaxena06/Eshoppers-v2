@@ -4,7 +4,7 @@ import Online from '../online/Online'
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
 import { Add, Remove, Edit } from '@material-ui/icons'
 import UserInfoModal from '../modals/userInfo'
 import { updateUser } from '../../apiCalls'
@@ -15,7 +15,7 @@ export default function Rightbar({ user, onlineFriends }) {
   const [friends, setFriends] = useState([])
   const { user: currentUser, dispatch } = useContext(AuthContext)
   const [followed, setFollowed] = useState(
-    currentUser.followings.includes(user?._id),
+    currentUser.followings.includes(user?._id)
   )
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Rightbar({ user, onlineFriends }) {
       if (user && user.username) {
         try {
           const friendList = await axios.get(
-            '/users/friendsByUserName/' + user.username,
+            '/users/friendsByUserName/' + user.username
           )
           setFriends(friendList.data)
         } catch (err) {
@@ -36,7 +36,7 @@ export default function Rightbar({ user, onlineFriends }) {
       } else {
         try {
           const friendList = await axios.get(
-            '/users/friends/' + currentUser?._id,
+            '/users/friends/' + currentUser?._id
           )
           setFriends(friendList.data)
         } catch (err) {
@@ -73,11 +73,11 @@ export default function Rightbar({ user, onlineFriends }) {
             <b>Pola Foster</b> and <b>3 other friends</b> have a birhday today.
           </span>
         </div> */}
-        <img className="rightbarAd" src="assets/ad.png" alt="" />
+        <img className='rightbarAd' src='assets/ad.png' alt='' />
         {onlineFriends.length > 0 && (
-          <h4 className="rightbarTitle">Online Friends</h4>
+          <h4 className='rightbarTitle'>Online Friends</h4>
         )}
-        <ul className="rightbarFriendList">
+        <ul className='rightbarFriendList'>
           {onlineFriends.map((u) => (
             <Online key={u._id} user={u} />
           ))}
@@ -99,7 +99,9 @@ export default function Rightbar({ user, onlineFriends }) {
             console.log(res)
             handleClose()
             dispatch({ type: 'UPDATE', payload: res.data.data })
-            message.success(res?.data?.message || 'Profile updated successfully')
+            message.success(
+              res?.data?.message || 'Profile updated successfully'
+            )
           })
           .catch((err) => {
             // console.log(err)
@@ -114,52 +116,52 @@ export default function Rightbar({ user, onlineFriends }) {
     return (
       <>
         {user.username !== currentUser.username && (
-          <button className="rightbarFollowButton" onClick={handleClick}>
+          <button className='rightbarFollowButton' onClick={handleClick}>
             {followed ? 'Unfollow' : 'Follow'}
             {followed ? <Remove /> : <Add />}
           </button>
         )}
-        <div className="d-flex justify-content-between">
-          <h4 className="rightbarTitle">User information</h4>
+        <div className='d-flex justify-content-between'>
+          <h4 className='rightbarTitle'>User information</h4>
           {user.username === currentUser.username && (
-            <button className="editButton" onClick={handleShow}>
+            <button className='editButton' onClick={handleShow}>
               <Edit />
               {' Edit profile'}
             </button>
           )}
         </div>
-        <div className="rightbarInfo">
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">First Name:</span>
-            <span className="rightbarInfoValue">{user.firstName}</span>
+        <div className='rightbarInfo'>
+          <div className='rightbarInfoItem'>
+            <span className='rightbarInfoKey'>First Name:</span>
+            <span className='rightbarInfoValue'>{user.firstName}</span>
           </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">Last Name:</span>
-            <span className="rightbarInfoValue">{user.lastName}</span>
+          <div className='rightbarInfoItem'>
+            <span className='rightbarInfoKey'>Last Name:</span>
+            <span className='rightbarInfoValue'>{user.lastName}</span>
           </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">City:</span>
-            <span className="rightbarInfoValue">{user.city}</span>
+          <div className='rightbarInfoItem'>
+            <span className='rightbarInfoKey'>City:</span>
+            <span className='rightbarInfoValue'>{user.city}</span>
           </div>
         </div>
-        <h4 className="rightbarTitle">User friends</h4>
-        <div className="rightbarFollowings">
+        <h4 className='rightbarTitle'>User friends</h4>
+        <div className='rightbarFollowings'>
           {friends.map((friend) => (
             <Link
               to={'/profile/' + friend.username}
               style={{ textDecoration: 'none' }}
             >
-              <div className="rightbarFollowing">
+              <div className='rightbarFollowing'>
                 <img
                   src={
                     friend.profilePicture
                       ? PF + friend.profilePicture
                       : PF + 'person/noAvatar.png'
                   }
-                  alt=""
-                  className="rightbarFollowingImg"
+                  alt=''
+                  className='rightbarFollowingImg'
                 />
-                <span className="rightbarFollowingName">{friend.username}</span>
+                <span className='rightbarFollowingName'>{friend.username}</span>
               </div>
             </Link>
           ))}
@@ -174,8 +176,8 @@ export default function Rightbar({ user, onlineFriends }) {
     )
   }
   return (
-    <div className="rightbar">
-      <div className="rightbarWrapper">
+    <div className='rightbar'>
+      <div className='rightbarWrapper'>
         {user ? <ProfileRightbar /> : <HomeRightbar />}
       </div>
     </div>

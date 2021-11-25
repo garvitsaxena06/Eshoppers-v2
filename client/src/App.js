@@ -9,24 +9,29 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import { useContext, useRef, useEffect} from 'react'
-import { io } from 'socket.io-client'
-import { AuthContext } from './context/AuthContext'
+import { useContext, useEffect } from 'react'
+import useSocket from './socket'
+import { AuthContext } from './context/Auth'
+import { SocketContext } from './context/Socket'
+import { setOnlineUsers } from './context/Socket/SocketActions'
 import Floating from './components/floatingMessage/Floating'
 
 function App() {
   const { user } = useContext(AuthContext)
-  const socket = useRef()
+  const { dispatch } = useContext(SocketContext)
+  const { socket } = useSocket()
 
   useEffect(() => {
-    socket.current = io('ws://localhost:8900')
-    socket.current.emit('addUser', user?._id)
-    // socket.current.on('getUsers', (users) => {
-    //   setOnlineUsers(
-    //     user.followings.filter((el) => users.some((u) => u.userId === el))
-    //   )
-    // })
-  }, [user])
+    if (socket && socket.current) {
+      socket.current.on('getUsers', (users) => {
+        dispatch(
+          setOnlineUsers(
+            user?.followings.filter((el) => users.some((u) => u.userId === el))
+          )
+        )
+      })
+    }
+  }, [user, dispatch, socket])
 
   return (
     <Router>

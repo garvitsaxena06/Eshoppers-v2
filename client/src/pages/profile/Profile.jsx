@@ -6,7 +6,7 @@ import Rightbar from '../../components/rightbar/Rightbar'
 import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
 import { getFriends } from '../../apiCalls'
 import { CameraAlt } from '@material-ui/icons'
 export default function Profile() {
@@ -33,55 +33,57 @@ export default function Profile() {
       .catch((err) => console.log(err))
   }, [loggedInUser._id])
 
+  console.log({ file })
+
   return (
     <>
       <Topbar />
-      <div className="profile">
+      <div className='profile'>
         <Sidebar friends={friends} />
-        <div className="profileRight">
-          <div className="profileRightTop">
-            <div className="profileCover">
+        <div className='profileRight'>
+          <div className='profileRightTop'>
+            <div className='profileCover'>
               <img
-                className="profileCoverImg"
+                className='profileCoverImg'
                 src={
                   user.coverPicture
                     ? PF + user.coverPicture
                     : PF + 'person/noCover.png'
                 }
-                alt=""
+                alt=''
               />
-              <div className="profileUserImgContainer">
+              <div className='profileUserImgContainer'>
                 <img
-                  className="profileUserImg"
+                  className='profileUserImg'
                   src={
                     user.profilePicture
                       ? PF + user.profilePicture
                       : PF + 'person/noAvatar.png'
                   }
-                  alt=""
+                  alt=''
                 />
                 <div>
-                  <label htmlFor="file" className="shareOption">
-                    <div className="editProfileImage">
+                  <label htmlFor='file' className='shareOption'>
+                    <div className='editProfileImage'>
                       <CameraAlt style={{ fontSize: '20px' }}></CameraAlt>
                     </div>
                     <input
                       style={{ display: 'none' }}
-                      type="file"
-                      id="file"
-                      accept=".png,.jpeg,.jpg"
+                      type='file'
+                      id='file'
+                      accept='.png,.jpeg,.jpg'
                       onChange={(e) => setFile(e.target.files[0])}
                     />
                   </label>
                 </div>
               </div>
             </div>
-            <div className="profileInfo">
-              <h4 className="profileInfoName">{user.username}</h4>
-              <span className="profileInfoDesc">{user.desc}</span>
+            <div className='profileInfo'>
+              <h4 className='profileInfoName'>{user.username}</h4>
+              <span className='profileInfoDesc'>{user.desc}</span>
             </div>
           </div>
-          <div className="profileRightBottom">
+          <div className='profileRightBottom'>
             <Feed username={username} />
             <Rightbar user={user} />
           </div>
