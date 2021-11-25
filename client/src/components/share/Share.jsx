@@ -49,7 +49,7 @@ export default function Share({ fetchPosts }) {
             className='shareProfileImg'
             src={
               user.profilePicture
-                ? PF + user.profilePicture
+                ? user.profilePicture
                 : PF + 'person/noAvatar.png'
             }
             alt=''

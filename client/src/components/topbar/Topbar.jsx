@@ -78,7 +78,7 @@ export default function Topbar() {
                   <img
                     src={
                       option.profilePicture
-                        ? PF + option.profilePicture
+                        ? option.profilePicture
                         : PF + 'person/noAvatar.png'
                     }
                     alt=''
@@ -138,7 +138,7 @@ export default function Topbar() {
             <img
               src={
                 user.profilePicture
-                  ? PF + user.profilePicture
+                  ? user.profilePicture
                   : PF + 'person/noAvatar.png'
               }
               alt=''

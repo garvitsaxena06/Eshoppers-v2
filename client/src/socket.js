@@ -6,7 +6,7 @@ import { setArrivalMessage } from './context/Socket/SocketActions'
 
 const useSocket = () => {
   const { user } = useContext(AuthContext)
-  const { dispatch, arrivalMessage } = useContext(SocketContext)
+  const { dispatch } = useContext(SocketContext)
   const socket = useRef()
 
   useEffect(() => {

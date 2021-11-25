@@ -11,6 +11,7 @@ import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
 
 const Messenger = () => {
   const { socket } = useSocket()
+  const [AllConversations, setAllConversations] = useState([])
   const [conversations, setConversations] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
@@ -29,6 +30,7 @@ const Messenger = () => {
     getConversations(user._id)
       .then((res) => {
         setConversations(res.data)
+        setAllConversations(res.data)
       })
       .catch((err) => console.log(err))
   }, [user._id])
@@ -54,7 +56,7 @@ const Messenger = () => {
           setMessages([...messages, res.data])
 
           const receiverId = currentChat.members?.find((el) => el !== user._id)
-          socket.current.emit('sendMessage', {
+          socket.emit('sendMessage', {
             senderId: user._id,
             receiverId,
             text: newMessage,
@@ -68,6 +70,21 @@ const Messenger = () => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const handleChange = (event) => {
+    const { value } = event.target.value
+    if (value === '') setConversations(AllConversations)
+    else {
+      const filteredConversations = AllConversations.filter((con) => {
+        return con
+      })
+      setConversations(filteredConversations)
+    }
+  }
+
+  const updateConversations = (data) => {
+    socket.emit('addConversation', data)
+  }
+
   return (
     <>
       <Topbar />
@@ -78,6 +95,7 @@ const Messenger = () => {
               type='text'
               placeholder='Search for friends'
               className='chatMenuInput'
+              onChange={handleChange}
             />
             {conversations.map((el, i) => (
               <div key={i} onClick={() => setCurrentChat(el)}>
@@ -125,6 +143,7 @@ const Messenger = () => {
               onlineUsers={onlineUsers}
               currentId={user._id}
               setCurrentChat={setCurrentChat}
+              updateConversations={updateConversations}
             />
           </div>
         </div>
