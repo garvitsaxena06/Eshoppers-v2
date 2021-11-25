@@ -1,43 +1,26 @@
-import { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Topbar from '../../components/topbar/Topbar'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Feed from '../../components/feed/Feed'
 import Rightbar from '../../components/rightbar/Rightbar'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
+import { SocketContext } from '../../context/Socket'
 import './home.css'
 import { useHistory } from 'react-router'
 import { getFriends } from '../../apiCalls'
-import { Socket } from '../../utils/socket'
-
 
 export default function Home() {
   const history = useHistory()
-  const socket = useRef(Socket).current
   const { user } = useContext(AuthContext)
+  const { onlineUsers } = useContext(SocketContext)
   const [friends, setFriends] = useState([])
-  const [onlineUsers, setOnlineUsers] = useState([])
   const [onlineFriends, setOnlineFriends] = useState([])
 
   useEffect(() => {
     if (!user) {
       history.push('/')
     }
-    // eslint-disable-next-line
-  }, [user])
-
-  useEffect(() => {
-    // socket = io('ws://localhost:8900')
-    const handleUsers = (users) => {
-      setOnlineUsers(
-        user.followings.filter((el) => users.some((u) => u.userId === el)),
-      )
-    }
-    socket.emit('addUser', user?._id)
-    socket.on('getUsers', handleUsers)
-    return () => {
-      socket.off('getUsers', handleUsers)
-    }
-  }, [user, socket])
+  }, [user, history])
 
   useEffect(() => {
     getFriends(user._id)
@@ -48,13 +31,13 @@ export default function Home() {
   }, [user._id])
 
   useEffect(() => {
-    setOnlineFriends(friends.filter((el) => onlineUsers.includes(el._id)))
+    setOnlineFriends(friends.filter((el) => onlineUsers?.includes(el._id)))
   }, [onlineUsers, friends])
 
   return (
     <>
       <Topbar />
-      <div className="homeContainer">
+      <div className='homeContainer'>
         <Sidebar onlineFriends={onlineFriends} friends={friends} />
         <Feed />
         <Rightbar onlineFriends={onlineFriends} friends={friends} />

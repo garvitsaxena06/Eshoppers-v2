@@ -4,63 +4,27 @@ import Topbar from '../../components/topbar/Topbar'
 import Conversation from '../../components/conversation/Conversation'
 import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
+import { SocketContext } from '../../context/Socket'
+import useSocket from '../../socket'
 import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
-import { Socket } from '../../utils/socket'
 
 const Messenger = () => {
+  const { socket } = useSocket()
   const [AllConversations, setAllConversations] = useState([])
   const [conversations, setConversations] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
-  const [arrivalMessage, setArrivalMessage] = useState(null)
-  const [onlineUsers, setOnlineUsers] = useState([])
-  const socket = useRef(Socket).current
   const { user } = useContext(AuthContext)
+  const { onlineUsers, arrivalMessage } = useContext(SocketContext)
   const scrollRef = useRef()
-
-  useEffect(() => {
-    const handleMessages = ({ senderId, text }) => {
-      setArrivalMessage({
-        sender: senderId,
-        text,
-        createdAt: Date.now(),
-      })
-    }
-
-    const handleConversations = ({ senderId, conversation }) => {
-      setAllConversations((prev) => [...prev, conversation])
-      setConversations((prev) => [...prev, conversation])
-    }
-
-    // socket = io('ws://localhost:8900')
-    socket.on('getMessage', handleMessages)
-    socket.on('getConversation', handleConversations)
-    return () => {
-      socket.off('getMessage', handleMessages)
-      socket.off('receive_conversation', handleConversations)
-    }
-  }, [socket])
 
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage])
   }, [arrivalMessage, currentChat])
-
-  useEffect(() => {
-    const handleUsers = (users) => {
-      setOnlineUsers(
-        user.followings.filter((el) => users.some((u) => u.userId === el)),
-      )
-    }
-    socket.emit('addUser', user._id)
-    socket.on('getUsers', handleUsers)
-    return () => {
-      socket.off('getUsers', handleUsers)
-    }
-  }, [user, socket])
 
   useEffect(() => {
     getConversations(user._id)
@@ -130,13 +94,13 @@ const Messenger = () => {
   return (
     <>
       <Topbar />
-      <div className="messenger">
-        <div className="chatMenu">
-          <div className="chatMenuWrapper">
+      <div className='messenger'>
+        <div className='chatMenu'>
+          <div className='chatMenuWrapper'>
             <input
-              type="text"
-              placeholder="Search for friends"
-              className="chatMenuInput"
+              type='text'
+              placeholder='Search for friends'
+              className='chatMenuInput'
               onChange={handleChange}
             />
             {conversations.map((el, i) => (
@@ -151,26 +115,26 @@ const Messenger = () => {
             ))}
           </div>
         </div>
-        <div className="chatBox">
-          <div className="chatBoxWrapper">
+        <div className='chatBox'>
+          <div className='chatBoxWrapper'>
             {currentChat ? (
               <>
-                <div className="chatBoxTop">
+                <div className='chatBoxTop'>
                   {messages.map((el, i) => (
                     <div key={i} ref={scrollRef}>
                       <Message message={el} own={el.sender === user._id} />
                     </div>
                   ))}
                 </div>
-                <div className="chatBoxBottom">
+                <div className='chatBoxBottom'>
                   <textarea
-                    className="chatMessageInput"
-                    placeholder="Write something..."
+                    className='chatMessageInput'
+                    placeholder='Write something...'
                     onChange={(e) => setNewMessage(e.target.value)}
                     value={newMessage}
                   ></textarea>
                   <button
-                    className="chatSubmitBtn"
+                    className='chatSubmitBtn'
                     onClick={sendMessageHandler}
                   >
                     Send
@@ -178,14 +142,14 @@ const Messenger = () => {
                 </div>
               </>
             ) : (
-              <span className="noConversationText">
+              <span className='noConversationText'>
                 Open a conversation to start a chat.
               </span>
             )}
           </div>
         </div>
-        <div className="chatOnline">
-          <div className="chatOnlineWrapper">
+        <div className='chatOnline'>
+          <div className='chatOnlineWrapper'>
             <ChatOnline
               onlineUsers={onlineUsers}
               currentId={user._id}

@@ -6,7 +6,7 @@ import Rightbar from '../../components/rightbar/Rightbar'
 import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
 import { getFriends, updateUser } from '../../apiCalls'
 import { CameraAlt, Edit } from '@material-ui/icons'
 import { upload } from '../../utils/upload'
@@ -70,35 +70,35 @@ export default function Profile() {
   return (
     <>
       <Topbar />
-      <div className="profile">
+      <div className='profile'>
         <Sidebar friends={friends} />
-        <div className="profileRight">
-          <div className="profileRightTop">
-            <div className="profileCover">
+        <div className='profileRight'>
+          <div className='profileRightTop'>
+            <div className='profileCover'>
               <div>
                 <img
-                  className="profileCoverImg"
+                  className='profileCoverImg'
                   src={
                     user.coverPicture
                       ? user.coverPicture
                       : PF + 'person/noCover.png'
                   }
-                  alt=""
+                  alt=''
                 />
                 {loading.coverPicture && (
-                  <Spinner animation="border" variant="primary" />
+                  <Spinner animation='border' variant='primary' />
                 )}
                 <div>
-                  <label htmlFor="cover" className="shareOption">
-                    <div className="editCoverImage">
+                  <label htmlFor='cover' className='shareOption'>
+                    <div className='editCoverImage'>
                       <Edit />
                       {' Edit Cover Photo'}
                     </div>
                     <input
                       style={{ display: 'none' }}
-                      type="file"
-                      id="cover"
-                      accept=".png,.jpeg,.jpg"
+                      type='file'
+                      id='cover'
+                      accept='.png,.jpeg,.jpg'
                       onChange={(e) =>
                         handleFileUpload(e.target.files[0], 'coverPicture')
                       }
@@ -106,34 +106,34 @@ export default function Profile() {
                   </label>
                 </div>
               </div>
-              <div className="profileUserImgContainer">
+              <div className='profileUserImgContainer'>
                 {loading.profilePicture ? (
                   <Spinner
-                    animation="border"
-                    className="profileUserImg"
-                    variant="primary"
+                    animation='border'
+                    className='profileUserImg'
+                    variant='primary'
                   />
                 ) : (
                   <img
-                    className="profileUserImg"
+                    className='profileUserImg'
                     src={
                       user.profilePicture
                         ? user.profilePicture
                         : PF + 'person/noAvatar.png'
                     }
-                    alt=""
+                    alt=''
                   />
                 )}
                 <div>
-                  <label htmlFor="file" className="shareOption">
-                    <div className="editProfileImage">
+                  <label htmlFor='file' className='shareOption'>
+                    <div className='editProfileImage'>
                       <CameraAlt style={{ fontSize: '20px' }}></CameraAlt>
                     </div>
                     <input
                       style={{ display: 'none' }}
-                      type="file"
-                      id="file"
-                      accept=".png,.jpeg,.jpg"
+                      type='file'
+                      id='file'
+                      accept='.png,.jpeg,.jpg'
                       onChange={(e) =>
                         handleFileUpload(e.target.files[0], 'profilePicture')
                       }
@@ -142,12 +142,12 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-            <div className="profileInfo">
-              <h4 className="profileInfoName">{user.username}</h4>
-              <span className="profileInfoDesc">{user.desc}</span>
+            <div className='profileInfo'>
+              <h4 className='profileInfoName'>{user.username}</h4>
+              <span className='profileInfoDesc'>{user.desc}</span>
             </div>
           </div>
-          <div className="profileRightBottom">
+          <div className='profileRightBottom'>
             <Feed username={username} />
             <Rightbar user={user} UpdateUserDetails={UpdateUserDetails} />
           </div>

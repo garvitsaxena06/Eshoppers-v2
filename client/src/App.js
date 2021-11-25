@@ -9,27 +9,44 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import { useContext } from 'react'
-import { AuthContext } from './context/AuthContext'
+import { useContext, useEffect } from 'react'
+import useSocket from './socket'
+import { AuthContext } from './context/Auth'
+import { SocketContext } from './context/Socket'
+import { setOnlineUsers } from './context/Socket/SocketActions'
 import Floating from './components/floatingMessage/Floating'
 
 function App() {
   const { user } = useContext(AuthContext)
+  const { dispatch } = useContext(SocketContext)
+  const { socket } = useSocket()
+
+  useEffect(() => {
+    if (socket && socket.current) {
+      socket.current.on('getUsers', (users) => {
+        dispatch(
+          setOnlineUsers(
+            user?.followings.filter((el) => users.some((u) => u.userId === el))
+          )
+        )
+      })
+    }
+  }, [user, dispatch, socket])
 
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
+        <Route exact path='/'>
           {user ? <Home /> : <Register />}
         </Route>
-        <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
-        <Route path="/register">
-          {user ? <Redirect to="/" /> : <Register />}
+        <Route path='/login'>{user ? <Redirect to='/' /> : <Login />}</Route>
+        <Route path='/register'>
+          {user ? <Redirect to='/' /> : <Register />}
         </Route>
-        <Route path="/messenger">
-          {!user ? <Redirect to="/" /> : <Messenger />}
+        <Route path='/messenger'>
+          {!user ? <Redirect to='/' /> : <Messenger />}
         </Route>
-        <Route path="/profile/:username">
+        <Route path='/profile/:username'>
           <Profile />
         </Route>
       </Switch>

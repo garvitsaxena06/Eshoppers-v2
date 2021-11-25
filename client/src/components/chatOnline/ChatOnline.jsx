@@ -21,7 +21,7 @@ const ChatOnline = ({
   }, [currentId])
 
   useEffect(() => {
-    setOnlineFriends(friends.filter((el) => onlineUsers.includes(el._id)))
+    setOnlineFriends(friends.filter((el) => onlineUsers?.includes(el._id)))
   }, [onlineUsers, friends])
 
   const openUserChat = (userId) => {

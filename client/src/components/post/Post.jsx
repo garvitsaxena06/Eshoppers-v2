@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { format } from 'timeago.js'
 import { Link } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth'
 import { Menu, Dropdown } from 'antd'
 
 export default function Post({ post, fetchPosts }) {
@@ -50,41 +50,41 @@ export default function Post({ post, fetchPosts }) {
   )
 
   return (
-    <div className="post">
-      <div className="postWrapper">
-        <div className="postTop">
-          <div className="postTopLeft">
+    <div className='post'>
+      <div className='postWrapper'>
+        <div className='postTop'>
+          <div className='postTopLeft'>
             <Link to={`/profile/${user.username}`}>
               <img
-                className="postProfileImg"
+                className='postProfileImg'
                 src={
                   user.profilePicture
                     ? user.profilePicture
                     : PF + 'person/noAvatar.png'
                 }
-                alt=""
+                alt=''
               />
             </Link>
-            <span className="postUsername">{user.username}</span>
-            <span className="postDate">{format(post.createdAt)}</span>
+            <span className='postUsername'>{user.username}</span>
+            <span className='postDate'>{format(post.createdAt)}</span>
           </div>
-          <div className="postTopRight">
+          <div className='postTopRight'>
             <Dropdown overlay={menu}>
               <MoreVert />
             </Dropdown>
           </div>
         </div>
-        <div className="postCenter">
-          <span className="postText">{post?.desc}</span>
-          <img className="postImg" src={PF + post.img} alt="" />
+        <div className='postCenter'>
+          <span className='postText'>{post?.desc}</span>
+          <img className='postImg' src={PF + post.img} alt='' />
         </div>
-        <div className="postBottom">
-          <div className="postBottomLeft">
+        <div className='postBottom'>
+          <div className='postBottomLeft'>
             <img
-              className="likeIcon"
+              className='likeIcon'
               src={`${PF}like.png`}
               onClick={likeHandler}
-              alt=""
+              alt=''
             />
             {/* <img
               className="likeIcon"
@@ -92,7 +92,7 @@ export default function Post({ post, fetchPosts }) {
               onClick={likeHandler}
               alt=""
             /> */}
-            <span className="postLikeCounter">{like} people like it</span>
+            <span className='postLikeCounter'>{like} people like it</span>
           </div>
           {/* <div className="postBottomRight">
             <span className="postCommentText">{post.comment} comments</span>
