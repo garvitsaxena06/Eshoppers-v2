@@ -30,8 +30,8 @@ const Messenger = () => {
     }
 
     const handleConversations = ({ senderId, conversation }) => {
-      setConversations((prev) => [...prev, conversation])
       setAllConversations((prev) => [...prev, conversation])
+      setConversations((prev) => [...prev, conversation])
     }
 
     // socket = io('ws://localhost:8900')
@@ -65,8 +65,8 @@ const Messenger = () => {
   useEffect(() => {
     getConversations(user._id)
       .then((res) => {
-        setConversations(res.data)
         setAllConversations(res.data)
+        setConversations(res.data)
       })
       .catch((err) => console.log(err))
   }, [user._id])
@@ -107,12 +107,17 @@ const Messenger = () => {
   }, [messages])
 
   const handleChange = (event) => {
-    const { value } = event.target.value
-    console.log({ conversations })
+    const { value } = event.target
     if (value === '') setConversations(AllConversations)
     else {
       const filteredConversations = AllConversations.filter((con) => {
-        return con
+        if (
+          con?.member?.username
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        )
+          return con
+        return 0
       })
       setConversations(filteredConversations)
     }
@@ -136,7 +141,12 @@ const Messenger = () => {
             />
             {conversations.map((el, i) => (
               <div key={i} onClick={() => setCurrentChat(el)}>
-                <Conversation conversation={el} currentUser={user} />
+                <Conversation
+                  AllConversations={AllConversations}
+                  setAllConversations={setAllConversations}
+                  conversation={el}
+                  currentUser={user}
+                />
               </div>
             ))}
           </div>
