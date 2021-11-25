@@ -17,7 +17,8 @@ const Messenger = () => {
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const { user } = useContext(AuthContext)
-  const { onlineUsers, arrivalMessage } = useContext(SocketContext)
+  const { onlineUsers, arrivalMessage, newConversation } =
+    useContext(SocketContext)
   const scrollRef = useRef()
 
   useEffect(() => {
@@ -25,6 +26,14 @@ const Messenger = () => {
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage])
   }, [arrivalMessage, currentChat])
+
+  useEffect(() => {
+    if (newConversation) {
+      const { conversation } = newConversation
+      setConversations((prev) => [...prev, conversation])
+      setAllConversations((prev) => [...prev, conversation])
+    }
+  }, [newConversation])
 
   useEffect(() => {
     getConversations(user._id)
@@ -56,7 +65,7 @@ const Messenger = () => {
           setMessages([...messages, res.data])
 
           const receiverId = currentChat.members?.find((el) => el !== user._id)
-          socket.emit('sendMessage', {
+          socket.current.emit('sendMessage', {
             senderId: user._id,
             receiverId,
             text: newMessage,
@@ -82,9 +91,8 @@ const Messenger = () => {
   }
 
   const updateConversations = (data) => {
-    socket.emit('addConversation', data)
+    socket.current.emit('addConversation', data)
   }
-
   return (
     <>
       <Topbar />
@@ -109,11 +117,17 @@ const Messenger = () => {
             {currentChat ? (
               <>
                 <div className='chatBoxTop'>
-                  {messages.map((el, i) => (
-                    <div key={i} ref={scrollRef}>
-                      <Message message={el} own={el.sender === user._id} />
-                    </div>
-                  ))}
+                  {messages.length > 0 ? (
+                    messages.map((el, i) => (
+                      <div key={i} ref={scrollRef}>
+                        <Message message={el} own={el.sender === user._id} />
+                      </div>
+                    ))
+                  ) : (
+                    <span className='noConversationText'>
+                      You don't have any conversations yet.
+                    </span>
+                  )}
                 </div>
                 <div className='chatBoxBottom'>
                   <textarea

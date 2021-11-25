@@ -4,6 +4,7 @@ import SocketReducer from './SocketReducer'
 const INITIAL_STATE = {
   onlineUsers: [],
   arrivalMessage: null,
+  newConversation: null,
 }
 
 export const SocketContext = createContext(INITIAL_STATE)
@@ -16,6 +17,7 @@ export const SocketProvider = ({ children }) => {
       value={{
         onlineUsers: state.onlineUsers,
         arrivalMessage: state.arrivalMessage,
+        newConversation: state.newConversation,
         dispatch,
       }}
     >

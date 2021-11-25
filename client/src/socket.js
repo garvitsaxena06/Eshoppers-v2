@@ -2,7 +2,10 @@ import { useRef, useEffect, useContext } from 'react'
 import { io } from 'socket.io-client'
 import { AuthContext } from './context/Auth'
 import { SocketContext } from './context/Socket'
-import { setArrivalMessage } from './context/Socket/SocketActions'
+import {
+  setArrivalMessage,
+  setNewConversation,
+} from './context/Socket/SocketActions'
 
 const useSocket = () => {
   const { user } = useContext(AuthContext)
@@ -21,6 +24,9 @@ const useSocket = () => {
             createdAt: Date.now(),
           })
         )
+      })
+      socket.current.on('getConversation', ({ senderId, conversation }) => {
+        dispatch(setNewConversation({ senderId, conversation }))
       })
     }
   }, [user, dispatch])

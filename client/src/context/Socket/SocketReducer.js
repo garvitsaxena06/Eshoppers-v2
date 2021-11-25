@@ -10,6 +10,11 @@ const SocketReducer = (state, action) => {
         ...state,
         arrivalMessage: action.payload,
       }
+    case 'SET_NEW_CONVERSATION':
+      return {
+        ...state,
+        newConversation: action.payload,
+      }
     default:
       return state
   }
