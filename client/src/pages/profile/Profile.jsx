@@ -69,84 +69,88 @@ export default function Profile() {
   return (
     <>
       <Topbar />
-      <div className='profile'>
+      <div className="profile">
         <Sidebar friends={friends} />
-        <div className='profileRight'>
-          <div className='profileRightTop'>
-            <div className='profileCover'>
+        <div className="profileRight">
+          <div className="profileRightTop">
+            <div className="profileCover">
               <div>
                 <img
-                  className='profileCoverImg'
+                  className="profileCoverImg"
                   src={
                     user.coverPicture
                       ? user.coverPicture
-                      : PF + 'person/noCover.png'
+                      : PF + 'pexels-lina-kivaka-2337491.jpg'
                   }
-                  alt=''
+                  alt=""
                 />
                 {loading.coverPicture && (
-                  <Spinner animation='border' variant='primary' />
+                  <Spinner animation="border" variant="primary" />
                 )}
-                <div>
-                  <label htmlFor='cover' className='shareOption'>
-                    <div className='editCoverImage'>
-                      <Edit />
-                      {' Edit Cover Photo'}
-                    </div>
-                    <input
-                      style={{ display: 'none' }}
-                      type='file'
-                      id='cover'
-                      accept='.png,.jpeg,.jpg'
-                      onChange={(e) =>
-                        handleFileUpload(e.target.files[0], 'coverPicture')
-                      }
-                    />
-                  </label>
-                </div>
+                {user.username === loggedInUser.username && (
+                  <div>
+                    <label htmlFor="cover" className="shareOption">
+                      <div className="editCoverImage">
+                        <Edit />
+                        {' Edit Cover Photo'}
+                      </div>
+                      <input
+                        style={{ display: 'none' }}
+                        type="file"
+                        id="cover"
+                        accept=".png,.jpeg,.jpg"
+                        onChange={(e) =>
+                          handleFileUpload(e.target.files[0], 'coverPicture')
+                        }
+                      />
+                    </label>
+                  </div>
+                )}
               </div>
-              <div className='profileUserImgContainer'>
+              <div className="profileUserImgContainer">
                 {loading.profilePicture ? (
                   <Spinner
-                    animation='border'
-                    className='profileUserImg'
-                    variant='primary'
+                    animation="border"
+                    className="profileUserImg"
+                    variant="primary"
                   />
                 ) : (
                   <img
-                    className='profileUserImg'
+                    className="profileUserImg"
                     src={
                       user.profilePicture
                         ? user.profilePicture
                         : PF + 'person/noAvatar.png'
                     }
-                    alt=''
+                    alt=""
                   />
                 )}
-                <div>
-                  <label htmlFor='file' className='shareOption'>
-                    <div className='editProfileImage'>
-                      <CameraAlt style={{ fontSize: '20px' }}></CameraAlt>
-                    </div>
-                    <input
-                      style={{ display: 'none' }}
-                      type='file'
-                      id='file'
-                      accept='.png,.jpeg,.jpg'
-                      onChange={(e) =>
-                        handleFileUpload(e.target.files[0], 'profilePicture')
-                      }
-                    />
-                  </label>
-                </div>
+                {user.username === loggedInUser.username && (
+                  <div>
+                    <label htmlFor="file" className="shareOption">
+                      <div className="editProfileImage">
+                        <CameraAlt style={{ fontSize: '20px' }}></CameraAlt>
+                      </div>
+                      <input
+                        style={{ display: 'none' }}
+                        type="file"
+                        id="file"
+                        accept=".png,.jpeg,.jpg"
+                        onChange={(e) =>
+                          handleFileUpload(e.target.files[0], 'profilePicture')
+                        }
+                      />
+                    </label>
+                  </div>
+                )}
               </div>
             </div>
-            <div className='profileInfo'>
-              <h4 className='profileInfoName'>{user.username}</h4>
-              <span className='profileInfoDesc'>{user.desc}</span>
+            <div className="profileInfo">
+              <h4 className="profileInfoName">{user.username}</h4>
+              <span className="profileInfoDesc">{user.desc}</span>
             </div>
           </div>
-          <div className='profileRightBottom'>
+          <div className="profileRightBottom">
             <Feed username={username} />
             <Rightbar user={user} UpdateUserDetails={UpdateUserDetails} />
           </div>
