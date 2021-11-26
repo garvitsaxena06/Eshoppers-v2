@@ -57,7 +57,6 @@ export default function Profile() {
 
   const handleFileUpload = (file, name) => {
     upload(file, (err, response) => {
-      console.log({ err, response })
       if (!err) {
         setLoading({ ...loading, [name]: true })
         UpdateUserDetails({ [name]: response })

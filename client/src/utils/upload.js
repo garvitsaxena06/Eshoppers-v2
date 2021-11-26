@@ -28,7 +28,11 @@ export const upload = (file, cb = () => {}) => {
           'Content-Type': file.type,
         },
       }
-      const url = `https://s3.ap-south-1.amazonaws.com/${bucketName}/${fileName}`
+      // const url = `https://s3.ap-south-1.amazonaws.com/${bucketName}/${fileName}`
+      const url = `${
+        process.env.CLOUDFRONT_ASSETS_URL ||
+        'https://d225jocw4xhwve.cloudfront.net'
+      }/${fileName}`
       axios
         .put(data, file, options)
         .then(() => cb(false, url))

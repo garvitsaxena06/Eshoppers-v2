@@ -16,7 +16,7 @@ export default function Feed({ username }) {
     setPosts(
       res.data.sort((p1, p2) => {
         return new Date(p2.createdAt) - new Date(p1.createdAt)
-      })
+      }),
     )
   }
 
@@ -26,11 +26,12 @@ export default function Feed({ username }) {
   }, [username, user._id])
 
   return (
-    <div className='feed'>
-      <div className='feedWrapper'>
+    <div className="feed">
+      <div className="feedWrapper">
         {(!username || username === user.username) && (
           <Share fetchPosts={fetchPosts} />
         )}
+
         {posts.map((p) => (
           <Post fetchPosts={fetchPosts} key={p._id} post={p} />
         ))}
