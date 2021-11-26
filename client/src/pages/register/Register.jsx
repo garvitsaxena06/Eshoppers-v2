@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useRef } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
+import { GenerateKeys } from '../../utils/crypto'
 
 export default function Register() {
   const username = useRef()
@@ -15,10 +16,12 @@ export default function Register() {
     if (passwordAgain.current.value !== password.current.value) {
       passwordAgain.current.setCustomValidity("Passwords don't match!")
     } else {
+      const keys = await GenerateKeys()
       const user = {
         username: username.current.value,
         email: email.current.value,
         password: password.current.value,
+        ...keys,
       }
       try {
         await axios.post('/auth/register', user)
@@ -30,53 +33,53 @@ export default function Register() {
   }
 
   return (
-    <div className='login'>
-      <div className='loginWrapper'>
-        <div className='loginLeft'>
-          <h3 className='loginLogo'>Lamasocial</h3>
-          <span className='loginDesc'>
+    <div className="login">
+      <div className="loginWrapper">
+        <div className="loginLeft">
+          <h3 className="loginLogo">Lamasocial</h3>
+          <span className="loginDesc">
             Connect with friends and the world around you on Lamasocial.
           </span>
         </div>
-        <div className='loginRight'>
-          <form className='loginBox' onSubmit={handleClick}>
+        <div className="loginRight">
+          <form className="loginBox" onSubmit={handleClick}>
             <input
-              placeholder='Username'
+              placeholder="Username"
               required
               ref={username}
-              name='username'
-              className='loginInput'
+              name="username"
+              className="loginInput"
             />
             <input
-              placeholder='Email'
+              placeholder="Email"
               required
               ref={email}
-              name='email'
-              className='loginInput'
-              type='email'
+              name="email"
+              className="loginInput"
+              type="email"
             />
             <input
-              placeholder='Password'
+              placeholder="Password"
               required
               ref={password}
-              name='password'
-              className='loginInput'
-              type='password'
-              minLength='6'
+              name="password"
+              className="loginInput"
+              type="password"
+              minLength="6"
             />
             <input
-              placeholder='Confirm Password'
+              placeholder="Confirm Password"
               required
               ref={passwordAgain}
-              name='passwordAgain'
-              className='loginInput'
-              type='password'
+              name="passwordAgain"
+              className="loginInput"
+              type="password"
             />
-            <button className='loginButton' type='submit'>
+            <button className="loginButton" type="submit">
               Sign Up
             </button>
             <button
-              className='loginRegisterButton'
+              className="loginRegisterButton"
               onClick={() => history.push('/login')}
             >
               Log into Account

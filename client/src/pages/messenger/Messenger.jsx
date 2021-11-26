@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/Auth'
 import { SocketContext } from '../../context/Socket'
 import useSocket from '../../socket'
 import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
-
+import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 const Messenger = () => {
   const { socket } = useSocket()
   const [AllConversations, setAllConversations] = useState([])
@@ -16,9 +16,11 @@ const Messenger = () => {
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
+  const [decryptionKeys, setDecryptionKeys] = useState()
   const { user } = useContext(AuthContext)
-  const { onlineUsers, arrivalMessage, newConversation } =
-    useContext(SocketContext)
+  const { onlineUsers, arrivalMessage, newConversation } = useContext(
+    SocketContext,
+  )
   const scrollRef = useRef()
 
   useEffect(() => {
@@ -52,13 +54,14 @@ const Messenger = () => {
       .catch((err) => console.log(err))
   }, [currentChat])
 
-  const sendMessageHandler = (e) => {
+  const sendMessageHandler = async (e) => {
     e.preventDefault()
+    const encryptedMessages = await Encrypt(newMessage, decryptionKeys)
     if (newMessage) {
       sendNewMessage({
         conversationId: currentChat._id,
         sender: user._id,
-        text: newMessage,
+        text: encryptedMessages,
       })
         .then((res) => {
           setNewMessage('')
@@ -102,17 +105,27 @@ const Messenger = () => {
   return (
     <>
       <Topbar />
-      <div className='messenger'>
-        <div className='chatMenu'>
-          <div className='chatMenuWrapper'>
+      <div className="messenger">
+        <div className="chatMenu">
+          <div className="chatMenuWrapper">
             <input
-              type='text'
-              placeholder='Search for friends'
-              className='chatMenuInput'
+              type="text"
+              placeholder="Search for friends"
+              className="chatMenuInput"
               onChange={handleChange}
             />
             {conversations.map((el, i) => (
-              <div key={i} onClick={() => setCurrentChat(el)}>
+              <div
+                key={i}
+                onClick={async () => {
+                  const derivedKeys = await DeriveKeys(
+                    el.member.publicKeyJwk,
+                    user.privateKeyJwk,
+                  )
+                  setDecryptionKeys(derivedKeys)
+                  setCurrentChat(el)
+                }}
+              >
                 <Conversation
                   AllConversations={AllConversations}
                   setAllConversations={setAllConversations}
@@ -123,32 +136,37 @@ const Messenger = () => {
             ))}
           </div>
         </div>
-        <div className='chatBox'>
-          <div className='chatBoxWrapper'>
+        <div className="chatBox">
+          <div className="chatBoxWrapper">
             {currentChat ? (
               <>
-                <div className='chatBoxTop'>
+                <div className="chatBoxTop">
                   {messages.length > 0 ? (
                     messages.map((el, i) => (
                       <div key={i} ref={scrollRef}>
-                        <Message message={el} own={el.sender === user._id} />
+                        <Message
+                          derivedKeys={decryptionKeys}
+                          Decrypt={Decrypt}
+                          message={el}
+                          own={el.sender === user._id}
+                        />
                       </div>
                     ))
                   ) : (
-                    <span className='noConversationText'>
+                    <span className="noConversationText">
                       You don't have any conversations yet.
                     </span>
                   )}
                 </div>
-                <div className='chatBoxBottom'>
+                <div className="chatBoxBottom">
                   <textarea
-                    className='chatMessageInput'
-                    placeholder='Write something...'
+                    className="chatMessageInput"
+                    placeholder="Write something..."
                     onChange={(e) => setNewMessage(e.target.value)}
                     value={newMessage}
                   ></textarea>
                   <button
-                    className='chatSubmitBtn'
+                    className="chatSubmitBtn"
                     onClick={sendMessageHandler}
                   >
                     Send
@@ -156,14 +174,14 @@ const Messenger = () => {
                 </div>
               </>
             ) : (
-              <span className='noConversationText'>
+              <span className="noConversationText">
                 Open a conversation to start a chat.
               </span>
             )}
           </div>
         </div>
-        <div className='chatOnline'>
-          <div className='chatOnlineWrapper'>
+        <div className="chatOnline">
+          <div className="chatOnlineWrapper">
             <ChatOnline
               onlineUsers={onlineUsers}
               currentId={user._id}
