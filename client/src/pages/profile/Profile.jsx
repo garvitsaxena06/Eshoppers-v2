@@ -14,22 +14,24 @@ import { message } from 'antd'
 import { Spinner } from 'react-bootstrap'
 
 export default function Profile() {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER
   const [user, setUser] = useState({})
   const { user: loggedInUser, dispatch } = useContext(AuthContext)
   const [loading, setLoading] = useState({
     coverPicture: false,
     profilePicture: false,
   })
+  const [loadingUserDetails, setLoadingUserDetails] = useState(false)
   const [friends, setFriends] = useState([])
   const username = useParams().username
 
   useEffect(() => {
+    setLoadingUserDetails(true)
     const fetchUser = async () => {
       const res = await axios.get(`/users?username=${username}`)
       setUser(res.data)
     }
     fetchUser()
+    setLoadingUserDetails(false)
   }, [username])
 
   useEffect(() => {
@@ -50,8 +52,8 @@ export default function Profile() {
         message.success(res?.data?.message || 'Profile updated successfully')
       })
       .catch((err) => {
-        // console.log(err)
-        // message.error('Please try again later.')
+        console.log(err)
+        message.error('Something went wrong!')
       }),
   ]
 
@@ -61,7 +63,7 @@ export default function Profile() {
         setLoading({ ...loading, [name]: true })
         UpdateUserDetails({ [name]: response })
       } else {
-        message.error(err?.message || 'Please try again later.')
+        message.error(err?.message || 'Something went wrong!')
       }
     })
   }
@@ -69,36 +71,39 @@ export default function Profile() {
   return (
     <>
       <Topbar />
-      <div className="profile">
+      <div className='profile'>
         <Sidebar friends={friends} />
-        <div className="profileRight">
-          <div className="profileRightTop">
-            <div className="profileCover">
+        <div className='profileRight'>
+          <div className='profileRightTop'>
+            <div className='profileCover'>
               <div>
                 <img
-                  className="profileCoverImg"
+                  className='profileCoverImg'
                   src={
                     user.coverPicture
-                      ? user.coverPicture
-                      : PF + 'pexels-lina-kivaka-2337491.jpg'
+                      ? user.coverPicture.replace(
+                          's3.ap-south-1.amazonaws.com/social-app-assets',
+                          'd225jocw4xhwve.cloudfront.net'
+                        )
+                      : 'https://d225jocw4xhwve.cloudfront.net/pexels-lina-kivaka-2337491.jpg'
                   }
-                  alt=""
+                  alt=''
                 />
                 {loading.coverPicture && (
-                  <Spinner animation="border" variant="primary" />
+                  <Spinner animation='border' variant='primary' />
                 )}
                 {user.username === loggedInUser.username && (
                   <div>
-                    <label htmlFor="cover" className="shareOption">
-                      <div className="editCoverImage">
+                    <label htmlFor='cover' className='shareOption'>
+                      <div className='editCoverImage'>
                         <Edit />
                         {' Edit Cover Photo'}
                       </div>
                       <input
                         style={{ display: 'none' }}
-                        type="file"
-                        id="cover"
-                        accept=".png,.jpeg,.jpg"
+                        type='file'
+                        id='cover'
+                        accept='.png,.jpeg,.jpg'
                         onChange={(e) =>
                           handleFileUpload(e.target.files[0], 'coverPicture')
                         }
@@ -107,35 +112,35 @@ export default function Profile() {
                   </div>
                 )}
               </div>
-              <div className="profileUserImgContainer">
+              <div className='profileUserImgContainer'>
                 {loading.profilePicture ? (
                   <Spinner
-                    animation="border"
-                    className="profileUserImg"
-                    variant="primary"
+                    animation='border'
+                    className='profileUserImg'
+                    variant='primary'
                   />
                 ) : (
                   <img
-                    className="profileUserImg"
+                    className='profileUserImg'
                     src={
                       user.profilePicture
                         ? user.profilePicture
-                        : PF + 'person/noAvatar.png'
+                        : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
                     }
-                    alt=""
+                    alt=''
                   />
                 )}
                 {user.username === loggedInUser.username && (
                   <div>
-                    <label htmlFor="file" className="shareOption">
-                      <div className="editProfileImage">
+                    <label htmlFor='file' className='shareOption'>
+                      <div className='editProfileImage'>
                         <CameraAlt style={{ fontSize: '20px' }}></CameraAlt>
                       </div>
                       <input
                         style={{ display: 'none' }}
-                        type="file"
-                        id="file"
-                        accept=".png,.jpeg,.jpg"
+                        type='file'
+                        id='file'
+                        accept='.png,.jpeg,.jpg'
                         onChange={(e) =>
                           handleFileUpload(e.target.files[0], 'profilePicture')
                         }
@@ -145,14 +150,14 @@ export default function Profile() {
                 )}
               </div>
             </div>
-            <div className="profileInfo">
-              <h4 className="profileInfoName">{user.username}</h4>
-              <span className="profileInfoDesc">{user.desc}</span>
-            </div>
           </div>
-          <div className="profileRightBottom">
-            <Feed username={username} />
-            <Rightbar user={user} UpdateUserDetails={UpdateUserDetails} />
+          <div className='profileRightBottom'>
+            <Feed username={username} user={user} />
+            <Rightbar
+              user={user}
+              UpdateUserDetails={UpdateUserDetails}
+              loadingUserDetails={loadingUserDetails}
+            />
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
 import { getConversationByOfTwoUsers, getFriends } from '../../apiCalls'
 import './chatOnline.css'
 
@@ -10,14 +11,19 @@ const ChatOnline = ({
 }) => {
   const [friends, setFriends] = useState([])
   const [onlineFriends, setOnlineFriends] = useState([])
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER
+  const [loadingFriends, setLoadingFriends] = useState(true)
 
   useEffect(() => {
+    setLoadingFriends(true)
     getFriends(currentId)
       .then((res) => {
         setFriends(res.data)
+        setLoadingFriends(false)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        setLoadingFriends(false)
+      })
   }, [currentId])
 
   useEffect(() => {
@@ -35,7 +41,9 @@ const ChatOnline = ({
           })
         setCurrentChat(res.data.data)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const checkUserOnline = (id) => {
@@ -43,32 +51,43 @@ const ChatOnline = ({
   }
 
   return (
-    <div className="chatOnline">
-      {friends.map((el, i) => (
-        <div
-          key={i}
-          className="chatOnlineFriend"
-          onClick={() => openUserChat(el._id)}
-        >
-          <div className="chatOnlineImgContainer">
-            <img
-              className="chatOnlineImg"
-              src={
-                el?.profilePicture
-                  ? el?.profilePicture
-                  : PF + 'person/noAvatar.png'
-              }
-              alt="profileImage"
-            />
+    <div className='chatOnline'>
+      {!loadingFriends
+        ? friends.map((el, i) => (
             <div
-              className={`chatOnlineBadge${
-                checkUserOnline(el._id) ? ' online' : ''
-              }`}
-            ></div>
-          </div>
-          <span className="chatOnlineName">{el.username}</span>
-        </div>
-      ))}
+              key={i}
+              className='chatOnlineFriend'
+              onClick={() => openUserChat(el._id)}
+            >
+              <div className='chatOnlineImgContainer'>
+                <img
+                  className='chatOnlineImg'
+                  src={
+                    el?.profilePicture
+                      ? el?.profilePicture
+                      : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
+                  }
+                  alt='profileImage'
+                />
+                <div
+                  className={`chatOnlineBadge${
+                    checkUserOnline(el._id) ? ' online' : ''
+                  }`}
+                ></div>
+              </div>
+              <span className='chatOnlineName'>{el.username}</span>
+            </div>
+          ))
+        : [...Array(3).keys()].map((el, i) => (
+            <div key={i} className='d-flex align-items-center ps-2 pe-3 py-2'>
+              <div>
+                <Skeleton circle width={40} height={40} />
+              </div>
+              <div className='w-100 ps-3'>
+                <Skeleton count={3} />
+              </div>
+            </div>
+          ))}
     </div>
   )
 }

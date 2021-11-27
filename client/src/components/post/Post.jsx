@@ -3,7 +3,7 @@ import { MoreVert } from '@material-ui/icons'
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { format } from 'timeago.js'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/Auth'
 import { Menu, Dropdown } from 'antd'
 
@@ -13,6 +13,7 @@ export default function Post({ post, fetchPosts }) {
   const [user, setUser] = useState({})
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
   const { user: currentUser } = useContext(AuthContext)
+  const history = useHistory()
 
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser._id))
@@ -60,12 +61,17 @@ export default function Post({ post, fetchPosts }) {
                 src={
                   user.profilePicture
                     ? user.profilePicture
-                    : PF + 'person/noAvatar.png'
+                    : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
                 }
                 alt=''
               />
             </Link>
-            <span className='postUsername'>{user.username}</span>
+            <span
+              className='postUsername'
+              onClick={() => history.push(`/profile/${user.username}`)}
+            >
+              {user.username}
+            </span>
             <span className='postDate'>{format(post.createdAt)}</span>
           </div>
           <div className='postTopRight'>

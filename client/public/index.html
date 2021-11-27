@@ -14,7 +14,7 @@
     />
     <link rel="stylesheet" href="http://localhost:3000/assets/style.css" />
     <link rel="apple-touch-icon" href="./images/gift.png" />
-    <link rel="manifest" href="./manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <title>Social App</title>
   </head>
 
@@ -30,12 +30,12 @@
               function (registration) {
                 console.log(
                   'Worker registration successful',
-                  registration.scope,
+                  registration.scope
                 )
               },
               function (err) {
                 console.log('Worker registration failed', err)
-              },
+              }
             )
             .catch(function (err) {
               console.log(err)

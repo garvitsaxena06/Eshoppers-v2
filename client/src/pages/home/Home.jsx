@@ -15,6 +15,7 @@ export default function Home() {
   const { onlineUsers } = useContext(SocketContext)
   const [friends, setFriends] = useState([])
   const [onlineFriends, setOnlineFriends] = useState([])
+  const [loadingFriends, setLoadingFriends] = useState(true)
 
   useEffect(() => {
     if (!user) {
@@ -23,11 +24,16 @@ export default function Home() {
   }, [user, history])
 
   useEffect(() => {
+    setLoadingFriends(true)
     getFriends(user._id)
       .then((res) => {
         setFriends(res.data)
+        setLoadingFriends(false)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        setLoadingFriends(false)
+      })
   }, [user._id])
 
   useEffect(() => {
@@ -38,9 +44,17 @@ export default function Home() {
     <>
       <Topbar />
       <div className='homeContainer'>
-        <Sidebar onlineFriends={onlineFriends} friends={friends} />
+        <Sidebar
+          onlineFriends={onlineFriends}
+          friends={friends}
+          loadingFriends={loadingFriends}
+        />
         <Feed />
-        <Rightbar onlineFriends={onlineFriends} friends={friends} />
+        <Rightbar
+          onlineFriends={onlineFriends}
+          friends={friends}
+          loadingFriends={loadingFriends}
+        />
       </div>
     </>
   )

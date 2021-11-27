@@ -8,6 +8,8 @@ import { AuthContext } from '../../context/Auth'
 import { SocketContext } from '../../context/Socket'
 import useSocket from '../../socket'
 import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
+import Skeleton from 'react-loading-skeleton'
+import { message } from 'antd'
 
 const Messenger = () => {
   const { socket } = useSocket()
@@ -16,6 +18,8 @@ const Messenger = () => {
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
+  const [loadingConversations, setLoadingConversations] = useState(true)
+  const [loadingMessages, setLoadingMessages] = useState(true)
   const { user } = useContext(AuthContext)
   const { onlineUsers, arrivalMessage, newConversation } =
     useContext(SocketContext)
@@ -36,20 +40,32 @@ const Messenger = () => {
   }, [newConversation])
 
   useEffect(() => {
+    setLoadingConversations(true)
     getConversations(user._id)
       .then((res) => {
         setAllConversations(res.data)
         setConversations(res.data)
+        setLoadingConversations(false)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        setLoadingConversations(false)
+        message.error('Something went wrong!')
+      })
   }, [user._id])
 
   useEffect(() => {
+    setLoadingMessages(true)
     getMessages(currentChat?._id)
       .then((res) => {
         setMessages(res.data)
+        setLoadingMessages(false)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        setLoadingMessages(false)
+        message.error('Something went wrong!')
+      })
   }, [currentChat])
 
   const sendMessageHandler = (e) => {
@@ -71,15 +87,19 @@ const Messenger = () => {
             text: newMessage,
           })
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          console.log(err)
+          message.error('Something went wrong!')
+        })
     }
   }
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, loadingMessages])
 
   const handleChange = (event) => {
+    setLoadingConversations(true)
     const { value } = event.target
     if (value === '') setConversations(AllConversations)
     else {
@@ -94,6 +114,7 @@ const Messenger = () => {
       })
       setConversations(filteredConversations)
     }
+    setLoadingConversations(false)
   }
 
   const updateConversations = (data) => {
@@ -111,16 +132,30 @@ const Messenger = () => {
               className='chatMenuInput'
               onChange={handleChange}
             />
-            {conversations.map((el, i) => (
-              <div key={i} onClick={() => setCurrentChat(el)}>
-                <Conversation
-                  AllConversations={AllConversations}
-                  setAllConversations={setAllConversations}
-                  conversation={el}
-                  currentUser={user}
-                />
-              </div>
-            ))}
+            {!loadingConversations
+              ? conversations.map((el, i) => (
+                  <div key={i} onClick={() => setCurrentChat(el)}>
+                    <Conversation
+                      AllConversations={AllConversations}
+                      setAllConversations={setAllConversations}
+                      conversation={el}
+                      currentUser={user}
+                    />
+                  </div>
+                ))
+              : [...Array(3).keys()].map((el, i) => (
+                  <div
+                    key={i}
+                    className='d-flex align-items-center ps-2 pe-3 py-2'
+                  >
+                    <div>
+                      <Skeleton circle width={40} height={40} />
+                    </div>
+                    <div className='w-100 ps-3'>
+                      <Skeleton count={3} />
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
         <div className='chatBox'>
@@ -128,16 +163,34 @@ const Messenger = () => {
             {currentChat ? (
               <>
                 <div className='chatBoxTop'>
-                  {messages.length > 0 ? (
-                    messages.map((el, i) => (
-                      <div key={i} ref={scrollRef}>
-                        <Message message={el} own={el.sender === user._id} />
+                  {!loadingMessages ? (
+                    messages.length > 0 ? (
+                      messages.map((el, i) => (
+                        <div key={i} ref={scrollRef}>
+                          <Message message={el} own={el.sender === user._id} />
+                        </div>
+                      ))
+                    ) : (
+                      <span className='noConversationText'>
+                        You don't have any conversations yet.
+                      </span>
+                    )
+                  ) : (
+                    [...Array(6).keys()].map((el, i) => (
+                      <div
+                        key={i}
+                        className={`d-flex align-items-center ps-2 pe-3 py-2 w-50 ${
+                          i % 2 === 0 ? 'ms-auto' : ''
+                        }`}
+                      >
+                        <div>
+                          <Skeleton circle width={40} height={40} />
+                        </div>
+                        <div className='w-100 ps-3'>
+                          <Skeleton count={3} />
+                        </div>
                       </div>
                     ))
-                  ) : (
-                    <span className='noConversationText'>
-                      You don't have any conversations yet.
-                    </span>
                   )}
                 </div>
                 <div className='chatBoxBottom'>

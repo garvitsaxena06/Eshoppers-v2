@@ -23,7 +23,7 @@
   border-radius: 50%;
   object-fit: cover;
   margin: auto;
-  top: -90px;
+  top: 0;
   position: relative;
   display: flex;
   border: 3px solid white;
@@ -31,6 +31,7 @@
 
 .profileUserImgContainer {
   position: relative;
+  margin-top: -90px;
 }
 
 .editProfileImage {
@@ -63,12 +64,11 @@
 .profileInfo {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .profileInfoName {
-  font-size: 24px;
+  font-size: 16px;
+  margin-bottom: 8px;
 }
 
 .profileInfoDesc {
@@ -76,5 +76,6 @@
 }
 
 .profileRightBottom {
+  margin-top: 80px;
   display: flex;
 }

@@ -17,7 +17,6 @@ export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
   const handleSearch = (e) => {
     const { value } = e.target
@@ -66,7 +65,6 @@ export default function Topbar() {
           <Autocomplete
             freeSolo
             id='free-solo-2-demo'
-            disableClearable
             options={searchedItems}
             getOptionLabel={(option) => option.username}
             renderOption={(option) => (
@@ -79,7 +77,7 @@ export default function Topbar() {
                     src={
                       option.profilePicture
                         ? option.profilePicture
-                        : PF + 'person/noAvatar.png'
+                        : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
                     }
                     alt=''
                     className='topbarImg'
@@ -139,7 +137,7 @@ export default function Topbar() {
               src={
                 user.profilePicture
                   ? user.profilePicture
-                  : PF + 'person/noAvatar.png'
+                  : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
               }
               alt=''
               className='topbarImg'

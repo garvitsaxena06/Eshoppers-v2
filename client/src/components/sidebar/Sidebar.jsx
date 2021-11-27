@@ -11,12 +11,13 @@ import {
   // Event,
   // School,
 } from '@material-ui/icons'
+import Skeleton from 'react-loading-skeleton'
 // import { Users } from '../../dummyData'
 import CloseFriend from '../closeFriend/CloseFriend'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/Auth'
 
-export default function Sidebar({ friends, onlineFriends }) {
+export default function Sidebar({ friends, onlineFriends, loadingFriends }) {
   const { user } = useContext(AuthContext)
   const history = useHistory()
 
@@ -70,9 +71,18 @@ export default function Sidebar({ friends, onlineFriends }) {
         {/* <button className="sidebarButton">Show More</button> */}
         <hr className='sidebarHr' />
         <ul className='sidebarFriendList'>
-          {friends.map((u) => (
-            <CloseFriend key={u._id} user={u} />
-          ))}
+          {!loadingFriends
+            ? friends.map((u) => <CloseFriend key={u._id} user={u} />)
+            : [...Array(3).keys()].map((el, i) => (
+                <div key={i} className='d-flex align-items-center pe-3 py-2'>
+                  <div>
+                    <Skeleton circle width={40} height={40} />
+                  </div>
+                  <div className='w-100 ps-3'>
+                    <Skeleton count={3} />
+                  </div>
+                </div>
+              ))}
         </ul>
       </div>
     </div>

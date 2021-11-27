@@ -3,6 +3,7 @@ import Online from '../online/Online'
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
 import { Add, Remove, Edit } from '@material-ui/icons'
 import UserInfoModal from '../modals/userInfo'
@@ -11,8 +12,9 @@ export default function Rightbar({
   user,
   onlineFriends,
   UpdateUserDetails = () => {},
+  loadingFriends,
+  loadingUserDetails = false,
 }) {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER
   const [friends, setFriends] = useState([])
   const { user: currentUser, dispatch } = useContext(AuthContext)
   const [followed, setFollowed] = useState(
@@ -79,9 +81,18 @@ export default function Rightbar({
           <h4 className='rightbarTitle'>Online Friends</h4>
         )}
         <ul className='rightbarFriendList'>
-          {onlineFriends.map((u) => (
-            <Online key={u._id} user={u} />
-          ))}
+          {!loadingFriends
+            ? onlineFriends.map((u) => <Online key={u._id} user={u} />)
+            : [...Array(3).keys()].map((el, i) => (
+                <div key={i} className='d-flex align-items-center pe-3 py-2'>
+                  <div>
+                    <Skeleton circle width={40} height={40} />
+                  </div>
+                  <div className='w-100 ps-3'>
+                    <Skeleton count={3} />
+                  </div>
+                </div>
+              ))}
         </ul>
       </>
     )
@@ -93,7 +104,6 @@ export default function Rightbar({
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
     const handleSubmit = (state) => {
-      console.log(state)
       try {
         UpdateUserDetails(state, (err) => {
           if (!err) handleClose()
@@ -105,58 +115,88 @@ export default function Rightbar({
 
     return (
       <>
-        {user.username !== currentUser.username && (
-          <button className='rightbarFollowButton' onClick={handleClick}>
-            {followed ? 'Unfollow' : 'Follow'}
-            {followed ? <Remove /> : <Add />}
-          </button>
-        )}
-        <div className='d-flex justify-content-between'>
-          <h4 className='rightbarTitle'>User information</h4>
-          {user.username === currentUser.username && (
-            <button className='editButton' onClick={handleShow}>
-              <Edit />
-              {' Edit profile'}
-            </button>
-          )}
-        </div>
-        <div className='rightbarInfo'>
-          <div className='rightbarInfoItem'>
-            <span className='rightbarInfoKey'>First Name:</span>
-            <span className='rightbarInfoValue'>{user.firstName}</span>
-          </div>
-          <div className='rightbarInfoItem'>
-            <span className='rightbarInfoKey'>Last Name:</span>
-            <span className='rightbarInfoValue'>{user.lastName}</span>
-          </div>
-          <div className='rightbarInfoItem'>
-            <span className='rightbarInfoKey'>City:</span>
-            <span className='rightbarInfoValue'>{user.city}</span>
-          </div>
-        </div>
-        <h4 className='rightbarTitle'>User friends</h4>
-        <div className='rightbarFollowings'>
-          {friends.map((friend) => (
-            <Link
-              key={friend.username}
-              to={'/profile/' + friend.username}
-              style={{ textDecoration: 'none' }}
-            >
-              <div className='rightbarFollowing'>
-                <img
-                  src={
-                    friend.profilePicture
-                      ? friend.profilePicture
-                      : PF + 'person/noAvatar.png'
-                  }
-                  alt=''
-                  className='rightbarFollowingImg'
-                />
-                <span className='rightbarFollowingName'>{friend.username}</span>
+        {!loadingUserDetails ? (
+          <>
+            <div className='profileInfo'>
+              <h4 className='profileInfoName'>
+                {user.username && `@${user.username}`}
+              </h4>
+              {/* <span className='profileInfoDesc'>{user.desc}</span> */}
+            </div>
+            {user.username !== currentUser.username && (
+              <button className='rightbarFollowButton' onClick={handleClick}>
+                {followed ? 'Unfollow' : 'Follow'}
+                {followed ? <Remove /> : <Add />}
+              </button>
+            )}
+            <div className='d-flex justify-content-between'>
+              <h4 className='rightbarTitle'>User information</h4>
+              {user.username === currentUser.username && (
+                <button className='editButton' onClick={handleShow}>
+                  <Edit />
+                  {' Edit profile'}
+                </button>
+              )}
+            </div>
+            <div className='rightbarInfo'>
+              <div className='rightbarInfoItem'>
+                <span className='rightbarInfoKey'>First Name:</span>
+                <span className='rightbarInfoValue'>
+                  {user.firstName || 'N/A'}
+                </span>
               </div>
-            </Link>
-          ))}
-        </div>
+              <div className='rightbarInfoItem'>
+                <span className='rightbarInfoKey'>Last Name:</span>
+                <span className='rightbarInfoValue'>
+                  {user.lastName || 'N/A'}
+                </span>
+              </div>
+              <div className='rightbarInfoItem'>
+                <span className='rightbarInfoKey'>City:</span>
+                <span className='rightbarInfoValue'>{user.city || 'N/A'}</span>
+              </div>
+            </div>
+            <h4 className='rightbarTitle'>User friends</h4>
+            <div className='rightbarFollowings'>
+              {friends.map((friend) => (
+                <Link
+                  key={friend.username}
+                  to={'/profile/' + friend.username}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <div className='rightbarFollowing'>
+                    <img
+                      src={
+                        friend.profilePicture
+                          ? friend.profilePicture
+                          : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
+                      }
+                      alt=''
+                      className='rightbarFollowingImg'
+                    />
+                    <span className='rightbarFollowingName text-center'>
+                      {friend.username}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div>
+            <div className='d-flex align-items-center pe-3 py-2'>
+              <div>
+                <Skeleton width={200} count={2} />
+              </div>
+              <div className='w-100 ps-3'>
+                <Skeleton height={36} />
+              </div>
+            </div>
+            <Skeleton count={3} width={200} />
+            <Skeleton count={6} />
+          </div>
+        )}
+
         <UserInfoModal
           show={show}
           user={user}
