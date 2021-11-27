@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useRef } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
+import { GenerateKeys } from '../../utils/crypto'
 
 export default function Register() {
   const username = useRef()
@@ -15,10 +16,12 @@ export default function Register() {
     if (passwordAgain.current.value !== password.current.value) {
       passwordAgain.current.setCustomValidity("Passwords don't match!")
     } else {
+      const keys = await GenerateKeys()
       const user = {
         username: username.current.value,
         email: email.current.value,
         password: password.current.value,
+        ...keys,
       }
       try {
         await axios.post('/auth/register', user)

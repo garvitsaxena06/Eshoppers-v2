@@ -13,7 +13,7 @@
 
 .profileCoverImg {
   width: 100%;
-  height: 340px;
+  height: 250px;
   object-fit: cover;
 }
 
@@ -41,8 +41,8 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: -12px;
-  margin-left: 70px;
+  top: 0;
+  margin-left: 48px;
   cursor: pointer;
 }
 
@@ -59,6 +59,7 @@
   position: absolute;
   right: 2%;
   bottom: 24%;
+  z-index: 3;
 }
 
 .profileInfo {
@@ -76,6 +77,5 @@
 }
 
 .profileRightBottom {
-  margin-top: 80px;
   display: flex;
 }

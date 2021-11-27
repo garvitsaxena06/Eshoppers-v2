@@ -13,6 +13,7 @@ import {
   sendNewMessage,
   getUserById,
 } from '../../apiCalls'
+import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
 import { message } from 'antd'
 
@@ -24,8 +25,9 @@ const Messenger = () => {
   const [messages, setMessages] = useState([])
   const [friend, setFriend] = useState(null)
   const [newMessage, setNewMessage] = useState('')
-  const [loadingConversations, setLoadingConversations] = useState(true)
-  const [loadingMessages, setLoadingMessages] = useState(true)
+  const [decryptionKeys, setDecryptionKeys] = useState()
+  const [loadingConversations, setLoadingConversations] = useState(false)
+  const [loadingMessages, setLoadingMessages] = useState(false)
   const { user } = useContext(AuthContext)
   const { onlineUsers, arrivalMessage, newConversation } =
     useContext(SocketContext)
@@ -62,11 +64,13 @@ const Messenger = () => {
 
   useEffect(() => {
     setLoadingMessages(true)
-    getUserById(currentChat?.members?.find((el) => el !== user._id))
-      .then((res) => {
-        setFriend(res.data)
-      })
-      .catch((err) => console.log(err))
+    if (currentChat) {
+      getUserById(currentChat?.members?.find((el) => el !== user._id))
+        .then((res) => {
+          setFriend(res.data)
+        })
+        .catch((err) => console.log(err))
+    }
     getMessages(currentChat?._id)
       .then((res) => {
         setMessages(res.data)
@@ -79,13 +83,14 @@ const Messenger = () => {
       })
   }, [currentChat, user])
 
-  const sendMessageHandler = (e) => {
+  const sendMessageHandler = async (e) => {
     e.preventDefault()
+    const encryptedMessages = await Encrypt(newMessage, decryptionKeys)
     if (newMessage) {
       sendNewMessage({
         conversationId: currentChat._id,
         sender: user._id,
-        text: newMessage,
+        text: encryptedMessages,
       })
         .then((res) => {
           setNewMessage('')
@@ -95,7 +100,7 @@ const Messenger = () => {
           socket.current.emit('sendMessage', {
             senderId: user._id,
             receiverId,
-            text: newMessage,
+            text: encryptedMessages,
           })
         })
         .catch((err) => {
@@ -131,6 +136,7 @@ const Messenger = () => {
   const updateConversations = (data) => {
     socket.current.emit('addConversation', data)
   }
+
   return (
     <>
       <Topbar />
@@ -143,9 +149,20 @@ const Messenger = () => {
               className='chatMenuInput'
               onChange={handleChange}
             />
-            {!loadingConversations
-              ? conversations.map((el, i) => (
-                  <div key={i} onClick={() => setCurrentChat(el)}>
+            {!loadingConversations ? (
+              conversations.length > 0 ? (
+                conversations.map((el, i) => (
+                  <div
+                    key={i}
+                    onClick={async () => {
+                      const derivedKeys = await DeriveKeys(
+                        el.member.publicKeyJwk,
+                        user.privateKeyJwk
+                      )
+                      setDecryptionKeys(derivedKeys)
+                      setCurrentChat(el)
+                    }}
+                  >
                     <Conversation
                       AllConversations={AllConversations}
                       setAllConversations={setAllConversations}
@@ -154,19 +171,26 @@ const Messenger = () => {
                     />
                   </div>
                 ))
-              : [...Array(3).keys()].map((el, i) => (
-                  <div
-                    key={i}
-                    className='d-flex align-items-center ps-2 pe-3 py-2'
-                  >
-                    <div>
-                      <Skeleton circle width={40} height={40} />
-                    </div>
-                    <div className='w-100 ps-3'>
-                      <Skeleton count={3} />
-                    </div>
+              ) : (
+                <span className='noChatText'>
+                  You don't have any conversations yet.
+                </span>
+              )
+            ) : (
+              [...Array(3).keys()].map((el, i) => (
+                <div
+                  key={i}
+                  className='d-flex align-items-center ps-2 pe-3 py-2'
+                >
+                  <div>
+                    <Skeleton circle width={40} height={40} />
                   </div>
-                ))}
+                  <div className='w-100 ps-3'>
+                    <Skeleton count={3} />
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className='chatBox'>
@@ -179,6 +203,8 @@ const Messenger = () => {
                       messages.map((el, i) => (
                         <div key={i} ref={scrollRef}>
                           <Message
+                            derivedKeys={decryptionKeys}
+                            Decrypt={Decrypt}
                             message={el}
                             friend={friend}
                             own={el.sender === user._id}
@@ -187,7 +213,7 @@ const Messenger = () => {
                       ))
                     ) : (
                       <span className='noConversationText'>
-                        You don't have any conversations yet.
+                        Write your first message to {friend?.username}...
                       </span>
                     )
                   ) : (

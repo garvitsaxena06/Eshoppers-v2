@@ -3,8 +3,17 @@ import { format } from 'timeago.js'
 import { AuthContext } from '../../context/Auth'
 import './message.css'
 
-const Message = ({ message, own, friend }) => {
+const Message = ({ message, own, Decrypt, derivedKeys, friend }) => {
+  const [state, setState] = React.useState('')
   const { user } = useContext(AuthContext)
+  React.useEffect(() => {
+    const getMessages = async () => {
+      const decryptedMessage = await Decrypt(message.text, derivedKeys)
+      setState(decryptedMessage)
+    }
+    getMessages()
+    // eslint-disable-next-line
+  }, [message, derivedKeys])
 
   return (
     <div className={`message${own ? ' own' : ''}`}>
@@ -22,7 +31,7 @@ const Message = ({ message, own, friend }) => {
           }
           alt='profileImage'
         />
-        <p className='messageText'>{message.text}</p>
+        <p className='messageText'>{state}</p>
       </div>
       <div className='messageBottom'>{format(message.createdAt)}</div>
     </div>

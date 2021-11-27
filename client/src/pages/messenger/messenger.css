@@ -71,3 +71,15 @@
   font-size: 40px;
   color: rgb(224, 224, 224);
 }
+
+.chatMenuWrapper {
+  position: relative;
+}
+
+.noChatText {
+  position: absolute;
+  font-size: 28px;
+  color: rgb(224, 224, 224);
+  top: 10%;
+  left: 18px;
+}
