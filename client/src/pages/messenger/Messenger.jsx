@@ -7,7 +7,12 @@ import ChatOnline from '../../components/chatOnline/ChatOnline'
 import { AuthContext } from '../../context/Auth'
 import { SocketContext } from '../../context/Socket'
 import useSocket from '../../socket'
-import { getConversations, getMessages, sendNewMessage } from '../../apiCalls'
+import {
+  getConversations,
+  getMessages,
+  sendNewMessage,
+  getUserById,
+} from '../../apiCalls'
 import Skeleton from 'react-loading-skeleton'
 import { message } from 'antd'
 
@@ -17,6 +22,7 @@ const Messenger = () => {
   const [conversations, setConversations] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
+  const [friend, setFriend] = useState(null)
   const [newMessage, setNewMessage] = useState('')
   const [loadingConversations, setLoadingConversations] = useState(true)
   const [loadingMessages, setLoadingMessages] = useState(true)
@@ -56,6 +62,11 @@ const Messenger = () => {
 
   useEffect(() => {
     setLoadingMessages(true)
+    getUserById(currentChat?.members?.find((el) => el !== user._id))
+      .then((res) => {
+        setFriend(res.data)
+      })
+      .catch((err) => console.log(err))
     getMessages(currentChat?._id)
       .then((res) => {
         setMessages(res.data)
@@ -66,7 +77,7 @@ const Messenger = () => {
         setLoadingMessages(false)
         message.error('Something went wrong!')
       })
-  }, [currentChat])
+  }, [currentChat, user])
 
   const sendMessageHandler = (e) => {
     e.preventDefault()
@@ -167,7 +178,11 @@ const Messenger = () => {
                     messages.length > 0 ? (
                       messages.map((el, i) => (
                         <div key={i} ref={scrollRef}>
-                          <Message message={el} own={el.sender === user._id} />
+                          <Message
+                            message={el}
+                            friend={friend}
+                            own={el.sender === user._id}
+                          />
                         </div>
                       ))
                     ) : (

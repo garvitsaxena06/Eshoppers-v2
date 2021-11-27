@@ -43,10 +43,10 @@ export default function Topbar() {
 
   const menu = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item key='Profile'>
         <Link to={`/profile/${user.username}`}>Profile</Link>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key='Logout'>
         <div onClick={logoutHandler}>Logout</div>
       </Menu.Item>
     </Menu>

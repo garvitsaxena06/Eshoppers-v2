@@ -1,14 +1,25 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { format } from 'timeago.js'
+import { AuthContext } from '../../context/Auth'
 import './message.css'
 
-const Message = ({ message, own }) => {
+const Message = ({ message, own, friend }) => {
+  const { user } = useContext(AuthContext)
+
   return (
     <div className={`message${own ? ' own' : ''}`}>
       <div className='messageTop'>
         <img
           className='messageImg'
-          src='https://www.stepstherapy.com.au/wp-content/uploads/2018/10/Yazmin-profile-picture-square.jpg'
+          src={
+            own
+              ? user?.profilePicture
+                ? user?.profilePicture
+                : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
+              : friend?.profilePicture
+              ? friend?.profilePicture
+              : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
+          }
           alt='profileImage'
         />
         <p className='messageText'>{message.text}</p>
