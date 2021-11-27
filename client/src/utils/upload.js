@@ -11,7 +11,7 @@ var bucketName = 'social-app-assets'
 
 export const upload = (file, cb = () => {}) => {
   try {
-    const fileName = `${file.name}-${new Date().getTime()}`
+    const fileName = `${file?.name}-${new Date().getTime()}`
     var params = {
       Bucket: bucketName,
       Key: fileName,

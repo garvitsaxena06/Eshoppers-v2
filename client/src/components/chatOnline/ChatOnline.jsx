@@ -52,8 +52,9 @@ const ChatOnline = ({
 
   return (
     <div className='chatOnline'>
-      {!loadingFriends
-        ? friends.map((el, i) => (
+      {!loadingFriends ? (
+        friends.length > 0 ? (
+          friends.map((el, i) => (
             <div
               key={i}
               className='chatOnlineFriend'
@@ -78,16 +79,21 @@ const ChatOnline = ({
               <span className='chatOnlineName'>{el.username}</span>
             </div>
           ))
-        : [...Array(3).keys()].map((el, i) => (
-            <div key={i} className='d-flex align-items-center ps-2 pe-3 py-2'>
-              <div>
-                <Skeleton circle width={40} height={40} />
-              </div>
-              <div className='w-100 ps-3'>
-                <Skeleton count={3} />
-              </div>
+        ) : (
+          <span className='noChatText'>You don't have any friends yet.</span>
+        )
+      ) : (
+        [...Array(3).keys()].map((el, i) => (
+          <div key={i} className='d-flex align-items-center ps-2 pe-3 py-2'>
+            <div>
+              <Skeleton circle width={40} height={40} />
             </div>
-          ))}
+            <div className='w-100 ps-3'>
+              <Skeleton count={3} />
+            </div>
+          </div>
+        ))
+      )}
     </div>
   )
 }

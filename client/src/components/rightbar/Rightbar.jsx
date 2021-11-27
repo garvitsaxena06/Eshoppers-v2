@@ -2,7 +2,7 @@ import './rightbar.css'
 import Online from '../online/Online'
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
 import { Add, Remove, Edit } from '@material-ui/icons'
@@ -16,6 +16,7 @@ export default function Rightbar({
   loadingUserDetails = false,
 }) {
   const [friends, setFriends] = useState([])
+  const history = useHistory()
   const { user: currentUser, dispatch } = useContext(AuthContext)
   const [followed, setFollowed] = useState(
     currentUser.followings.includes(user?._id)
@@ -82,7 +83,14 @@ export default function Rightbar({
         )}
         <ul className='rightbarFriendList'>
           {!loadingFriends
-            ? onlineFriends.map((u) => <Online key={u._id} user={u} />)
+            ? onlineFriends.map((u) => (
+                <div
+                  onClick={() => history.push(`/messenger?q=${u._id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <Online key={u._id} user={u} />
+                </div>
+              ))
             : [...Array(3).keys()].map((el, i) => (
                 <div key={i} className='d-flex align-items-center pe-3 py-2'>
                   <div>

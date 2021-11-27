@@ -50,6 +50,7 @@
 .chatOnlineWrapper {
   padding: 10px;
   height: 100%;
+  position: relative;
 }
 
 .chatBoxWrapper {
@@ -70,10 +71,6 @@
   top: 10%;
   font-size: 40px;
   color: rgb(224, 224, 224);
-}
-
-.chatMenuWrapper {
-  position: relative;
 }
 
 .noChatText {

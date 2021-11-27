@@ -12,10 +12,12 @@ import {
   getMessages,
   sendNewMessage,
   getUserById,
+  getConversationByOfTwoUsers,
 } from '../../apiCalls'
 import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
 import { message } from 'antd'
+import { useLocation } from 'react-router'
 
 const Messenger = () => {
   const { socket } = useSocket()
@@ -32,6 +34,8 @@ const Messenger = () => {
   const { onlineUsers, arrivalMessage, newConversation } =
     useContext(SocketContext)
   const scrollRef = useRef()
+
+  const friendId = useLocation().search?.split('=')[1]
 
   useEffect(() => {
     arrivalMessage &&
@@ -82,6 +86,12 @@ const Messenger = () => {
         message.error('Something went wrong!')
       })
   }, [currentChat, user])
+
+  useEffect(() => {
+    DeriveKeys(friend?.publicKeyJwk, user?.privateKeyJwk).then((res) => {
+      setDecryptionKeys(res)
+    })
+  }, [friend, user])
 
   const sendMessageHandler = async (e) => {
     e.preventDefault()
@@ -137,6 +147,25 @@ const Messenger = () => {
     socket.current.emit('addConversation', data)
   }
 
+  useEffect(() => {
+    if (friendId) {
+      getConversationByOfTwoUsers(user._id, friendId)
+        .then((res) => {
+          if (res.data.new)
+            updateConversations({
+              senderId: user._id,
+              receiverId: friendId,
+              conversation: res.data.data,
+            })
+          setCurrentChat(res.data.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    // eslint-disable-next-line
+  }, [friendId, user])
+
   return (
     <>
       <Topbar />
@@ -152,17 +181,7 @@ const Messenger = () => {
             {!loadingConversations ? (
               conversations.length > 0 ? (
                 conversations.map((el, i) => (
-                  <div
-                    key={i}
-                    onClick={async () => {
-                      const derivedKeys = await DeriveKeys(
-                        el.member.publicKeyJwk,
-                        user.privateKeyJwk
-                      )
-                      setDecryptionKeys(derivedKeys)
-                      setCurrentChat(el)
-                    }}
-                  >
+                  <div key={i} onClick={() => setCurrentChat(el)}>
                     <Conversation
                       AllConversations={AllConversations}
                       setAllConversations={setAllConversations}

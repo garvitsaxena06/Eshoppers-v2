@@ -74,7 +74,7 @@ export default function Post({ post, fetchPosts }) {
             </span>
             <span className='postDate'>{format(post.createdAt)}</span>
           </div>
-          <div className='postTopRight'>
+          <div className='postTopRight' style={{ cursor: 'pointer' }}>
             <Dropdown overlay={menu}>
               <MoreVert />
             </Dropdown>

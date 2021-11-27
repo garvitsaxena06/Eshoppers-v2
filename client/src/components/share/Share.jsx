@@ -82,14 +82,14 @@ export default function Share({ fetchPosts }) {
         )}
         <form className='shareBottom' onSubmit={submitHandler}>
           <div className='shareOptions'>
-            <label htmlFor='file' className='shareOption'>
+            <label htmlFor='feedPost' className='shareOption'>
               <PermMedia htmlColor='tomato' className='shareIcon' />
               <span className='shareOptionText'>Photo or Video</span>
               <input
                 style={{ display: 'none' }}
                 type='file'
                 ref={imageRef}
-                id='file'
+                id='feedPost'
                 accept='.png,.jpeg,.jpg'
                 onChange={(e) => setFile(e.target.files[0])}
               />
