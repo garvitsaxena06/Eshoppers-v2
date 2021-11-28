@@ -37,7 +37,7 @@ export default function Topbar() {
   const logoutHandler = () => {
     localStorage.removeItem('user')
     dispatch({ type: 'LOGOUT' })
-    message.success('Logout successfully')
+    message.success('Logout successfully.')
     history.push('/')
   }
 
@@ -114,7 +114,7 @@ export default function Topbar() {
           </span>
         </div>
 
-        <div className='d-flex'>
+        <div className='d-flex align-items-center'>
           <div className='topbarIcons'>
             {/* <div className="topbarIconItem">
               <Person />
@@ -132,6 +132,7 @@ export default function Topbar() {
               {/* <span className="topbarIconBadge">1</span> */}
             </div>
           </div>
+          <span className='helloUserText'>Hello, {user?.username}</span>
           <Dropdown overlay={menu}>
             <img
               src={

@@ -170,3 +170,8 @@
 .searchSuggestions .username {
   font-size: 13px;
 }
+
+.helloUserText {
+  font-weight: 500;
+  padding-right: 8px;
+}

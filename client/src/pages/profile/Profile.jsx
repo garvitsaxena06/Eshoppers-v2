@@ -49,7 +49,7 @@ export default function Profile() {
         setUser(res.data.data)
         dispatch({ type: 'UPDATE', payload: res.data.data })
         setLoading({ coverPicture: false, profilePicture: false })
-        message.success(res?.data?.message || 'Profile updated successfully')
+        message.success(res?.data?.message || 'Profile updated successfully.')
       })
       .catch((err) => {
         console.log(err)

@@ -32,7 +32,7 @@ export default function Share({ fetchPosts }) {
             axios
               .post('/posts', payload)
               .then((res) => {
-                message.success('New Post Uploaded')
+                message.success('New post uploaded.')
                 fetchPosts()
               })
               .catch((err) => {
@@ -43,6 +43,16 @@ export default function Share({ fetchPosts }) {
           }
         })
       } catch (err) {}
+    } else {
+      axios
+        .post('/posts', payload)
+        .then((res) => {
+          message.success('New post uploaded.')
+          fetchPosts()
+        })
+        .catch((err) => {
+          message.error(err?.data || 'Please try again later.')
+        })
     }
     desc.current.value = ''
     setFile(null)

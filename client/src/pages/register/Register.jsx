@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
 import { GenerateKeys } from '../../utils/crypto'
+import { message } from 'antd'
 
 export default function Register() {
   const username = useRef()
@@ -14,7 +15,7 @@ export default function Register() {
   const handleClick = async (e) => {
     e.preventDefault()
     if (passwordAgain.current.value !== password.current.value) {
-      passwordAgain.current.setCustomValidity("Passwords don't match!")
+      message.warning("Passwords don't match!")
     } else {
       const keys = await GenerateKeys()
       const user = {
@@ -25,9 +26,13 @@ export default function Register() {
       }
       try {
         await axios.post('/auth/register', user)
+        message.success(
+          'Registration done successfully. Please login to continue.'
+        )
         history.push('/login')
       } catch (err) {
         console.log(err)
+        message.error(err?.response?.data?.message || 'Something went wrong!')
       }
     }
   }

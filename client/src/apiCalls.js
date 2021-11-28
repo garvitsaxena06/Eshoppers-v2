@@ -1,12 +1,15 @@
 import axios from 'axios'
+import { message } from 'antd'
 
 export const loginCall = async (userCredential, dispatch) => {
   dispatch({ type: 'LOGIN_START' })
   try {
     const res = await axios.post('/auth/login', userCredential)
     dispatch({ type: 'LOGIN_SUCCESS', payload: res.data })
+    message.success('Logged in successfully.')
   } catch (err) {
     dispatch({ type: 'LOGIN_FAILURE', payload: err })
+    message.error(err?.response?.data?.message)
   }
 }
 

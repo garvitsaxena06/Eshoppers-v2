@@ -82,7 +82,7 @@ export default function Post({ post, fetchPosts }) {
         </div>
         <div className='postCenter'>
           <span className='postText'>{post?.desc}</span>
-          <img className='postImg' src={post.img} alt='' />
+          {post.img && <img className='postImg' src={post.img} alt='' />}
         </div>
         <div className='postBottom'>
           <div className='postBottomLeft'>
