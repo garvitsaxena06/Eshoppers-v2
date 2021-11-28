@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Link, useHistory } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
-import { Add, Remove, Edit } from '@material-ui/icons'
+import { Add, Remove, Edit, Chat } from '@material-ui/icons'
 import UserInfoModal from '../modals/userInfo'
 
 export default function Rightbar({
@@ -131,12 +131,23 @@ export default function Rightbar({
               </h4>
               {/* <span className='profileInfoDesc'>{user.desc}</span> */}
             </div>
-            {user.username !== currentUser.username && (
-              <button className='rightbarFollowButton' onClick={handleClick}>
-                {followed ? 'Unfollow' : 'Follow'}
-                {followed ? <Remove /> : <Add />}
-              </button>
-            )}
+            <div className='d-flex align-items-center'>
+              {user.username !== currentUser.username && (
+                <button className='rightbarFollowButton' onClick={handleClick}>
+                  {followed ? 'Unfollow' : 'Follow'}
+                  {followed ? <Remove /> : <Add />}
+                </button>
+              )}
+              {followed && (
+                <button
+                  className='rightbarFollowButton ms-3'
+                  onClick={() => history.push(`/messenger?q=${user?._id}`)}
+                  title='Send Message'
+                >
+                  <Chat />
+                </button>
+              )}
+            </div>
             <div className='d-flex justify-content-between'>
               <h4 className='rightbarTitle'>User information</h4>
               {user.username === currentUser.username && (

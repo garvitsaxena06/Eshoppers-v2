@@ -80,3 +80,8 @@
   top: 10%;
   left: 18px;
 }
+
+.chatBoxHeader {
+  align-self: flex-end;
+  margin: 8px 8px 12px;
+}

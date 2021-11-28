@@ -16,7 +16,7 @@ import {
 } from '../../apiCalls'
 import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
-import { message } from 'antd'
+import { message, Switch, Tooltip } from 'antd'
 import { useLocation } from 'react-router'
 
 const Messenger = () => {
@@ -30,6 +30,7 @@ const Messenger = () => {
   const [decryptionKeys, setDecryptionKeys] = useState()
   const [loadingConversations, setLoadingConversations] = useState(false)
   const [loadingMessages, setLoadingMessages] = useState(false)
+  const [encryptMessages, setEncryptMessages] = useState(false)
   const { user } = useContext(AuthContext)
   const { onlineUsers, arrivalMessage, newConversation } =
     useContext(SocketContext)
@@ -122,7 +123,7 @@ const Messenger = () => {
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loadingMessages])
+  }, [messages])
 
   const handleChange = (event) => {
     setLoadingConversations(true)
@@ -214,28 +215,19 @@ const Messenger = () => {
         </div>
         <div className='chatBox'>
           <div className='chatBoxWrapper'>
+            <div className='chatBoxHeader'>
+              <Tooltip
+                overlayStyle={{ whiteSpace: 'pre-line' }}
+                title={`Enable this if you want to see the encrypt message`}
+                placement='bottom'
+              >
+                <Switch onChange={(checked) => setEncryptMessages(checked)} />
+              </Tooltip>
+            </div>
             {currentChat ? (
               <>
                 <div className='chatBoxTop'>
-                  {!loadingMessages ? (
-                    messages.length > 0 ? (
-                      messages.map((el, i) => (
-                        <div key={i} ref={scrollRef}>
-                          <Message
-                            derivedKeys={decryptionKeys}
-                            Decrypt={Decrypt}
-                            message={el}
-                            friend={friend}
-                            own={el.sender === user._id}
-                          />
-                        </div>
-                      ))
-                    ) : (
-                      <span className='noConversationText'>
-                        Write your first message to {friend?.username}...
-                      </span>
-                    )
-                  ) : (
+                  {loadingMessages &&
                     [...Array(6).keys()].map((el, i) => (
                       <div
                         key={i}
@@ -250,7 +242,25 @@ const Messenger = () => {
                           <Skeleton count={3} />
                         </div>
                       </div>
+                    ))}
+                  {messages.length > 0 ? (
+                    messages.map((el, i) => (
+                      <div key={i} ref={scrollRef}>
+                        <Message
+                          encryptMessages={encryptMessages}
+                          derivedKeys={decryptionKeys}
+                          Decrypt={Decrypt}
+                          message={el}
+                          friend={friend}
+                          own={el.sender === user._id}
+                        />
+                      </div>
                     ))
+                  ) : (
+                    <span className='noConversationText'>
+                      {!loadingMessages &&
+                        `Write your first message to ${friend?.username}...`}
+                    </span>
                   )}
                 </div>
                 <div className='chatBoxBottom'>

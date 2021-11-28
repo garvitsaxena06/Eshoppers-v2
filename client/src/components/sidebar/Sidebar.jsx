@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './sidebar.css'
 import {
   RssFeed,
@@ -16,10 +16,27 @@ import Skeleton from 'react-loading-skeleton'
 import CloseFriend from '../closeFriend/CloseFriend'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/Auth'
+import { getFriends } from '../../apiCalls'
 
-export default function Sidebar({ friends, onlineFriends, loadingFriends }) {
+export default function Sidebar() {
   const { user } = useContext(AuthContext)
   const history = useHistory()
+
+  const [friends, setFriends] = useState([])
+  const [loadingFriends, setLoadingFriends] = useState(true)
+
+  useEffect(() => {
+    setLoadingFriends(true)
+    getFriends(user._id)
+      .then((res) => {
+        setFriends(res.data)
+        setLoadingFriends(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        setLoadingFriends(false)
+      })
+  }, [user])
 
   return (
     <div className='sidebar'>

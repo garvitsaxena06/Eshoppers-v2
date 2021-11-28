@@ -34,7 +34,7 @@ export default function Home() {
         console.log(err)
         setLoadingFriends(false)
       })
-  }, [user._id])
+  }, [user])
 
   useEffect(() => {
     setOnlineFriends(friends.filter((el) => onlineUsers?.includes(el._id)))
@@ -44,11 +44,7 @@ export default function Home() {
     <>
       <Topbar />
       <div className='homeContainer'>
-        <Sidebar
-          onlineFriends={onlineFriends}
-          friends={friends}
-          loadingFriends={loadingFriends}
-        />
+        <Sidebar />
         <Feed />
         <Rightbar
           onlineFriends={onlineFriends}

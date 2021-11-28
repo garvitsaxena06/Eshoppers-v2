@@ -3,7 +3,14 @@ import { format } from 'timeago.js'
 import { AuthContext } from '../../context/Auth'
 import './message.css'
 
-const Message = ({ message, own, Decrypt, derivedKeys, friend }) => {
+const Message = ({
+  message,
+  own,
+  Decrypt,
+  derivedKeys,
+  friend,
+  encryptMessages,
+}) => {
   const [state, setState] = React.useState('')
   const { user } = useContext(AuthContext)
   React.useEffect(() => {
@@ -31,7 +38,7 @@ const Message = ({ message, own, Decrypt, derivedKeys, friend }) => {
           }
           alt='profileImage'
         />
-        <p className='messageText'>{state}</p>
+        <p className='messageText'>{encryptMessages ? message.text : state}</p>
       </div>
       <div className='messageBottom'>{format(message.createdAt)}</div>
     </div>
