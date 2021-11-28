@@ -39,14 +39,14 @@ export default function Register() {
 
   return (
     <div className='login'>
-      <div className='loginWrapper'>
-        <div className='loginLeft'>
+      <div className='loginWrapper row align-items-center'>
+        <div className='loginLeft col-md-6'>
           <h3 className='loginLogo'>Lamasocial</h3>
           <span className='loginDesc'>
             Connect with friends and the world around you on Lamasocial.
           </span>
         </div>
-        <div className='loginRight'>
+        <div className='loginRight col-md-6'>
           <form className='loginBox' onSubmit={handleClick}>
             <input
               placeholder='Username'
