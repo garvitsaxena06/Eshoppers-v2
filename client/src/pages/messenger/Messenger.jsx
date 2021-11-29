@@ -18,6 +18,10 @@ import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
 import { message, Switch, Tooltip } from 'antd'
 import { useLocation } from 'react-router'
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace'
+import useWindowSize from '../../utils/windowSize'
+import { IconButton } from '@material-ui/core'
+import SendIcon from '@material-ui/icons/Send'
 
 const Messenger = () => {
   const { socket } = useSocket()
@@ -32,6 +36,7 @@ const Messenger = () => {
   const [loadingMessages, setLoadingMessages] = useState(false)
   const [encryptMessages, setEncryptMessages] = useState(false)
   const { user } = useContext(AuthContext)
+  const width = useWindowSize()
   const { onlineUsers, arrivalMessage, newConversation } =
     useContext(SocketContext)
   const scrollRef = useRef()
@@ -170,9 +175,14 @@ const Messenger = () => {
   return (
     <>
       <Topbar />
-      <div className='messenger'>
-        <div className='chatMenu'>
+      <div className={`messenger ${width < 783 ? 'messengerMobile' : ''}`}>
+        <div
+          className={`chatMenu ${
+            width < 783 && !currentChat ? 'chatMenuMobile' : ''
+          }`}
+        >
           <div className='chatMenuWrapper'>
+            <h5 className='sectionTitle'>Your recent conversations</h5>
             <input
               type='text'
               placeholder='Search for friends'
@@ -213,19 +223,28 @@ const Messenger = () => {
             )}
           </div>
         </div>
-        <div className='chatBox'>
+        <div
+          className={`chatBox ${
+            width < 783 && currentChat ? 'chatBoxMobile' : ''
+          }`}
+        >
           <div className='chatBoxWrapper'>
-            <div className='chatBoxHeader'>
-              <Tooltip
-                overlayStyle={{ whiteSpace: 'pre-line' }}
-                title={`Enable this if you want to see the encrypt message`}
-                placement='bottom'
-              >
-                {currentChat && (
+            {currentChat && (
+              <div className='chatBoxHeader d-flex justify-content-between align-items-center'>
+                <IconButton onClick={() => setCurrentChat(null)}>
+                  <KeyboardBackspaceIcon
+                    style={{ color: '#5e5e5e', fontSize: 28 }}
+                  />
+                </IconButton>
+                <Tooltip
+                  overlayStyle={{ whiteSpace: 'pre-line' }}
+                  title={`Enable this if you want to see the encrypt message`}
+                  placement='bottom'
+                >
                   <Switch onChange={(checked) => setEncryptMessages(checked)} />
-                )}
-              </Tooltip>
-            </div>
+                </Tooltip>
+              </div>
+            )}
             {currentChat ? (
               <>
                 <div className='chatBoxTop'>
@@ -271,12 +290,13 @@ const Messenger = () => {
                     placeholder='Write something...'
                     onChange={(e) => setNewMessage(e.target.value)}
                     value={newMessage}
+                    rows={1}
                   ></textarea>
                   <button
                     className='chatSubmitBtn'
                     onClick={sendMessageHandler}
                   >
-                    Send
+                    <SendIcon style={{ color: '#fff' }} />
                   </button>
                 </div>
               </>
@@ -289,6 +309,7 @@ const Messenger = () => {
         </div>
         <div className='chatOnline'>
           <div className='chatOnlineWrapper'>
+            <h5 className='sectionTitle'>Your friends</h5>
             <ChatOnline
               onlineUsers={onlineUsers}
               currentId={user._id}

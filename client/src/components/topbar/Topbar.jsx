@@ -7,6 +7,7 @@ import {
   Home,
   Timeline,
   Message,
+  ExitToApp,
 } from '@material-ui/icons'
 import MenuIcon from '@material-ui/icons/Menu'
 import Autocomplete from '@material-ui/lab/Autocomplete'
@@ -240,6 +241,10 @@ export default function Topbar() {
             <Message />
             <span onClick={() => history.push(`/messenger`)}>Messenger</span>
           </div>
+          <div className='profileLink'>
+            <ExitToApp />
+            <span onClick={logoutHandler}>Logout</span>
+          </div>
           <Divider />
           <div className='profileLink mt-2'>
             <Switch onChange={(checked) => setTheme(checked)} />
@@ -253,7 +258,10 @@ export default function Topbar() {
               const online = checkUserOnline(u._id)
               return (
                 <div
-                  onClick={() => history.push(`/messenger?q=${u._id}`)}
+                  onClick={() => {
+                    closeHandler()
+                    history.push(`/messenger?q=${u._id}`)
+                  }}
                   style={{ cursor: 'pointer' }}
                 >
                   <Online key={u._id} user={u} online={online} />
