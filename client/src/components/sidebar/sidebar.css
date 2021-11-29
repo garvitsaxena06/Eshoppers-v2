@@ -6,6 +6,12 @@
   top: 50px;
 }
 
+@media only screen and (max-width: 782px) {
+  .sidebar {
+    display: none;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -54,5 +60,3 @@
   margin: 0;
   list-style: none;
 }
-
-

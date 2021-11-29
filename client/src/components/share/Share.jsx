@@ -71,7 +71,7 @@ export default function Share({ fetchPosts }) {
             }
             alt=''
           />
-          <input
+          <textarea
             placeholder={"What's in your mind " + user.username + '?'}
             className='shareInput'
             ref={desc}

@@ -62,9 +62,10 @@
   z-index: 3;
 }
 
-.profileInfo {
-  display: flex;
-  flex-direction: column;
+@media only screen and (max-width: 510px) {
+  .editCoverImage {
+    margin-right: 0;
+  }
 }
 
 .profileInfoName {

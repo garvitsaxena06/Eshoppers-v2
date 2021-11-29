@@ -6,7 +6,7 @@ import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
 import { AuthContext } from '../../context/Auth'
 import { SocketContext } from '../../context/Socket'
-import useSocket from '../../socket'
+import useSocket from '../../utils/socket'
 import {
   getConversations,
   getMessages,
@@ -221,7 +221,9 @@ const Messenger = () => {
                 title={`Enable this if you want to see the encrypt message`}
                 placement='bottom'
               >
-                <Switch onChange={(checked) => setEncryptMessages(checked)} />
+                {currentChat && (
+                  <Switch onChange={(checked) => setEncryptMessages(checked)} />
+                )}
               </Tooltip>
             </div>
             {currentChat ? (

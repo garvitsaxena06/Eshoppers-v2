@@ -14,6 +14,7 @@ export default function Rightbar({
   UpdateUserDetails = () => {},
   loadingFriends,
   loadingUserDetails = false,
+  mobileView,
 }) {
   const [friends, setFriends] = useState([])
   const history = useHistory()
@@ -125,12 +126,6 @@ export default function Rightbar({
       <>
         {!loadingUserDetails ? (
           <>
-            <div className='profileInfo'>
-              <h4 className='profileInfoName'>
-                {user.username && `@${user.username}`}
-              </h4>
-              {/* <span className='profileInfoDesc'>{user.desc}</span> */}
-            </div>
             <div className='d-flex align-items-center'>
               {user.username !== currentUser.username && (
                 <button className='rightbarFollowButton' onClick={handleClick}>
@@ -148,12 +143,17 @@ export default function Rightbar({
                 </button>
               )}
             </div>
-            <div className='d-flex justify-content-between'>
-              <h4 className='rightbarTitle'>User information</h4>
+            <div className='profileEditContainer'>
+              <div className='d-flex flex-column'>
+                <h4 className='profileInfoName'>
+                  <strong>{user.username && `@${user.username}`}</strong>
+                </h4>
+                <h4 className='rightbarTitle'>User information</h4>
+              </div>
               {user.username === currentUser.username && (
                 <button className='editButton' onClick={handleShow}>
                   <Edit />
-                  {' Edit profile'}
+                  {'Edit profile'}
                 </button>
               )}
             </div>
@@ -226,7 +226,7 @@ export default function Rightbar({
     )
   }
   return (
-    <div className='rightbar'>
+    <div className={mobileView ? 'rightbarMobile' : 'rightbar'}>
       <div className='rightbarWrapper'>
         {user ? <ProfileRightbar /> : <HomeRightbar />}
       </div>

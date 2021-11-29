@@ -25,6 +25,19 @@
 .shareInput {
   border: none;
   width: 80%;
+  font-size: 14px;
+}
+
+.shareInput::-webkit-input-placeholder {
+  font-size: 13px;
+}
+
+.shareInput:-ms-input-placeholder {
+  font-size: 13px;
+}
+
+.shareInput::placeholder {
+  font-size: 13px;
 }
 
 .shareInput:focus {
@@ -41,64 +54,91 @@
   justify-content: space-between;
 }
 
-.shareOptions{
-    display: flex;
-    margin-left: 20px;
+.shareOptions {
+  display: flex;
+  margin-left: 20px;
 }
 
-.shareOption{
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
-    cursor: pointer;
+.shareOption {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
 }
 
-.shareIcon{
-    font-size: 18px;
-    margin-right: 3px;
+.shareIcon {
+  font-size: 18px;
+  margin-right: 3px;
 }
 
-.shareOptionText{
-    font-size: 14px;
-    font-weight: 500;
+.shareOptionText {
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.shareButton{
-    border: none;
-    padding: 7px;
-    border-radius: 5px;
-    background-color: green;
-    font-weight: 500;
-    margin-right: 20px;
-    cursor: pointer;
-    color: white;
-}
-
-.editButton{
+.shareButton {
   border: none;
   padding: 7px;
   border-radius: 5px;
-  background-color: #E4EBE6;
+  background-color: green;
   font-weight: 500;
   margin-right: 20px;
   cursor: pointer;
-  color: black;
-  margin-bottom: 6px;
+  color: white;
 }
-.shareImgContainer{
+
+.editButton {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #e4ebe6;
+  font-weight: 500;
+  cursor: pointer;
+  color: black;
+  margin-left: 8px;
+}
+.shareImgContainer {
   padding: 0 20px 10px 20px;
   position: relative;
 }
 
-.shareImg{
+.shareImg {
   width: 100%;
   object-fit: cover;
 }
 
-.shareCancelImg{
+.shareCancelImg {
   position: absolute;
   top: 0;
   right: 20px;
   cursor: pointer;
   opacity: 0.7;
+}
+
+.profileEditContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media only screen and (max-width: 1045px) {
+  .rightbar .profileEditContainer {
+    flex-direction: column;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .rightbar .editButton {
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: 370px) {
+  .rightbarMobile .profileEditContainer {
+    flex-direction: column;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .rightbarMobile .editButton {
+    margin-left: 0;
+  }
 }

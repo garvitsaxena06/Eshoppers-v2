@@ -10,7 +10,7 @@ import {
   Redirect,
 } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
-import useSocket from './socket'
+import useSocket from './utils/socket'
 import { AuthContext } from './context/Auth'
 import { SocketContext } from './context/Socket'
 import { setOnlineUsers } from './context/Socket/SocketActions'

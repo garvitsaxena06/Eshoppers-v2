@@ -1,11 +1,11 @@
 import { useRef, useEffect, useContext } from 'react'
 import { io } from 'socket.io-client'
-import { AuthContext } from './context/Auth'
-import { SocketContext } from './context/Socket'
+import { AuthContext } from '../context/Auth'
+import { SocketContext } from '../context/Socket'
 import {
   setArrivalMessage,
   setNewConversation,
-} from './context/Socket/SocketActions'
+} from '../context/Socket/SocketActions'
 
 const useSocket = () => {
   const { user } = useContext(AuthContext)

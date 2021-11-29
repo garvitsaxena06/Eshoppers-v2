@@ -23,6 +23,7 @@
 
 .topbarCenter {
   flex: 5;
+  padding: 0 12px;
 }
 
 .searchbar {
@@ -174,4 +175,61 @@
 .helloUserText {
   font-weight: 500;
   padding-right: 8px;
+}
+
+.menuIcon {
+  display: none;
+  padding-left: 28px;
+  padding-right: 8px;
+}
+
+@media only screen and (max-width: 782px) {
+  .topbarRight {
+    display: none;
+  }
+  .menuIcon {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .topbarLeft {
+    display: none;
+  }
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+}
+
+.profileUsername {
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+.profileLinks {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileContent a {
+  font-size: 13px;
+}
+
+.profileLinks .profileLink {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.profileLinks .profileLink .MuiSvgIcon-root {
+  color: #1890ff;
+  font-size: 36px;
+  padding-right: 12px;
+}
+
+.profileLinks .profileLink button {
+  margin-right: 12px;
 }

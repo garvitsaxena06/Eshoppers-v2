@@ -2,6 +2,19 @@
   flex: 3.5;
 }
 
+.rightbarMobile {
+  display: none;
+}
+
+@media only screen and (max-width: 782px) {
+  .rightbar {
+    display: none;
+  }
+  .rightbarMobile {
+    display: block;
+  }
+}
+
 .rightbarWrapper {
   padding: 20px 20px 0 0;
 }
@@ -98,4 +111,8 @@
 
 .rightbarFollowButton:focus {
   outline: none;
+}
+
+.rightbarMobile {
+  padding: 20px;
 }

@@ -4,19 +4,52 @@ import {
   //Person,
   Chat,
   Notifications,
+  Home,
+  Timeline,
+  Message,
 } from '@material-ui/icons'
+import MenuIcon from '@material-ui/icons/Menu'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
+import IconButton from '@material-ui/core/IconButton'
 import { Link, useHistory } from 'react-router-dom'
-import { Menu, Dropdown, message } from 'antd'
-import React, { useContext, useState } from 'react'
+import { Menu, Dropdown, message, Drawer, Divider, Switch } from 'antd'
+import React, { useContext, useState, useEffect } from 'react'
+import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
-import { searchUserByUsername } from '../../apiCalls'
+import { getFriends, searchUserByUsername } from '../../apiCalls'
+import useWindowSize from '../../utils/windowSize'
+import { SocketContext } from '../../context/Socket'
+import Online from '../online/Online'
 
 export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext)
+  const { onlineUsers } = useContext(SocketContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
+  const [visible, setVisible] = useState(false)
+  const [theme, setTheme] = useState(false)
+  const [friends, setFriends] = useState([])
+  const [onlineFriends, setOnlineFriends] = useState([])
+  const [loadingFriends, setLoadingFriends] = useState(true)
+  const width = useWindowSize()
+
+  useEffect(() => {
+    setLoadingFriends(true)
+    getFriends(user._id)
+      .then((res) => {
+        setFriends(res.data)
+        setLoadingFriends(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        setLoadingFriends(false)
+      })
+  }, [user])
+
+  useEffect(() => {
+    setOnlineFriends(friends.filter((el) => onlineUsers?.includes(el._id)))
+  }, [onlineUsers, friends])
 
   const handleSearch = (e) => {
     const { value } = e.target
@@ -32,6 +65,14 @@ export default function Topbar() {
     } else {
       setSearchedItems([])
     }
+  }
+
+  const showHandler = () => {
+    setVisible(true)
+  }
+
+  const closeHandler = () => {
+    setVisible(false)
   }
 
   const logoutHandler = () => {
@@ -51,6 +92,10 @@ export default function Topbar() {
       </Menu.Item>
     </Menu>
   )
+
+  const checkUserOnline = (id) => {
+    return onlineFriends.some((el) => el._id === id)
+  }
 
   return (
     <div className='topbarContainer'>
@@ -92,7 +137,11 @@ export default function Topbar() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label='Search for friend (by username)'
+                label={
+                  width > 340
+                    ? `Search for friend (by username)`
+                    : `Search for friend`
+                }
                 margin='normal'
                 onChange={(e) => handleSearch(e)}
                 InputProps={{ ...params.InputProps, type: 'search' }}
@@ -146,6 +195,82 @@ export default function Topbar() {
           </Dropdown>
         </div>
       </div>
+      <div className='menuIcon'>
+        <IconButton onClick={showHandler}>
+          <MenuIcon style={{ color: '#fff' }} />
+        </IconButton>
+      </div>
+      <Drawer
+        width={width > 370 ? 320 : '100%'}
+        placement='right'
+        visible={visible}
+        onClose={closeHandler}
+      >
+        <div className='profileContainer'>
+          <img
+            src={
+              user.profilePicture
+                ? user.profilePicture
+                : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
+            }
+            style={{ width: 80, height: 80 }}
+            alt=''
+            className='topbarImg'
+          />
+          <div className='profileContent ms-2'>
+            <h5 className='profileUsername'>
+              Hello, <br /> <strong>@{user.username}</strong>
+            </h5>
+            <Link to={`/profile/${user.username}`}>Visit your profile</Link>
+          </div>
+        </div>
+        <Divider />
+        <div className='profileLinks'>
+          <div className='profileLink'>
+            <Home />
+            <span onClick={() => history.push(`/`)}>Homepage</span>
+          </div>
+          <div className='profileLink'>
+            <Timeline />
+            <span onClick={() => history.push(`/profile/${user.username}`)}>
+              Timeline
+            </span>
+          </div>
+          <div className='profileLink'>
+            <Message />
+            <span onClick={() => history.push(`/messenger`)}>Messenger</span>
+          </div>
+          <Divider />
+          <div className='profileLink mt-2'>
+            <Switch onChange={(checked) => setTheme(checked)} />
+            Toggle theme
+          </div>
+        </div>
+        <Divider />
+        <h5 className='profileUsername mb-3'>Your friends</h5>
+        {!loadingFriends
+          ? friends.map((u) => {
+              const online = checkUserOnline(u._id)
+              return (
+                <div
+                  onClick={() => history.push(`/messenger?q=${u._id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <Online key={u._id} user={u} online={online} />
+                </div>
+              )
+            })
+          : [...Array(2).keys()].map((el, i) => (
+              <div key={i} className='d-flex align-items-center pe-3 py-2'>
+                <div>
+                  <Skeleton circle width={40} height={40} />
+                </div>
+                <div className='w-100 ps-3'>
+                  <Skeleton count={3} />
+                </div>
+              </div>
+            ))}
+      </Drawer>
     </div>
   )
 }

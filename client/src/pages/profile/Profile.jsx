@@ -12,9 +12,11 @@ import { CameraAlt, Edit } from '@material-ui/icons'
 import { upload } from '../../utils/upload'
 import { message } from 'antd'
 import { Spinner } from 'react-bootstrap'
+import useWindowSize from '../../utils/windowSize'
 
 export default function Profile() {
   const [user, setUser] = useState({})
+  const width = useWindowSize()
   const { user: loggedInUser, dispatch } = useContext(AuthContext)
   const [loading, setLoading] = useState({
     coverPicture: false,
@@ -96,7 +98,7 @@ export default function Profile() {
                     <label htmlFor='cover' className='shareOption'>
                       <div className='editCoverImage'>
                         <Edit />
-                        {' Edit Cover Photo'}
+                        {width > 510 && 'Edit Cover Photo'}
                       </div>
                       <input
                         style={{ display: 'none' }}
@@ -150,6 +152,12 @@ export default function Profile() {
               </div>
             </div>
           </div>
+          <Rightbar
+            user={user}
+            UpdateUserDetails={UpdateUserDetails}
+            loadingUserDetails={loadingUserDetails}
+            mobileView
+          />
           <div className='profileRightBottom'>
             <Feed username={username} user={user} />
             <Rightbar

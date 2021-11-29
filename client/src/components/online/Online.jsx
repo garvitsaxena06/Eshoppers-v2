@@ -1,6 +1,6 @@
 import './online.css'
 
-export default function Online({ user }) {
+export default function Online({ user, online = true }) {
   return (
     <li className='rightbarFriend'>
       <div className='rightbarProfileImgContainer'>
@@ -13,7 +13,7 @@ export default function Online({ user }) {
           }
           alt=''
         />
-        <span className='rightbarOnline'></span>
+        <span className={online ? 'rightbarOnline' : 'rightbarOffline'}></span>
       </div>
       <span className='rightbarUsername'>{user.username}</span>
     </li>
