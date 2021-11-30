@@ -65,7 +65,7 @@
 .loginButton {
   border-radius: 10px;
   border: none;
-  background-color: #1775ee;
+  background-color: #120a5c;
   color: white;
   font-size: 16px;
   padding: 8px 0;
@@ -91,7 +91,7 @@
   align-self: center;
   border-radius: 10px;
   border: none;
-  background-color: #42b72a;
+  background-color: teal;
   color: white;
   font-size: 16px;
   font-weight: 500;

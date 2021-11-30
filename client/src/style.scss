@@ -14,6 +14,14 @@
   }
 }
 
+.ant-switch-checked {
+  background-color: #120a5c;
+}
+
+.MuiFab-primary {
+  background-color: #120a5c !important;
+}
+
 .modal-content {
   .form-control {
     font-size: 13px;
@@ -45,6 +53,10 @@
       margin-top: 18px;
       font-size: 13px;
       font-weight: 600;
+      &.btn-primary {
+        background-color: #120a5c;
+        border-color: #120a5c;
+      }
     }
   }
 }
