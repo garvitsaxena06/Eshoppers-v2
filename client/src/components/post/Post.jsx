@@ -74,11 +74,13 @@ export default function Post({ post, fetchPosts }) {
             </span>
             <span className='postDate'>{format(post.createdAt)}</span>
           </div>
-          <div className='postTopRight' style={{ cursor: 'pointer' }}>
-            <Dropdown overlay={menu}>
-              <MoreVert />
-            </Dropdown>
-          </div>
+          {post?.userId === currentUser?._id && (
+            <div className='postTopRight' style={{ cursor: 'pointer' }}>
+              <Dropdown overlay={menu}>
+                <MoreVert />
+              </Dropdown>
+            </div>
+          )}
         </div>
         <div className='postCenter'>
           <span className='postText'>{post?.desc}</span>
