@@ -86,6 +86,7 @@ export default function Rightbar({
           {!loadingFriends
             ? onlineFriends.map((u) => (
                 <div
+                  key={u._id}
                   onClick={() => history.push(`/messenger?q=${u._id}`)}
                   style={{ cursor: 'pointer' }}
                 >

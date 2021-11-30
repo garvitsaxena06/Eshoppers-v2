@@ -17,12 +17,14 @@
 }
 
 .messageText {
-  padding: 10px;
+  padding: 8px 12px;
   border-radius: 20px;
   background-color: #1877f2;
   color: #fff;
   max-width: 300px;
+  font-size: 13px;
   word-break: break-all;
+  font-weight: 500;
 }
 
 .messageBottom {

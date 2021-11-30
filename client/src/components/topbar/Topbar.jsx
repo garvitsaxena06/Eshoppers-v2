@@ -3,7 +3,6 @@ import {
   Search,
   //Person,
   Chat,
-  Notifications,
   Home,
   Timeline,
   Message,
@@ -13,11 +12,14 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
+import Paper from '@material-ui/core/Paper'
 import { Link, useHistory } from 'react-router-dom'
-import { Menu, Dropdown, message, Drawer, Divider, Switch } from 'antd'
+import { Menu, Dropdown, message, Drawer, Divider, Switch, Tooltip } from 'antd'
 import React, { useContext, useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
+import { ThemeContext } from '../../context/Theme'
+import { changeTheme } from '../../context/Theme/ThemeActions'
 import { getFriends, searchUserByUsername } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
 import { SocketContext } from '../../context/Socket'
@@ -26,10 +28,10 @@ import Online from '../online/Online'
 export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext)
   const { onlineUsers } = useContext(SocketContext)
+  const { theme, dispatch: themeDispatch } = useContext(ThemeContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
   const [visible, setVisible] = useState(false)
-  const [theme, setTheme] = useState(false)
   const [friends, setFriends] = useState([])
   const [onlineFriends, setOnlineFriends] = useState([])
   const [loadingFriends, setLoadingFriends] = useState(true)
@@ -112,6 +114,20 @@ export default function Topbar() {
             freeSolo
             id='free-solo-2-demo'
             options={searchedItems}
+            PaperComponent={({ children }) => (
+              <Paper
+                style={
+                  theme === 'dark'
+                    ? {
+                        background: '#0a0c0e',
+                        border: '1px solid #181111',
+                      }
+                    : {}
+                }
+              >
+                {children}
+              </Paper>
+            )}
             getOptionLabel={(option) => option.username}
             renderOption={(option) => (
               <div
@@ -178,7 +194,21 @@ export default function Topbar() {
               {/* <span className="topbarIconBadge">2</span> */}
             </div>
             <div className='topbarIconItem'>
-              <Notifications />
+              <Tooltip
+                overlayStyle={{ whiteSpace: 'pre-line', fontSize: 13 }}
+                title={`Dark theme`}
+                placement='bottom'
+              >
+                <Switch
+                  size='small'
+                  checked={theme === 'dark' ? true : false}
+                  onChange={(checked) => {
+                    themeDispatch(changeTheme(checked ? 'dark' : 'light'))
+                    localStorage.setItem('theme', checked ? 'dark' : 'light')
+                  }}
+                />
+              </Tooltip>
+
               {/* <span className="topbarIconBadge">1</span> */}
             </div>
           </div>
@@ -247,7 +277,13 @@ export default function Topbar() {
           </div>
           <Divider />
           <div className='profileLink mt-2'>
-            <Switch onChange={(checked) => setTheme(checked)} />
+            <Switch
+              checked={theme === 'dark' ? true : false}
+              onChange={(checked) => {
+                themeDispatch(changeTheme(checked ? 'dark' : 'light'))
+                localStorage.setItem('theme', checked ? 'dark' : 'light')
+              }}
+            />
             Toggle theme
           </div>
         </div>
@@ -258,6 +294,7 @@ export default function Topbar() {
               const online = checkUserOnline(u._id)
               return (
                 <div
+                  key={u._id}
                   onClick={() => {
                     closeHandler()
                     history.push(`/messenger?q=${u._id}`)

@@ -237,7 +237,7 @@ const Messenger = () => {
                   />
                 </IconButton>
                 <Tooltip
-                  overlayStyle={{ whiteSpace: 'pre-line' }}
+                  overlayStyle={{ whiteSpace: 'pre-line', fontSize: 13 }}
                   title={`Enable this if you want to see the encrypt message`}
                   placement='bottom'
                 >

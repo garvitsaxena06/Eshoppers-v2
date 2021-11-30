@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+@import './assets/styles/darkTheme';
 
 * {
   margin: 0;
@@ -10,5 +11,40 @@
   .anticon {
     top: 0;
     vertical-align: 0;
+  }
+}
+
+.modal-content {
+  .form-control {
+    font-size: 13px;
+    &::-webkit-input-placeholder {
+      font-size: 12px;
+    }
+
+    &:-ms-input-placeholder {
+      font-size: 12px;
+    }
+
+    &::placeholder {
+      font-size: 12px;
+    }
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      box-shadow: none;
+      border: 1px solid #ced4da;
+    }
+  }
+  .modal-body {
+    label {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    button {
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 }

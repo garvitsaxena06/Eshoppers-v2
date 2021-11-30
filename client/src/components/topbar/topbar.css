@@ -144,7 +144,7 @@
 
 .searchSuggestions {
   display: flex;
-  justify-content: space-between;
+  justify-content: baseline;
   align-items: center;
   border-bottom: 1px solid rgb(240, 240, 240);
   padding-bottom: 8px;
@@ -155,13 +155,14 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  margin-right: 16px;
   object-fit: cover;
 }
 
 .searchSuggestions .searchContent {
   display: flex;
   flex-direction: column;
-  text-align: right;
+  text-align: left;
 }
 
 .searchSuggestions .email {
@@ -232,4 +233,11 @@
 
 .profileLinks .profileLink button {
   margin-right: 12px;
+}
+
+.topbarIconItem .ant-switch-small:focus,
+.topbarIconItem .ant-switch-small:focus-visible,
+.topbarIconItem .ant-switch-small:hover {
+  outline: none;
+  box-shadow: none;
 }

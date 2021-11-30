@@ -13,13 +13,25 @@ import { useContext, useEffect } from 'react'
 import useSocket from './utils/socket'
 import { AuthContext } from './context/Auth'
 import { SocketContext } from './context/Socket'
+import { ThemeContext } from './context/Theme'
 import { setOnlineUsers } from './context/Socket/SocketActions'
 import Floating from './components/floatingMessage/Floating'
 
 function App() {
   const { user } = useContext(AuthContext)
   const { dispatch } = useContext(SocketContext)
+  const { theme } = useContext(ThemeContext)
   const { socket } = useSocket()
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('darkTheme')
+      document.body.classList.remove('lightTheme')
+    } else {
+      document.body.classList.remove('darkTheme')
+      document.body.classList.add('lightTheme')
+    }
+  }, [theme])
 
   useEffect(() => {
     if (socket && socket.current) {
