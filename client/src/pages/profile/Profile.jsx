@@ -32,7 +32,7 @@ export default function Profile() {
         .then((res) => {
           setUser(res.data)
         })
-        .catch(console.log)
+        .catch((err) => console.log(err))
     }
     fetchUser()
     setLoadingUserDetails(false)
@@ -64,7 +64,7 @@ export default function Profile() {
     upload(file, (err, response) => {
       if (!err) {
         setLoading({ ...loading, [name]: true })
-        UpdateUserDetails({ [name]: response })
+        UpdateUserDetails({ ...loggedInUser, [name]: response })
       } else {
         message.error(err?.message || 'Something went wrong!')
       }

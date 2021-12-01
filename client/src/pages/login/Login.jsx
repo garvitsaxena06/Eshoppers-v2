@@ -58,6 +58,7 @@ export default function Login() {
             <button
               className='loginRegisterButton'
               onClick={() => history.push('/')}
+              disabled={isFetching}
             >
               {isFetching ? (
                 <CircularProgress color='white' size='20px' />

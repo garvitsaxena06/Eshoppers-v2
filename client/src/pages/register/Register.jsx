@@ -1,6 +1,7 @@
 import { useRef, useContext } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
+import { CircularProgress } from '@material-ui/core'
 import { GenerateKeys } from '../../utils/crypto'
 import { message } from 'antd'
 import { RegisterCall } from '../../apiCalls'
@@ -12,7 +13,7 @@ export default function Register() {
   const password = useRef()
   const passwordAgain = useRef()
   const history = useHistory()
-  const { dispatch } = useContext(AuthContext)
+  const { dispatch, isFetching } = useContext(AuthContext)
 
   const handleClick = async (e) => {
     e.preventDefault()
@@ -26,13 +27,17 @@ export default function Register() {
         password: password.current.value,
         ...keys,
       }
-      try {
-        RegisterCall(user, dispatch)
-        history.push('/login')
-      } catch (err) {
-        console.log(err)
-        message.error(err?.response?.data?.message || 'Something went wrong!')
-      }
+      RegisterCall(user, dispatch)
+        .then((res) => {
+          message.success(
+            'Registration done successfully. Please login to continue.'
+          )
+          history.push('/login')
+        })
+        .catch((err) => {
+          console.log(err)
+          message.error(err?.response?.data || 'Something went wrong!')
+        })
     }
   }
 
@@ -79,14 +84,23 @@ export default function Register() {
               className='loginInput'
               type='password'
             />
-            <button className='loginButton' type='submit'>
-              Sign Up
+            <button className='loginButton' type='submit' disabled={isFetching}>
+              {isFetching ? (
+                <CircularProgress color='white' size='20px' />
+              ) : (
+                'Sign Up'
+              )}
             </button>
             <button
               className='loginRegisterButton'
               onClick={() => history.push('/login')}
+              disabled={isFetching}
             >
-              Log into Account
+              {isFetching ? (
+                <CircularProgress color='white' size='20px' />
+              ) : (
+                'Log into Account'
+              )}
             </button>
           </form>
         </div>

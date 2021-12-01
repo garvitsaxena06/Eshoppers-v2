@@ -14,15 +14,19 @@ export default function Feed({ username, user: userProps }) {
 
   const fetchPosts = async () => {
     setLoadingPosts(true)
-    const res = username
-      ? await axios.get(`${POSTS_BASE_URL}/profile/` + username)
-      : await axios.get(`${POSTS_BASE_URL}/timeline/` + user._id)
-    setPosts(
-      res.data.sort((p1, p2) => {
-        return new Date(p2.createdAt) - new Date(p1.createdAt)
-      })
-    )
-    setLoadingPosts(false)
+    try {
+      const res = username
+        ? await axios.get(`${POSTS_BASE_URL}/profile/` + username)
+        : await axios.get(`${POSTS_BASE_URL}/timeline/` + user._id)
+      setPosts(
+        res.data.sort((p1, p2) => {
+          return new Date(p2.createdAt) - new Date(p1.createdAt)
+        })
+      )
+      setLoadingPosts(false)
+    } catch (error) {
+      setLoadingPosts(false)
+    }
   }
 
   useEffect(() => {

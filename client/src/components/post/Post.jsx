@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { format } from 'timeago.js'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/Auth'
-import { Menu, Dropdown } from 'antd'
+import { Menu, Dropdown, message } from 'antd'
 import { getUserById, likePost, deletePost } from '../../apiCalls'
 
 export default function Post({ post, fetchPosts }) {
@@ -23,10 +23,9 @@ export default function Post({ post, fetchPosts }) {
     const fetchUser = async () => {
       getUserById(post.userId)
         .then((res) => {
-          console.log({ res })
           setUser(res.data)
         })
-        .catch(console.log)
+        .catch((err) => console.log(err))
     }
     fetchUser()
   }, [post.userId])
@@ -40,10 +39,14 @@ export default function Post({ post, fetchPosts }) {
   }
 
   const deleteHandler = async () => {
-    try {
-      deletePost({ _id: post._id })
-      fetchPosts()
-    } catch (err) {}
+    deletePost({ _id: post._id })
+      .then((res) => {
+        message.success('Post deleted successfully.')
+        fetchPosts()
+      })
+      .catch((err) => {
+        message.error('Something went wrong!')
+      })
   }
 
   const menu = (

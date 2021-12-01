@@ -15,6 +15,10 @@ const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId)
 }
 
+const removeUserByUserId = (userId) => {
+  users = users.filter((user) => user.userId !== userId)
+}
+
 const getUser = (userId) => {
   return users.find((user) => user.userId === userId)
 }
@@ -45,6 +49,13 @@ io.on('connection', (socket) => {
       senderId,
       conversation,
     })
+  })
+
+  // logout user
+  socket.on('logoutUser', (id) => {
+    console.log('a user disconnected.')
+    removeUserByUserId(id)
+    io.emit('getUsers', users)
   })
 
   // disconnect a user

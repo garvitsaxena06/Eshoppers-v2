@@ -50,6 +50,7 @@
 
 .chatMessageInput {
   width: 100%;
+  font-size: 13px;
   padding: 10px;
   border-radius: 10px;
   border-color: lightgray;
@@ -128,9 +129,8 @@
   position: absolute;
   font-size: 28px;
   color: rgb(224, 224, 224);
-  top: 10%;
+  top: 12%;
   left: 18px;
-  margin-top: 16px;
 }
 
 .chatBoxHeader {

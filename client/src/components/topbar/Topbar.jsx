@@ -24,10 +24,12 @@ import { getFriends, searchUserByUsername } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
 import { SocketContext } from '../../context/Socket'
 import Online from '../online/Online'
+import useSocket from '../../utils/socket'
 
 export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext)
   const { onlineUsers } = useContext(SocketContext)
+  const { socket } = useSocket()
   const { theme, dispatch: themeDispatch } = useContext(ThemeContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
@@ -48,7 +50,7 @@ export default function Topbar() {
         console.log(err)
         setLoadingFriends(false)
       })
-  }, [user])
+  }, [user._id])
 
   useEffect(() => {
     setOnlineFriends(friends.filter((el) => onlineUsers?.includes(el._id)))
@@ -81,6 +83,7 @@ export default function Topbar() {
   const logoutHandler = () => {
     localStorage.removeItem('user')
     dispatch({ type: 'LOGOUT' })
+    socket.current.emit('logoutUser', user._id)
     message.success('Logout successfully.')
     history.push('/')
   }

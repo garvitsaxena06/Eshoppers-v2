@@ -1,6 +1,7 @@
 import './rightbar.css'
 import Online from '../online/Online'
 import { useContext, useEffect, useState } from 'react'
+import { message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
@@ -12,6 +13,7 @@ import {
   follow,
   unfollow,
 } from '../../apiCalls'
+
 export default function Rightbar({
   user,
   onlineFriends,
@@ -56,10 +58,24 @@ export default function Rightbar({
     try {
       if (followed) {
         unfollow(user._id, currentUser._id)
-        dispatch({ type: 'UNFOLLOW', payload: user._id })
+          .then((res) => {
+            message.success('User has been unfollowed.')
+            dispatch({ type: 'UNFOLLOW', payload: user._id })
+          })
+          .catch((err) => {
+            console.log(err)
+            message.error('Something went wrong!')
+          })
       } else {
         follow(user._id, currentUser._id)
-        dispatch({ type: 'FOLLOW', payload: user._id })
+          .then((res) => {
+            message.success('User has been followed.')
+            dispatch({ type: 'FOLLOW', payload: user._id })
+          })
+          .catch((err) => {
+            console.log(err)
+            message.error('Something went wrong!')
+          })
       }
       setFollowed(!followed)
     } catch (err) {}
@@ -75,12 +91,12 @@ export default function Rightbar({
           </span>
         </div> */}
         <img className='rightbarAd' src='assets/ad.png' alt='' />
-        {onlineFriends.length > 0 && (
+        {onlineFriends?.length > 0 && (
           <h4 className='rightbarTitle'>Online Friends</h4>
         )}
         <ul className='rightbarFriendList'>
           {!loadingFriends
-            ? onlineFriends.map((u) => (
+            ? onlineFriends?.map((u) => (
                 <div
                   key={u._id}
                   onClick={() => history.push(`/messenger?q=${u._id}`)}
@@ -114,8 +130,8 @@ export default function Rightbar({
         UpdateUserDetails(state, (err) => {
           if (!err) handleClose()
         })
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
 

@@ -38,7 +38,7 @@ export const upload = (file, cb = () => {}) => {
         .then(() => cb(false, url))
         .catch((err) => cb(err))
     })
-  } catch (error) {
-    console.log({ error })
+  } catch (err) {
+    console.log({ err })
   }
 }
