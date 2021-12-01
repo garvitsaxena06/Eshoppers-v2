@@ -11,12 +11,25 @@ import { AuthContext } from '../../context/Auth'
 import axios from 'axios'
 import { message } from 'antd'
 import { upload } from '../../utils/upload'
+import { POSTS_BASE_URL } from '../../utils/connections'
 
 export default function Share({ fetchPosts }) {
   const { user } = useContext(AuthContext)
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
   const desc = useRef()
   const [file, setFile] = useState(null)
+
+  const uploadPost = (payload) => {
+    axios
+      .post(POSTS_BASE_URL, payload)
+      .then((res) => {
+        message.success('New Post Uploaded')
+        fetchPosts()
+      })
+      .catch((err) => {
+        message.error(err?.data || 'Please try again later.')
+      })
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -29,20 +42,14 @@ export default function Share({ fetchPosts }) {
         upload(file, (err, response) => {
           if (!err) {
             payload.img = response
-            axios
-              .post('/posts', payload)
-              .then((res) => {
-                message.success('New Post Uploaded')
-                fetchPosts()
-              })
-              .catch((err) => {
-                message.error(err?.data || 'Please try again later.')
-              })
+            uploadPost(payload)
           } else {
             message.error(err?.message || 'Please try again later.')
           }
         })
       } catch (err) {}
+    } else {
+      uploadPost(payload)
     }
     desc.current.value = ''
     setFile(null)

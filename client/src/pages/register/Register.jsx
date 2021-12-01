@@ -1,8 +1,10 @@
-import axios from 'axios'
-import { useRef } from 'react'
+
+import { useRef, useContext } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
 import { GenerateKeys } from '../../utils/crypto'
+import { RegisterCall } from '../../apiCalls'
+import { AuthContext } from '../../context/Auth'
 
 export default function Register() {
   const username = useRef()
@@ -10,6 +12,7 @@ export default function Register() {
   const password = useRef()
   const passwordAgain = useRef()
   const history = useHistory()
+  const { dispatch } = useContext(AuthContext)
 
   const handleClick = async (e) => {
     e.preventDefault()
@@ -24,7 +27,7 @@ export default function Register() {
         ...keys,
       }
       try {
-        await axios.post('/auth/register', user)
+        RegisterCall(user, dispatch)
         history.push('/login')
       } catch (err) {
         console.log(err)

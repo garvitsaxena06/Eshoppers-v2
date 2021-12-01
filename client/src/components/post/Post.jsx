@@ -1,11 +1,11 @@
 import './post.css'
 import { MoreVert } from '@material-ui/icons'
 import { useContext, useEffect, useState } from 'react'
-import axios from 'axios'
 import { format } from 'timeago.js'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/Auth'
 import { Menu, Dropdown } from 'antd'
+import { getUserById, likePost, deletePost } from '../../apiCalls'
 
 export default function Post({ post, fetchPosts }) {
   const [like, setLike] = useState(post.likes.length)
@@ -20,15 +20,19 @@ export default function Post({ post, fetchPosts }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`)
-      setUser(res.data)
+      getUserById(post.userId)
+        .then((res) => {
+          console.log({ res })
+          setUser(res.data)
+        })
+        .catch(console.log)
     }
     fetchUser()
   }, [post.userId])
 
   const likeHandler = () => {
     try {
-      axios.put('/posts/' + post._id + '/like', { userId: currentUser._id })
+      likePost({ _id: post._id, payload: { userId: currentUser._id } })
     } catch (err) {}
     setLike(isLiked ? like - 1 : like + 1)
     setIsLiked(!isLiked)
@@ -36,7 +40,7 @@ export default function Post({ post, fetchPosts }) {
 
   const deleteHandler = async () => {
     try {
-      await axios.delete('/posts/' + post._id + '/' + currentUser._id)
+      deletePost({ _id: post._id })
       fetchPosts()
     } catch (err) {}
   }
