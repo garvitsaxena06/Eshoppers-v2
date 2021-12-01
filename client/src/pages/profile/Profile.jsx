@@ -4,10 +4,9 @@ import Sidebar from '../../components/sidebar/Sidebar'
 import Feed from '../../components/feed/Feed'
 import Rightbar from '../../components/rightbar/Rightbar'
 import { useEffect, useState, useContext } from 'react'
-import axios from 'axios'
 import { useParams } from 'react-router'
 import { AuthContext } from '../../context/Auth'
-import { getFriends, updateUser } from '../../apiCalls'
+import { getFriends, updateUser, getUserByUsername } from '../../apiCalls'
 import { CameraAlt, Edit } from '@material-ui/icons'
 import { upload } from '../../utils/upload'
 import { message } from 'antd'
@@ -29,8 +28,11 @@ export default function Profile() {
   useEffect(() => {
     setLoadingUserDetails(true)
     const fetchUser = async () => {
-      const res = await axios.get(`/users?username=${username}`)
-      setUser(res.data)
+      getUserByUsername(username)
+        .then((res) => {
+          setUser(res.data)
+        })
+        .catch(console.log)
     }
     fetchUser()
     setLoadingUserDetails(false)
