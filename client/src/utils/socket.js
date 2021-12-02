@@ -14,7 +14,7 @@ const useSocket = () => {
 
   useEffect(() => {
     if (user) {
-      socket.current = io('ws://localhost:8900')
+      socket.current = io('ws://13.232.184.56:8900')
       socket.current.emit('addUser', user?._id)
       socket.current.on('getMessage', ({ senderId, text }) => {
         dispatch(
