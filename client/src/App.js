@@ -36,6 +36,7 @@ function App() {
   useEffect(() => {
     if (socket && socket.current) {
       socket.current.on('getUsers', (users) => {
+        console.log({ users })
         dispatch(
           setOnlineUsers(
             user?.followings.filter((el) => users.some((u) => u.userId === el))
