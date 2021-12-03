@@ -14,7 +14,7 @@ const useSocket = () => {
 
   useEffect(() => {
     if (user) {
-      socket.current = io('ws://viachat.docplus.online/socket')
+      socket.current = io('ws://viachat.docplus.online/socket/')
       socket.current.emit('addUser', user?._id)
       socket.current.on('getMessage', ({ senderId, text }) => {
         dispatch(
