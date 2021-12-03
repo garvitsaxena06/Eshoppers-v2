@@ -5,6 +5,8 @@ const io = require('socket.io')(8900, {
       'http://localhost:3000',
       'http://13.232.184.56',
       'https://13.232.184.56',
+      'https://viachat.docplus.online',
+      'http://viachat.docplus.online',
     ],
   },
 })
