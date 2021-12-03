@@ -24,13 +24,13 @@ function ChatController(socket) {
   // take userId and socketId from user
   socket.on('addUser', (userId) => {
     addUser(userId, socket.id)
-    io.emit('getUsers', users)
+    socket.emit('getUsers', users)
   })
 
   // send and get message
   socket.on('sendMessage', ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId)
-    io.to(user?.socketId).emit('getMessage', {
+    socket.to(user?.socketId).emit('getMessage', {
       senderId,
       text,
     })
@@ -39,7 +39,7 @@ function ChatController(socket) {
   // add conversation
   socket.on('addConversation', ({ senderId, receiverId, conversation }) => {
     const user = getUser(receiverId)
-    io.to(user?.socketId).emit('getConversation', {
+    socket.to(user?.socketId).emit('getConversation', {
       senderId,
       conversation,
     })
@@ -49,14 +49,14 @@ function ChatController(socket) {
   socket.on('logoutUser', (id) => {
     console.log('a user disconnected.')
     removeUserByUserId(id)
-    io.emit('getUsers', users)
+    socket.emit('getUsers', users)
   })
 
   // disconnect a user
   socket.on('disconnect', () => {
     console.log('a user disconnected.')
     removeUser(socket.id)
-    io.emit('getUsers', users)
+    socket.emit('getUsers', users)
   })
 }
 

@@ -12,14 +12,10 @@ const io = require('socket.io')(8900, {
   },
 })
 
-const ChatIO = io.of("/chat");
+const ChatIO = io.of('/chat')
 
+ChatIO.on('connection', ChatController)
 
-ChatIO.on("connection", ChatController);
+// io.on('connection', (socket) => {
 
-
-
-
-io.on('connection', (socket) => {
-  
-})
+// })
