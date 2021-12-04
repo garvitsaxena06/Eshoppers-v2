@@ -14,7 +14,9 @@ const io = require('socket.io')(8900, {
 
 const ChatIO = io.of('/chat')
 
-ChatIO.on('connection', ChatController)
+ChatIO.on('connection', (socket) => {
+  ChatController(socket, ChatIO)
+})
 
 // io.on('connection', (socket) => {
 

@@ -17,20 +17,20 @@ const getUser = (userId) => {
   return users.find((user) => user.userId === userId)
 }
 
-function ChatController(socket) {
+function ChatController(socket, ChatIO) {
   // when connect
   console.log('a user connected.')
 
   // take userId and socketId from user
   socket.on('addUser', (userId) => {
     addUser(userId, socket.id)
-    socket.emit('getUsers', users)
+    ChatIO.emit('getUsers', users)
   })
 
   // send and get message
   socket.on('sendMessage', ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId)
-    socket.to(user?.socketId).emit('getMessage', {
+    ChatIO.to(user?.socketId).emit('getMessage', {
       senderId,
       text,
     })
@@ -39,7 +39,7 @@ function ChatController(socket) {
   // add conversation
   socket.on('addConversation', ({ senderId, receiverId, conversation }) => {
     const user = getUser(receiverId)
-    socket.to(user?.socketId).emit('getConversation', {
+    ChatIO.to(user?.socketId).emit('getConversation', {
       senderId,
       conversation,
     })
@@ -49,14 +49,14 @@ function ChatController(socket) {
   socket.on('logoutUser', (id) => {
     console.log('a user disconnected.')
     removeUserByUserId(id)
-    socket.emit('getUsers', users)
+    ChatIO.emit('getUsers', users)
   })
 
   // disconnect a user
   socket.on('disconnect', () => {
     console.log('a user disconnected.')
     removeUser(socket.id)
-    socket.emit('getUsers', users)
+    ChatIO.emit('getUsers', users)
   })
 }
 
