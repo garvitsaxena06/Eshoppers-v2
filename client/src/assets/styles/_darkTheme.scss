@@ -159,6 +159,9 @@ $darkShadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
     .chatSubmitBtn {
       background-color: $buttonBlue;
     }
+    .chatFileAttachBtn .MuiSvgIcon-root {
+      color: $buttonBlue;
+    }
   }
   .login {
     background-color: $secondaryBlack;
@@ -259,6 +262,12 @@ $darkShadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
         color: $offWhite;
       }
     }
+  }
+  .imgSendBtn {
+    background-color: $buttonBlue;
+  }
+  .imageModal .ant-modal-close .anticon {
+    color: $primaryBlack;
   }
   .searchSuggestions {
     color: $offWhite;

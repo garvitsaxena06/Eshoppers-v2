@@ -16,12 +16,14 @@ import {
 } from '../../apiCalls'
 import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
-import { message, Switch, Tooltip } from 'antd'
+import { message, Switch, Tooltip, Upload, Modal } from 'antd'
 import { useLocation } from 'react-router'
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace'
 import useWindowSize from '../../utils/windowSize'
 import { IconButton } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
+import AttachFileIcon from '@material-ui/icons/AttachFile'
+import { upload } from '../../utils/upload'
 
 const Messenger = () => {
   const { socket } = useSocket()
@@ -35,6 +37,9 @@ const Messenger = () => {
   const [loadingConversations, setLoadingConversations] = useState(false)
   const [loadingMessages, setLoadingMessages] = useState(false)
   const [encryptMessages, setEncryptMessages] = useState(false)
+  const [sendFile, setSendFile] = useState(null)
+  const [sendingFile, setSendingFile] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const { user } = useContext(AuthContext)
   const width = useWindowSize()
   const { onlineUsers, arrivalMessage, newConversation } =
@@ -83,7 +88,12 @@ const Messenger = () => {
     }
     getMessages(currentChat?._id)
       .then((res) => {
-        setMessages(res.data)
+        if (res.data && res.data.length > 0)
+          setMessages(
+            res.data.sort(
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            )
+          )
         setLoadingMessages(false)
       })
       .catch((err) => {
@@ -99,10 +109,10 @@ const Messenger = () => {
     })
   }, [friend, user])
 
-  const sendMessageHandler = async (e) => {
-    e.preventDefault()
-    const encryptedMessages = await Encrypt(newMessage, decryptionKeys)
-    if (newMessage) {
+  const sendMessageHandler = async (e, url) => {
+    e?.preventDefault()
+    const encryptedMessages = await Encrypt(url ?? newMessage, decryptionKeys)
+    if (url || newMessage) {
       sendNewMessage({
         conversationId: currentChat._id,
         sender: user._id,
@@ -110,6 +120,7 @@ const Messenger = () => {
       })
         .then((res) => {
           setNewMessage('')
+          setSendingFile(false)
           setMessages([...messages, res.data])
 
           const receiverId = currentChat.members?.find((el) => el !== user._id)
@@ -128,7 +139,7 @@ const Messenger = () => {
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, encryptMessages])
 
   const handleChange = (event) => {
     setLoadingConversations(true)
@@ -171,6 +182,39 @@ const Messenger = () => {
     }
     // eslint-disable-next-line
   }, [friendId, user])
+
+  const closeModal = () => {
+    setIsVisible(false)
+    setSendFile(null)
+  }
+
+  const fileChangeHandler = (file) => {
+    if (file.file?.originFileObj) {
+      setSendFile(file.file?.originFileObj)
+      setIsVisible(true)
+      setSendingFile(true)
+    }
+  }
+
+  const fileTypeCheckHandler = (file) => {
+    const acceptedFileType = ['image/png', 'image/jpeg', 'image/jpg']
+    if (!acceptedFileType.includes(file.type)) {
+      message.error(`${file.name} is not an image file!`)
+      return false
+    }
+    return true
+  }
+
+  const sendImageHandler = () => {
+    upload(sendFile, (err, response) => {
+      if (!err) {
+        sendMessageHandler(null, response)
+        closeModal()
+      } else {
+        message.error(err?.message || 'Please try again later.')
+      }
+    })
+  }
 
   return (
     <>
@@ -272,6 +316,8 @@ const Messenger = () => {
                           derivedKeys={decryptionKeys}
                           Decrypt={Decrypt}
                           message={el}
+                          setSendFile={setSendFile}
+                          setIsVisible={setIsVisible}
                           friend={friend}
                           own={el.sender === user._id}
                         />
@@ -292,6 +338,18 @@ const Messenger = () => {
                     value={newMessage}
                     rows={1}
                   ></textarea>
+
+                  <Upload
+                    accept='image/*'
+                    name='file'
+                    onChange={fileChangeHandler}
+                    beforeUpload={fileTypeCheckHandler}
+                  >
+                    <button className='chatFileAttachBtn'>
+                      <AttachFileIcon />
+                    </button>
+                  </Upload>
+
                   <button
                     className='chatSubmitBtn'
                     onClick={sendMessageHandler}
@@ -319,6 +377,34 @@ const Messenger = () => {
           </div>
         </div>
       </div>
+      <Modal
+        visible={isVisible}
+        onCancel={closeModal}
+        footer={null}
+        width={450}
+        className='imageModal'
+      >
+        <div className='modalImageContainer'>
+          {sendFile && (
+            <img
+              src={
+                typeof sendFile === 'object'
+                  ? URL.createObjectURL(sendFile)
+                  : sendFile
+              }
+              alt=''
+            />
+          )}
+        </div>
+        {sendingFile && (
+          <button
+            className='chatSubmitBtn imgSendBtn'
+            onClick={sendImageHandler}
+          >
+            <SendIcon style={{ color: '#fff' }} />
+          </button>
+        )}
+      </Modal>
     </>
   )
 }

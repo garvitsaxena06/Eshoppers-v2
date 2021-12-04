@@ -40,3 +40,14 @@
   background-color: rgb(240, 240, 240);
   color: #000;
 }
+
+.imgInChat {
+  width: 150px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.imgInChat:hover {
+  opacity: 0.5;
+}

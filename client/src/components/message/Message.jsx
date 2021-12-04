@@ -10,6 +10,8 @@ const Message = ({
   derivedKeys,
   friend,
   encryptMessages,
+  setSendFile = () => {},
+  setIsVisible = () => {},
 }) => {
   const [state, setState] = React.useState('')
   const { user } = useContext(AuthContext)
@@ -38,7 +40,25 @@ const Message = ({
           }
           alt='profileImage'
         />
-        <p className='messageText'>{encryptMessages ? message.text : state}</p>
+        {state.startsWith('http') &&
+        (state.includes('.png') ||
+          state.includes('.jpeg') ||
+          state.includes('.jpg')) &&
+        !encryptMessages ? (
+          <img
+            className='imgInChat'
+            src={state}
+            alt=''
+            onClick={() => {
+              setSendFile(state)
+              setIsVisible(true)
+            }}
+          />
+        ) : (
+          <p className='messageText'>
+            {encryptMessages ? message.text : state}
+          </p>
+        )}
       </div>
       <div className='messageBottom'>{format(message.createdAt)}</div>
     </div>
