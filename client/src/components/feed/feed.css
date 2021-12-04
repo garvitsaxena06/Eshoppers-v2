@@ -5,3 +5,9 @@
 .feedWrapper {
   padding: 20px;
 }
+
+.noPostHeading {
+  font-size: 32px;
+  color: rgb(224, 224, 224);
+  margin: 24px 0;
+}

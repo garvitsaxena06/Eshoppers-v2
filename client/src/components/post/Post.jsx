@@ -7,7 +7,12 @@ import { AuthContext } from '../../context/Auth'
 import { Menu, Dropdown, message } from 'antd'
 import { getUserById, likePost, deletePost } from '../../apiCalls'
 
-export default function Post({ post, fetchPosts }) {
+export default function Post({
+  post,
+  fetchPosts,
+  differentUser = false,
+  index,
+}) {
   const [like, setLike] = useState(post.likes.length)
   const [isLiked, setIsLiked] = useState(false)
   const [user, setUser] = useState({})
@@ -58,7 +63,7 @@ export default function Post({ post, fetchPosts }) {
   )
 
   return (
-    <div className='post'>
+    <div className={`post ${differentUser && index === 0 ? 'firstPost' : ''}`}>
       <div className='postWrapper'>
         <div className='postTop'>
           <div className='postTopLeft'>

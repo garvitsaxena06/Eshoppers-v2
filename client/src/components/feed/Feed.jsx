@@ -41,35 +41,54 @@ export default function Feed({ username, user: userProps }) {
           <Share fetchPosts={fetchPosts} />
         )}
 
-        {!loadingPosts
-          ? posts.map((p) => (
-              <Post fetchPosts={fetchPosts} key={p._id} post={p} />
+        {!loadingPosts ? (
+          posts && posts.length > 0 ? (
+            posts.map((p, i) => (
+              <Post
+                fetchPosts={fetchPosts}
+                key={p._id}
+                post={p}
+                index={i}
+                differentUser={userProps ? userProps?._id !== user._id : false}
+              />
             ))
-          : [...Array(2).keys()].map((el, i) => (
-              <div key={i} className='mt-3'>
-                <div className='d-flex align-items-center pe-3 py-2'>
-                  <div>
-                    <Skeleton circle width={40} height={40} />
-                  </div>
-                  <div className='ps-3'>
-                    <Skeleton count={2} width={200} />
-                  </div>
-                  <div className='w-100 ps-3'>
-                    <Skeleton width={100} />
-                  </div>
+          ) : (
+            <h3 className='noPostHeading'>
+              {userProps
+                ? userProps?._id !== user._id
+                  ? '@' + userProps?.username
+                  : 'You'
+                : 'You'}{' '}
+              have not post anything yet!
+            </h3>
+          )
+        ) : (
+          [...Array(2).keys()].map((el, i) => (
+            <div key={i} className='mt-3'>
+              <div className='d-flex align-items-center pe-3 py-2'>
+                <div>
+                  <Skeleton circle width={40} height={40} />
                 </div>
-                <Skeleton count={2} />
-                <Skeleton height={180} />
-                <div className='d-flex align-items-center pe-3 py-2'>
-                  <div>
-                    <Skeleton circle width={40} height={40} />
-                  </div>
-                  <div className='ps-3'>
-                    <Skeleton width={200} />
-                  </div>
+                <div className='ps-3'>
+                  <Skeleton count={2} width={200} />
+                </div>
+                <div className='w-100 ps-3'>
+                  <Skeleton width={100} />
                 </div>
               </div>
-            ))}
+              <Skeleton count={2} />
+              <Skeleton height={180} />
+              <div className='d-flex align-items-center pe-3 py-2'>
+                <div>
+                  <Skeleton circle width={40} height={40} />
+                </div>
+                <div className='ps-3'>
+                  <Skeleton width={200} />
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   )

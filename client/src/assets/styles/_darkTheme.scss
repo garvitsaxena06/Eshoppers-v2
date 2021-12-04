@@ -162,6 +162,9 @@ $darkShadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
   }
   .login {
     background-color: $secondaryBlack;
+    .loginLogo {
+      color: $buttonBlue;
+    }
     .loginDesc {
       color: $offWhite;
     }

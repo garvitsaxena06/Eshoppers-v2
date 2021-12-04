@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react'
+import { useRef, useContext, useState } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
 import { CircularProgress } from '@material-ui/core'
@@ -13,12 +13,15 @@ export default function Register() {
   const password = useRef()
   const passwordAgain = useRef()
   const history = useHistory()
-  const { dispatch, isFetching } = useContext(AuthContext)
+  const { dispatch } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false)
 
   const handleClick = async (e) => {
+    setLoading(true)
     e.preventDefault()
     if (passwordAgain.current.value !== password.current.value) {
       message.warning("Passwords don't match!")
+      setLoading(false)
     } else {
       const keys = await GenerateKeys()
       const user = {
@@ -32,10 +35,12 @@ export default function Register() {
           message.success(
             'Registration done successfully. Please login to continue.'
           )
+          setLoading(false)
           history.push('/login')
         })
         .catch((err) => {
           console.log(err)
+          setLoading(false)
           message.error(err?.response?.data || 'Something went wrong!')
         })
     }
@@ -45,9 +50,9 @@ export default function Register() {
     <div className='login'>
       <div className='loginWrapper row align-items-center'>
         <div className='loginLeft col-md-6'>
-          <h3 className='loginLogo'>Lamasocial</h3>
+          <h3 className='loginLogo'>ViaChat</h3>
           <span className='loginDesc'>
-            Connect with friends and the world around you on Lamasocial.
+            Connect with friends and the world around you on ViaChat.
           </span>
         </div>
         <div className='loginRight col-md-6'>
@@ -84,8 +89,8 @@ export default function Register() {
               className='loginInput'
               type='password'
             />
-            <button className='loginButton' type='submit' disabled={isFetching}>
-              {isFetching ? (
+            <button className='loginButton' type='submit' disabled={loading}>
+              {loading ? (
                 <CircularProgress color='white' size='20px' />
               ) : (
                 'Sign Up'
@@ -94,9 +99,9 @@ export default function Register() {
             <button
               className='loginRegisterButton'
               onClick={() => history.push('/login')}
-              disabled={isFetching}
+              disabled={loading}
             >
-              {isFetching ? (
+              {loading ? (
                 <CircularProgress color='white' size='20px' />
               ) : (
                 'Log into Account'

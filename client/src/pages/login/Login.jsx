@@ -23,9 +23,9 @@ export default function Login() {
     <div className='login'>
       <div className='loginWrapper row align-items-center'>
         <div className='loginLeft col-md-6'>
-          <h3 className='loginLogo'>Lamasocial</h3>
+          <h3 className='loginLogo'>ViaChat</h3>
           <span className='loginDesc'>
-            Connect with friends and the world around you on Lamasocial.
+            Connect with friends and the world around you on ViaChat.
           </span>
         </div>
         <div className='loginRight col-md-6'>
