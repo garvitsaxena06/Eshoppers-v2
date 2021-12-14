@@ -90,7 +90,7 @@ export default function Rightbar({
             <b>Pola Foster</b> and <b>3 other friends</b> have a birhday today.
           </span>
         </div> */}
-        <img className='rightbarAd' src='assets/ad.png' alt='' />
+        <img className='rightbarAd' src='assets/ad.jpg' alt='' />
         {onlineFriends?.length > 0 && (
           <h4 className='rightbarTitle'>Online Friends</h4>
         )}

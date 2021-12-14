@@ -255,7 +255,7 @@ export default function Topbar() {
               <Person />
               <span className="topbarIconBadge">1</span>
             </div> */}
-            <Dropdown overlay={messagesDropdown} trigger={['click']}>
+            <Dropdown overlay={messagesDropdown}>
               <div className='topbarIconItem'>
                 <Chat />
 

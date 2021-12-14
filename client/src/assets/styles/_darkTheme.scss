@@ -72,7 +72,8 @@ $darkShadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
     color: $offWhite;
     border: $boxborder;
   }
-  .rightbar {
+  .rightbar,
+  .rightbarMobile {
     background-color: $secondaryBlack;
     border-right: $boxborder;
     margin-top: 20px;
