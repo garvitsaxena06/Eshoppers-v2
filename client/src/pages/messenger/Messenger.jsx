@@ -14,6 +14,7 @@ import {
   getUserById,
   getConversationByOfTwoUsers,
 } from '../../apiCalls'
+import { setArrivalMessage } from '../../context/Socket/SocketActions'
 import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
 import { message, Switch, Tooltip, Upload, Modal } from 'antd'
@@ -42,7 +43,7 @@ const Messenger = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { user } = useContext(AuthContext)
   const width = useWindowSize()
-  const { onlineUsers, arrivalMessage, newConversation } =
+  const { onlineUsers, arrivalMessage, newConversation, dispatch } =
     useContext(SocketContext)
   const scrollRef = useRef()
 
@@ -94,6 +95,7 @@ const Messenger = () => {
               (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
             )
           )
+        dispatch(setArrivalMessage(null))
         setLoadingMessages(false)
       })
       .catch((err) => {
@@ -101,7 +103,7 @@ const Messenger = () => {
         setLoadingMessages(false)
         message.error('Something went wrong!')
       })
-  }, [currentChat, user])
+  }, [currentChat, user, dispatch])
 
   useEffect(() => {
     DeriveKeys(friend?.publicKeyJwk, user?.privateKeyJwk).then((res) => {

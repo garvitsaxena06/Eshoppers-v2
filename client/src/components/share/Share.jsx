@@ -49,7 +49,11 @@ export default function Share({ fetchPosts }) {
         })
       } catch (err) {}
     } else {
-      uploadPost(payload)
+      if (desc.current.value.length > 0) {
+        uploadPost(payload)
+      } else {
+        message.warning("You can't upload a blank post.")
+      }
     }
     desc.current.value = ''
     setFile(null)

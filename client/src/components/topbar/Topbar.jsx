@@ -14,27 +14,38 @@ import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
 import Paper from '@material-ui/core/Paper'
 import { Link, useHistory } from 'react-router-dom'
-import { Menu, Dropdown, message, Drawer, Divider, Switch, Tooltip } from 'antd'
+import {
+  Menu,
+  Dropdown,
+  message,
+  Drawer,
+  Divider,
+  Switch,
+  Tooltip,
+  Empty,
+} from 'antd'
 import React, { useContext, useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { AuthContext } from '../../context/Auth'
 import { ThemeContext } from '../../context/Theme'
 import { changeTheme } from '../../context/Theme/ThemeActions'
-import { getFriends, searchUserByUsername } from '../../apiCalls'
+import { getFriends, getUserById, searchUserByUsername } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
 import { SocketContext } from '../../context/Socket'
 import Online from '../online/Online'
 import useSocket from '../../utils/socket'
+import { Decrypt, DeriveKeys } from '../../utils/crypto'
 
 export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext)
-  const { onlineUsers } = useContext(SocketContext)
+  const { onlineUsers, arrivalMessage } = useContext(SocketContext)
   const { socket } = useSocket()
   const { theme, dispatch: themeDispatch } = useContext(ThemeContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
   const [visible, setVisible] = useState(false)
   const [friends, setFriends] = useState([])
+  const [arrivalMessageContent, setArrivalMessageContent] = useState(null)
   const [onlineFriends, setOnlineFriends] = useState([])
   const [loadingFriends, setLoadingFriends] = useState(true)
   const width = useWindowSize()
@@ -88,6 +99,29 @@ export default function Topbar() {
     history.push('/')
   }
 
+  useEffect(() => {
+    if (arrivalMessage) {
+      getUserById(arrivalMessage?.sender)
+        .then((sender) => {
+          DeriveKeys(sender.data?.publicKeyJwk, user?.privateKeyJwk)
+            .then((res) => {
+              Decrypt(arrivalMessage?.text, res)
+                .then((decryptMessage) => {
+                  setArrivalMessageContent({
+                    username: sender.data?.username,
+                    message: decryptMessage,
+                    profilePicture: sender.data?.profilePicture,
+                    userId: sender.data?._id,
+                  })
+                })
+                .catch((err) => console.log(err))
+            })
+            .catch((err) => console.log(err))
+        })
+        .catch((err) => console.log(err))
+    }
+  }, [arrivalMessage, user])
+
   const menu = (
     <Menu>
       <Menu.Item key='Profile'>
@@ -97,6 +131,38 @@ export default function Topbar() {
         <div onClick={logoutHandler}>Logout</div>
       </Menu.Item>
     </Menu>
+  )
+
+  const messagesDropdown = (
+    <div className='searchSuggestions messageNotifBox'>
+      {arrivalMessage ? (
+        <>
+          <div className='profilePicture'>
+            <img
+              src={
+                arrivalMessageContent?.profilePicture
+                  ? arrivalMessageContent?.profilePicture
+                  : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
+              }
+              alt=''
+              className='topbarImg'
+            />
+          </div>
+          <div
+            className='searchContent'
+            style={{ cursor: 'pointer' }}
+            onClick={() =>
+              history.push(`/messenger?q=${arrivalMessageContent?.userId}`)
+            }
+          >
+            <div className='email'>{arrivalMessageContent?.username}</div>
+            <div className='username'>{arrivalMessageContent?.message}</div>
+          </div>
+        </>
+      ) : (
+        <Empty description='No new messages' />
+      )}
+    </div>
   )
 
   const checkUserOnline = (id) => {
@@ -189,13 +255,15 @@ export default function Topbar() {
               <Person />
               <span className="topbarIconBadge">1</span>
             </div> */}
-            <div
-              className='topbarIconItem'
-              onClick={() => history.push('/messenger')}
-            >
-              <Chat />
-              {/* <span className="topbarIconBadge">2</span> */}
-            </div>
+            <Dropdown overlay={messagesDropdown} trigger={['click']}>
+              <div className='topbarIconItem'>
+                <Chat />
+
+                <span className='topbarIconBadge'>
+                  {arrivalMessage ? 1 : 0}
+                </span>
+              </div>
+            </Dropdown>
             <div className='topbarIconItem'>
               <Tooltip
                 overlayStyle={{ whiteSpace: 'pre-line', fontSize: 13 }}

@@ -254,3 +254,27 @@
   outline: none;
   box-shadow: none;
 }
+
+.messageNotifBox {
+  width: 250px;
+  background-color: #fff;
+  padding: 18px 12px;
+}
+
+.messageNotifBox .ant-empty {
+  margin: auto;
+}
+
+.messageNotifBox .ant-empty-img-default {
+  width: 90px;
+}
+
+.messageNotifBox .ant-empty-description {
+  font-size: 13px;
+  margin-top: -8px;
+  font-weight: 500;
+}
+
+.messageNotifBox .username {
+  font-weight: 600;
+}

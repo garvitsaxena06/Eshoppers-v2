@@ -272,6 +272,11 @@ $darkShadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
   .searchSuggestions {
     color: $offWhite;
     border-color: $lightBlack;
+    &.messageNotifBox {
+      background-color: $secondaryBlack;
+      border: $boxborder;
+      box-shadow: $darkShadow;
+    }
   }
   ::-webkit-scrollbar {
     width: 5px;

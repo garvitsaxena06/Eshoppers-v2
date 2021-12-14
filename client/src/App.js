@@ -16,6 +16,7 @@ import { SocketContext } from './context/Socket'
 import { ThemeContext } from './context/Theme'
 import { setOnlineUsers } from './context/Socket/SocketActions'
 import Floating from './components/floatingMessage/Floating'
+import { Notifications } from 'react-push-notification'
 
 function App() {
   const { user } = useContext(AuthContext)
@@ -48,6 +49,7 @@ function App() {
 
   return (
     <Router>
+      <Notifications />
       <Switch>
         <Route exact path='/'>
           {user ? <Home /> : <Register />}
