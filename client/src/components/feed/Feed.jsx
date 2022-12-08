@@ -1,16 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Skeleton from 'react-loading-skeleton'
 import Post from '../post/Post'
 import Share from '../share/Share'
 import './feed.css'
 import axios from 'axios'
-import { AuthContext } from '../../context/Auth'
 import { POSTS_BASE_URL } from '../../utils/connections'
 
 export default function Feed({ username, user: userProps }) {
+  const { user } = useSelector((state) => state.user)
   const [posts, setPosts] = useState([])
   const [loadingPosts, setLoadingPosts] = useState(true)
-  const { user } = useContext(AuthContext)
 
   const fetchPosts = async () => {
     setLoadingPosts(true)

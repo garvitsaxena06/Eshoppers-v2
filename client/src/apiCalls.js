@@ -7,15 +7,20 @@ import {
   MESSAGES_BASE_URL,
   CONVERSATIONS_BASE_URL,
 } from './utils/connections.js'
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} from './store/actions/userActions.js'
 
 export const loginCall = async (userCredential, dispatch) => {
-  dispatch({ type: 'LOGIN_START' })
+  dispatch(loginStart())
   try {
     const res = await axios.post(`${AUTH_BASE_URL}/login`, userCredential)
-    dispatch({ type: 'LOGIN_SUCCESS', payload: res.data })
+    dispatch(loginSuccess(res.data))
     message.success('Logged in successfully.')
   } catch (err) {
-    dispatch({ type: 'LOGIN_FAILURE', payload: err })
+    dispatch(loginFailure())
     message.error(err?.response?.data?.message)
   }
 }

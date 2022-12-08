@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { format } from 'timeago.js'
-import { AuthContext } from '../../context/Auth'
 import './message.css'
 
 const Message = ({
@@ -14,7 +14,7 @@ const Message = ({
   setIsVisible = () => {},
 }) => {
   const [state, setState] = React.useState('')
-  const { user } = useContext(AuthContext)
+  const { user } = useSelector((state) => state.user)
   React.useEffect(() => {
     const getMessages = async () => {
       const decryptedMessage = await Decrypt(message.text, derivedKeys)

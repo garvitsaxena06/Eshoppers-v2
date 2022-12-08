@@ -1,15 +1,17 @@
-import { useContext, useRef } from 'react'
+import { useRef } from 'react'
 import './login.css'
 import { loginCall } from '../../apiCalls'
-import { AuthContext } from '../../context/Auth'
 import { CircularProgress } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Login() {
   const history = useHistory()
   const email = useRef()
   const password = useRef()
-  const { isFetching, dispatch } = useContext(AuthContext)
+
+  const dispatch = useDispatch()
+  const { isFetching } = useSelector((state) => state.user)
 
   const handleClick = (e) => {
     e.preventDefault()

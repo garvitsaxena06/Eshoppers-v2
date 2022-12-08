@@ -1,10 +1,9 @@
 import './rightbar.css'
 import Online from '../online/Online'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
-import { AuthContext } from '../../context/Auth'
 import { Add, Remove, Edit, Chat } from '@material-ui/icons'
 import UserInfoModal from '../modals/userInfo'
 import {
@@ -13,6 +12,8 @@ import {
   follow,
   unfollow,
 } from '../../apiCalls'
+import { useSelector, useDispatch } from 'react-redux'
+import { followAction, unfollowAction } from '../../store/actions/userActions'
 
 export default function Rightbar({
   user,
@@ -24,7 +25,8 @@ export default function Rightbar({
 }) {
   const [friends, setFriends] = useState([])
   const history = useHistory()
-  const { user: currentUser, dispatch } = useContext(AuthContext)
+  const dispatch = useDispatch()
+  const { user: currentUser } = useSelector((state) => state.user)
   const [followed, setFollowed] = useState(
     currentUser.followings.includes(user?._id)
   )
@@ -60,7 +62,7 @@ export default function Rightbar({
         unfollow(user._id, currentUser._id)
           .then((res) => {
             message.success('User has been unfollowed.')
-            dispatch({ type: 'UNFOLLOW', payload: user._id })
+            dispatch(unfollowAction(user._id))
           })
           .catch((err) => {
             console.log(err)
@@ -70,7 +72,7 @@ export default function Rightbar({
         follow(user._id, currentUser._id)
           .then((res) => {
             message.success('User has been followed.')
-            dispatch({ type: 'FOLLOW', payload: user._id })
+            dispatch(followAction(user._id))
           })
           .catch((err) => {
             console.log(err)

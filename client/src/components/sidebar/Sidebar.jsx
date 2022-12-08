@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './sidebar.css'
 import {
   RssFeed,
@@ -15,11 +15,11 @@ import Skeleton from 'react-loading-skeleton'
 // import { Users } from '../../dummyData'
 import CloseFriend from '../closeFriend/CloseFriend'
 import { useHistory } from 'react-router-dom'
-import { AuthContext } from '../../context/Auth'
 import { getFriends } from '../../apiCalls'
+import { useSelector } from 'react-redux'
 
 export default function Sidebar() {
-  const { user } = useContext(AuthContext)
+  const { user } = useSelector((state) => state.user)
   const history = useHistory()
 
   const [friends, setFriends] = useState([])

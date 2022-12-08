@@ -3,20 +3,22 @@ import Topbar from '../../components/topbar/Topbar'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Feed from '../../components/feed/Feed'
 import Rightbar from '../../components/rightbar/Rightbar'
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { AuthContext } from '../../context/Auth'
 import { getFriends, updateUser, getUserByUsername } from '../../apiCalls'
 import { CameraAlt, Edit } from '@material-ui/icons'
 import { upload } from '../../utils/upload'
 import { message } from 'antd'
 import { Spinner } from 'react-bootstrap'
 import useWindowSize from '../../utils/windowSize'
+import { useDispatch, useSelector } from 'react-redux'
+import { UPDATE } from '../../store/constants/userConstants'
 
 export default function Profile() {
   const [user, setUser] = useState({})
   const width = useWindowSize()
-  const { user: loggedInUser, dispatch } = useContext(AuthContext)
+  const dispatch = useDispatch()
+  const { user: loggedInUser } = useSelector((state) => state.user)
   const [loading, setLoading] = useState({
     coverPicture: false,
     profilePicture: false,
@@ -51,7 +53,8 @@ export default function Profile() {
       .then((res) => {
         cb(false, res)
         setUser(res.data.data)
-        dispatch({ type: 'UPDATE', payload: res.data.data })
+        dispatch({ type: UPDATE, payload: res.data.data })
+        localStorage.setItem('user', JSON.stringify(res.data.data))
         setLoading({ coverPicture: false, profilePicture: false })
         message.success(res?.data?.message || 'Profile updated successfully.')
       })

@@ -6,15 +6,15 @@ import {
   // EmojiEmotions,
   Cancel,
 } from '@material-ui/icons'
-import { useContext, useRef, useState } from 'react'
-import { AuthContext } from '../../context/Auth'
+import { useRef, useState } from 'react'
 import axios from 'axios'
 import { message } from 'antd'
 import { upload } from '../../utils/upload'
 import { POSTS_BASE_URL } from '../../utils/connections'
+import { useSelector } from 'react-redux'
 
 export default function Share({ fetchPosts }) {
-  const { user } = useContext(AuthContext)
+  const { user } = useSelector((state) => state.user)
   const desc = useRef()
   const imageRef = useRef()
   const [file, setFile] = useState(null)

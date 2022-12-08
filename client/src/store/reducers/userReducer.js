@@ -1,24 +1,41 @@
-const AuthReducer = (state, action) => {
+import {
+  FOLLOW,
+  LOGIN_FAILURE,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  UNFOLLOW,
+  UPDATE,
+} from '../constants/userConstants'
+
+export const userReducer = (
+  state = {
+    user: null,
+    isFetching: false,
+    error: false,
+  },
+  action
+) => {
   switch (action.type) {
-    case 'LOGIN_START':
+    case LOGIN_START:
       return {
         user: null,
         isFetching: true,
         error: false,
       }
-    case 'LOGIN_SUCCESS':
+    case LOGIN_SUCCESS:
       return {
         user: action.payload,
         isFetching: false,
         error: false,
       }
-    case 'LOGIN_FAILURE':
+    case LOGIN_FAILURE:
       return {
         user: null,
         isFetching: false,
         error: true,
       }
-    case 'FOLLOW':
+    case FOLLOW:
       return {
         ...state,
         user: {
@@ -26,7 +43,7 @@ const AuthReducer = (state, action) => {
           followings: [...state.user.followings, action.payload],
         },
       }
-    case 'UNFOLLOW':
+    case UNFOLLOW:
       return {
         ...state,
         user: {
@@ -36,12 +53,12 @@ const AuthReducer = (state, action) => {
           ),
         },
       }
-    case 'UPDATE':
+    case UPDATE:
       return {
         ...state,
         user: action.payload,
       }
-    case 'LOGOUT':
+    case LOGOUT:
       return {
         user: null,
         isFetching: false,
@@ -51,5 +68,3 @@ const AuthReducer = (state, action) => {
       return state
   }
 }
-
-export default AuthReducer

@@ -1,7 +1,6 @@
-import { useRef, useEffect, useContext } from 'react'
-import { useDispatch } from 'react-redux'
+import { useRef, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { io } from 'socket.io-client'
-import { AuthContext } from '../context/Auth'
 import {
   setArrivalMessage,
   setNewConversation,
@@ -10,7 +9,7 @@ import PushNotification from './pushNotification'
 
 const useSocket = () => {
   const dispatch = useDispatch()
-  const { user } = useContext(AuthContext)
+  const { user } = useSelector((state) => state.user)
   const socket = useRef()
   const { pushNotification } = PushNotification()
 

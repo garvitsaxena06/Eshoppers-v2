@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import './messenger.css'
 import Topbar from '../../components/topbar/Topbar'
 import Conversation from '../../components/conversation/Conversation'
 import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
-import { AuthContext } from '../../context/Auth'
 import useSocket from '../../utils/socket'
 import {
   getConversations,
@@ -43,7 +42,7 @@ const Messenger = () => {
   const [sendFile, setSendFile] = useState(null)
   const [sendingFile, setSendingFile] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-  const { user } = useContext(AuthContext)
+  const { user } = useSelector((state) => state.user)
   const width = useWindowSize()
   const { onlineUsers, arrivalMessage, newConversation } = socketRedux
   const scrollRef = useRef()

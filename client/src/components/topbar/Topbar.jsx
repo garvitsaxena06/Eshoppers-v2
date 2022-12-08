@@ -24,21 +24,25 @@ import {
   Tooltip,
   Empty,
 } from 'antd'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { useSelector, useDispatch } from 'react-redux'
-import { AuthContext } from '../../context/Auth'
 import { changeTheme } from '../../store/actions/themeActions'
 import { getFriends, getUserById, searchUserByUsername } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
 import Online from '../online/Online'
 import useSocket from '../../utils/socket'
 import { Decrypt, DeriveKeys } from '../../utils/crypto'
+import { logoutUser } from '../../store/actions/userActions'
 
 export default function Topbar() {
-  const themeDispatch = useDispatch()
-  const { theme, socket: socketRedux } = useSelector((state) => state)
-  const { user, dispatch } = useContext(AuthContext)
+  const dispatch = useDispatch()
+  const {
+    theme,
+    socket: socketRedux,
+    user: userRedux,
+  } = useSelector((state) => state)
+  const { user } = userRedux
   const { onlineUsers, arrivalMessage } = socketRedux
   const { socket } = useSocket()
   const history = useHistory()
@@ -93,7 +97,7 @@ export default function Topbar() {
 
   const logoutHandler = () => {
     localStorage.removeItem('user')
-    dispatch({ type: 'LOGOUT' })
+    dispatch(logoutUser())
     socket.current.emit('logoutUser', user._id)
     message.success('Logout successfully.')
     history.push('/')
@@ -274,7 +278,7 @@ export default function Topbar() {
                   size='small'
                   checked={theme === 'dark' ? true : false}
                   onChange={(checked) => {
-                    themeDispatch(changeTheme(checked ? 'dark' : 'light'))
+                    dispatch(changeTheme(checked ? 'dark' : 'light'))
                   }}
                 />
               </Tooltip>
@@ -350,7 +354,7 @@ export default function Topbar() {
             <Switch
               checked={theme === 'dark' ? true : false}
               onChange={(checked) => {
-                themeDispatch(changeTheme(checked ? 'dark' : 'light'))
+                dispatch(changeTheme(checked ? 'dark' : 'light'))
               }}
             />
             Toggle theme

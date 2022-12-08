@@ -1,11 +1,11 @@
-import { useRef, useContext, useState } from 'react'
+import { useRef, useState } from 'react'
 import './register.css'
 import { useHistory } from 'react-router'
 import { CircularProgress } from '@material-ui/core'
 import { GenerateKeys } from '../../utils/crypto'
 import { message } from 'antd'
 import { RegisterCall } from '../../apiCalls'
-import { AuthContext } from '../../context/Auth'
+import { useDispatch } from 'react-redux'
 
 export default function Register() {
   const username = useRef()
@@ -13,7 +13,7 @@ export default function Register() {
   const password = useRef()
   const passwordAgain = useRef()
   const history = useHistory()
-  const { dispatch } = useContext(AuthContext)
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
 
   const handleClick = async (e) => {

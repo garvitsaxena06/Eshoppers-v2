@@ -1,11 +1,11 @@
 import './post.css'
 import { MoreVert } from '@material-ui/icons'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { format } from 'timeago.js'
 import { Link, useHistory } from 'react-router-dom'
-import { AuthContext } from '../../context/Auth'
 import { Menu, Dropdown, message } from 'antd'
 import { getUserById, likePost, deletePost } from '../../apiCalls'
+import { useSelector } from 'react-redux'
 
 export default function Post({
   post,
@@ -17,7 +17,7 @@ export default function Post({
   const [isLiked, setIsLiked] = useState(false)
   const [user, setUser] = useState({})
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
-  const { user: currentUser } = useContext(AuthContext)
+  const { user: currentUser } = useSelector((state) => state.user)
   const history = useHistory()
 
   useEffect(() => {

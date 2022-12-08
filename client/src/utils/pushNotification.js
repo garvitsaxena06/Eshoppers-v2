@@ -1,11 +1,10 @@
-import { useContext } from 'react'
 import addNotification from 'react-push-notification'
+import { useSelector } from 'react-redux'
 import { getUserById } from '../apiCalls'
-import { AuthContext } from '../context/Auth'
 import { Decrypt, DeriveKeys } from './crypto'
 
 const PushNotification = () => {
-  const { user } = useContext(AuthContext)
+  const { user } = useSelector((state) => state.user)
   const pushNotification = ({ senderId, text }) => {
     getUserById(senderId)
       .then((sender) => {
