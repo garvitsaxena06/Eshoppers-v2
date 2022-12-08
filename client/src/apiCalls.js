@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd'
 import {
+  AUTH_BASE_URL,
   POSTS_BASE_URL,
   USERS_BASE_URL,
   MESSAGES_BASE_URL,
@@ -10,7 +11,7 @@ import {
 export const loginCall = async (userCredential, dispatch) => {
   dispatch({ type: 'LOGIN_START' })
   try {
-    const res = await axios.post(`${USERS_BASE_URL}/login`, userCredential)
+    const res = await axios.post(`${AUTH_BASE_URL}/login`, userCredential)
     dispatch({ type: 'LOGIN_SUCCESS', payload: res.data })
     message.success('Logged in successfully.')
   } catch (err) {
@@ -20,7 +21,7 @@ export const loginCall = async (userCredential, dispatch) => {
 }
 
 export const RegisterCall = async (user, dispatch) =>
-  await axios.post(`${USERS_BASE_URL}/register`, user)
+  await axios.post(`${AUTH_BASE_URL}/register`, user)
 
 export const getUserById = async (id) =>
   await axios.get(`${USERS_BASE_URL}?userId=` + id)
