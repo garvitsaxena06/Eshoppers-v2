@@ -23,9 +23,9 @@ export default function Login() {
     <div className='login'>
       <div className='loginWrapper row align-items-center'>
         <div className='loginLeft col-md-6'>
-          <h3 className='loginLogo'>ViaChat</h3>
+          <h3 className='loginLogo'>Eshoppers</h3>
           <span className='loginDesc'>
-            Connect with friends and the world around you on ViaChat.
+            The next generation of e-commerce platform that you can trust
           </span>
         </div>
         <div className='loginRight col-md-6'>
