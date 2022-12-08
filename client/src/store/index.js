@@ -1,10 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { themeReducer } from './reducers/themeReducer'
+import { socketReducer } from './reducers/socketReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 const reducer = combineReducers({
   theme: themeReducer,
+  socket: socketReducer,
 })
 
 const themeFromStorage = localStorage.getItem('theme')

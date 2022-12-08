@@ -10,17 +10,16 @@ import {
   Redirect,
 } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import useSocket from './utils/socket'
-import { useSelector } from 'react-redux'
 import { AuthContext } from './context/Auth'
-import { SocketContext } from './context/Socket'
-import { setOnlineUsers } from './context/Socket/SocketActions'
+import { setOnlineUsers } from './store/actions/socketActions'
 import Floating from './components/floatingMessage/Floating'
 import { Notifications } from 'react-push-notification'
 
 function App() {
   const { user } = useContext(AuthContext)
-  const { dispatch } = useContext(SocketContext)
+  const dispatch = useDispatch()
   const { theme } = useSelector((state) => state)
   const { socket } = useSocket()
 

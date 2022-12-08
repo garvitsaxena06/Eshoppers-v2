@@ -1,16 +1,16 @@
 import { useRef, useEffect, useContext } from 'react'
+import { useDispatch } from 'react-redux'
 import { io } from 'socket.io-client'
 import { AuthContext } from '../context/Auth'
-import { SocketContext } from '../context/Socket'
 import {
   setArrivalMessage,
   setNewConversation,
-} from '../context/Socket/SocketActions'
+} from '../store/actions/socketActions'
 import PushNotification from './pushNotification'
 
 const useSocket = () => {
+  const dispatch = useDispatch()
   const { user } = useContext(AuthContext)
-  const { dispatch } = useContext(SocketContext)
   const socket = useRef()
   const { pushNotification } = PushNotification()
 

@@ -31,16 +31,15 @@ import { AuthContext } from '../../context/Auth'
 import { changeTheme } from '../../store/actions/themeActions'
 import { getFriends, getUserById, searchUserByUsername } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
-import { SocketContext } from '../../context/Socket'
 import Online from '../online/Online'
 import useSocket from '../../utils/socket'
 import { Decrypt, DeriveKeys } from '../../utils/crypto'
 
 export default function Topbar() {
   const themeDispatch = useDispatch()
-  const { theme } = useSelector((state) => state)
+  const { theme, socket: socketRedux } = useSelector((state) => state)
   const { user, dispatch } = useContext(AuthContext)
-  const { onlineUsers, arrivalMessage } = useContext(SocketContext)
+  const { onlineUsers, arrivalMessage } = socketRedux
   const { socket } = useSocket()
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])

@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react'
+import { useSelector } from 'react-redux'
 import Topbar from '../../components/topbar/Topbar'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Feed from '../../components/feed/Feed'
 import Rightbar from '../../components/rightbar/Rightbar'
 import { AuthContext } from '../../context/Auth'
-import { SocketContext } from '../../context/Socket'
 import './home.css'
 import { useHistory } from 'react-router'
 import { getFriends } from '../../apiCalls'
@@ -12,7 +12,8 @@ import { getFriends } from '../../apiCalls'
 export default function Home() {
   const history = useHistory()
   const { user } = useContext(AuthContext)
-  const { onlineUsers } = useContext(SocketContext)
+  const { socket } = useSelector((state) => state)
+  const { onlineUsers } = socket
   const [friends, setFriends] = useState([])
   const [onlineFriends, setOnlineFriends] = useState([])
   const [loadingFriends, setLoadingFriends] = useState(true)

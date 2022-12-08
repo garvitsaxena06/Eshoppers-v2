@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import './messenger.css'
 import Topbar from '../../components/topbar/Topbar'
 import Conversation from '../../components/conversation/Conversation'
 import Message from '../../components/message/Message'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
 import { AuthContext } from '../../context/Auth'
-import { SocketContext } from '../../context/Socket'
 import useSocket from '../../utils/socket'
 import {
   getConversations,
@@ -14,7 +14,7 @@ import {
   getUserById,
   getConversationByOfTwoUsers,
 } from '../../apiCalls'
-import { setArrivalMessage } from '../../context/Socket/SocketActions'
+import { setArrivalMessage } from '../../store/actions/socketActions'
 import { Encrypt, Decrypt, DeriveKeys } from '../../utils/crypto'
 import Skeleton from 'react-loading-skeleton'
 import { message, Switch, Tooltip, Upload, Modal } from 'antd'
@@ -27,6 +27,8 @@ import AttachFileIcon from '@material-ui/icons/AttachFile'
 import { upload } from '../../utils/upload'
 
 const Messenger = () => {
+  const dispatch = useDispatch()
+  const { socket: socketRedux } = useSelector((state) => state)
   const { socket } = useSocket()
   const [AllConversations, setAllConversations] = useState([])
   const [conversations, setConversations] = useState([])
@@ -43,8 +45,7 @@ const Messenger = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { user } = useContext(AuthContext)
   const width = useWindowSize()
-  const { onlineUsers, arrivalMessage, newConversation, dispatch } =
-    useContext(SocketContext)
+  const { onlineUsers, arrivalMessage, newConversation } = socketRedux
   const scrollRef = useRef()
 
   const friendId = useLocation().search?.split('=')[1]
