@@ -177,7 +177,7 @@ export default function Topbar() {
     <div className='topbarContainer'>
       <div className='topbarLeft'>
         <Link to='/' style={{ textDecoration: 'none' }}>
-          <span className='logo'>Eshoppers</span>
+          <span className='logo'>EShoppers</span>
         </Link>
       </div>
       <div className='topbarCenter'>
@@ -243,13 +243,13 @@ export default function Topbar() {
       <div className='topbarRight'>
         <div className='topbarLinks'>
           <span className='topbarLink' onClick={() => history.push('/')}>
-            Homepage
+            Shopping
           </span>
           <span
             className='topbarLink'
             onClick={() => history.push(`/profile/${user.username}`)}
           >
-            Timeline
+            Visit Profile
           </span>
         </div>
 
@@ -333,12 +333,12 @@ export default function Topbar() {
         <div className='profileLinks'>
           <div className='profileLink'>
             <Home />
-            <span onClick={() => history.push(`/`)}>Homepage</span>
+            <span onClick={() => history.push(`/`)}>Shopping</span>
           </div>
           <div className='profileLink'>
             <Timeline />
             <span onClick={() => history.push(`/profile/${user.username}`)}>
-              Timeline
+              Visit Profile
             </span>
           </div>
           <div className='profileLink'>

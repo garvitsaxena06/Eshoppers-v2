@@ -190,31 +190,6 @@ export default function Rightbar({
                 <span className='rightbarInfoValue'>{user.city || 'N/A'}</span>
               </div>
             </div>
-            <h4 className='rightbarTitle'>User friends</h4>
-            <div className='rightbarFollowings'>
-              {friends.map((friend) => (
-                <Link
-                  key={friend.username}
-                  to={'/profile/' + friend.username}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <div className='rightbarFollowing'>
-                    <img
-                      src={
-                        friend.profilePicture
-                          ? friend.profilePicture
-                          : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
-                      }
-                      alt=''
-                      className='rightbarFollowingImg'
-                    />
-                    <span className='rightbarFollowingName text-center'>
-                      {friend.username}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
           </>
         ) : (
           <div>

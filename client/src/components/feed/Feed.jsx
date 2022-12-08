@@ -37,10 +37,6 @@ export default function Feed({ username, user: userProps }) {
   return (
     <div className='feed'>
       <div className='feedWrapper'>
-        {(!username || username === user.username) && (
-          <Share fetchPosts={fetchPosts} />
-        )}
-
         {!loadingPosts ? (
           posts && posts.length > 0 ? (
             posts.map((p, i) => (

@@ -80,7 +80,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #120a5c;
+  background-color: #0c0c0c;
   color: #fff;
   padding: 8px 16px;
   margin: 0 10px;
@@ -95,7 +95,7 @@
 }
 
 .chatFileAttachBtn .MuiSvgIcon-root {
-  color: #120a5c;
+  color: #0c0c0c;
   font-size: 30px;
 }
 
@@ -165,7 +165,7 @@
 }
 
 .imageModal .ant-modal-close .anticon {
-  color: #120a5c;
+  color: #0c0c0c;
 }
 
 .imageModal .ant-modal-body {

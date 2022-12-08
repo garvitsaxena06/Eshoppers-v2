@@ -1,7 +1,7 @@
 .topbarContainer {
   height: 50px;
   width: 100%;
-  background-color: #120a5c;
+  background-color: #0c0c0c;
   display: flex;
   align-items: center;
   position: sticky;
@@ -246,6 +246,10 @@
 
 .profileLinks .profileLink button {
   margin-right: 12px;
+}
+
+.topbarIconItem .ant-switch-small {
+  background: #343434;
 }
 
 .topbarIconItem .ant-switch-small:focus,

@@ -25,7 +25,7 @@ export default function Login() {
     <div className='login'>
       <div className='loginWrapper row align-items-center'>
         <div className='loginLeft col-md-6'>
-          <h3 className='loginLogo'>Eshoppers</h3>
+          <h3 className='loginLogo'>EShoppers</h3>
           <span className='loginDesc'>
             The next generation of e-commerce platform that you can trust
           </span>
