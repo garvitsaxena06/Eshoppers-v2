@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import { Provider } from 'react-redux'
+import store from './store'
 import { AuthContextProvider } from './context/Auth'
 import { SocketProvider } from './context/Socket'
 import { ThemeContextProvider } from './context/Theme'
@@ -10,7 +12,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import './style.scss'
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <AuthContextProvider>
       <SocketProvider>
         <ThemeContextProvider>
@@ -18,6 +20,6 @@ ReactDOM.render(
         </ThemeContextProvider>
       </SocketProvider>
     </AuthContextProvider>
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 )

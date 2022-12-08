@@ -11,9 +11,9 @@ import {
 } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
 import useSocket from './utils/socket'
+import { useSelector } from 'react-redux'
 import { AuthContext } from './context/Auth'
 import { SocketContext } from './context/Socket'
-import { ThemeContext } from './context/Theme'
 import { setOnlineUsers } from './context/Socket/SocketActions'
 import Floating from './components/floatingMessage/Floating'
 import { Notifications } from 'react-push-notification'
@@ -21,7 +21,7 @@ import { Notifications } from 'react-push-notification'
 function App() {
   const { user } = useContext(AuthContext)
   const { dispatch } = useContext(SocketContext)
-  const { theme } = useContext(ThemeContext)
+  const { theme } = useSelector((state) => state)
   const { socket } = useSocket()
 
   useEffect(() => {

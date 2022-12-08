@@ -26,9 +26,9 @@ import {
 } from 'antd'
 import React, { useContext, useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import { useSelector, useDispatch } from 'react-redux'
 import { AuthContext } from '../../context/Auth'
-import { ThemeContext } from '../../context/Theme'
-import { changeTheme } from '../../context/Theme/ThemeActions'
+import { changeTheme } from '../../store/actions/themeActions'
 import { getFriends, getUserById, searchUserByUsername } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
 import { SocketContext } from '../../context/Socket'
@@ -37,10 +37,11 @@ import useSocket from '../../utils/socket'
 import { Decrypt, DeriveKeys } from '../../utils/crypto'
 
 export default function Topbar() {
+  const themeDispatch = useDispatch()
+  const { theme } = useSelector((state) => state)
   const { user, dispatch } = useContext(AuthContext)
   const { onlineUsers, arrivalMessage } = useContext(SocketContext)
   const { socket } = useSocket()
-  const { theme, dispatch: themeDispatch } = useContext(ThemeContext)
   const history = useHistory()
   const [searchedItems, setSearchedItems] = useState([])
   const [visible, setVisible] = useState(false)
@@ -275,7 +276,6 @@ export default function Topbar() {
                   checked={theme === 'dark' ? true : false}
                   onChange={(checked) => {
                     themeDispatch(changeTheme(checked ? 'dark' : 'light'))
-                    localStorage.setItem('theme', checked ? 'dark' : 'light')
                   }}
                 />
               </Tooltip>
@@ -352,7 +352,6 @@ export default function Topbar() {
               checked={theme === 'dark' ? true : false}
               onChange={(checked) => {
                 themeDispatch(changeTheme(checked ? 'dark' : 'light'))
-                localStorage.setItem('theme', checked ? 'dark' : 'light')
               }}
             />
             Toggle theme
