@@ -1,62 +1,35 @@
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Col, Row } from 'react-bootstrap'
 import Skeleton from 'react-loading-skeleton'
-import Post from '../post/Post'
+import { listProducts } from '../../store/actions/productActions'
+import Product from './Product'
 import './feed.css'
-import axios from 'axios'
-import { POSTS_BASE_URL } from '../../utils/connections'
 
-export default function Feed({ username, user: userProps }) {
-  const { user } = useSelector((state) => state.user)
-  const [posts, setPosts] = useState([])
-  const [loadingPosts, setLoadingPosts] = useState(true)
+export default function Feed() {
+  const dispatch = useDispatch()
 
-  const fetchPosts = async () => {
-    setLoadingPosts(true)
-    try {
-      const res = username
-        ? await axios.get(`${POSTS_BASE_URL}/profile/` + username)
-        : await axios.get(`${POSTS_BASE_URL}/timeline/` + user._id)
-      setPosts(
-        res.data.sort((p1, p2) => {
-          return new Date(p2.createdAt) - new Date(p1.createdAt)
-        })
-      )
-      setLoadingPosts(false)
-    } catch (error) {
-      setLoadingPosts(false)
-    }
-  }
+  const productList = useSelector((state) => state.productList)
+  const { loading, products } = productList
 
   useEffect(() => {
-    fetchPosts()
-    // eslint-disable-next-line
-  }, [username, user._id, userProps])
+    dispatch(listProducts())
+  }, [dispatch])
 
   return (
     <div className='feed'>
       <div className='feedWrapper'>
-        {!loadingPosts ? (
-          posts && posts.length > 0 ? (
-            posts.map((p, i) => (
-              <Post
-                fetchPosts={fetchPosts}
-                key={p._id}
-                post={p}
-                index={i}
-                differentUser={userProps ? userProps?._id !== user._id : false}
-              />
-            ))
-          ) : (
-            <h3 className='noPostHeading'>
-              {userProps
-                ? userProps?._id !== user._id
-                  ? '@' + userProps?.username
-                  : 'You'
-                : 'You'}{' '}
-              have not post anything yet!
-            </h3>
-          )
+        <h4 className='fw-semibold text-decoration-underline'>
+          Latest Products
+        </h4>
+        {!loading ? (
+          <Row>
+            {products?.map((product, index) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
         ) : (
           [...Array(2).keys()].map((el, i) => (
             <div key={i} className='mt-3'>
