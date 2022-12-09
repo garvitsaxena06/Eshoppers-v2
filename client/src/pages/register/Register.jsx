@@ -3,7 +3,7 @@ import './register.css'
 import { useHistory } from 'react-router'
 import { CircularProgress } from '@material-ui/core'
 import { GenerateKeys } from '../../utils/crypto'
-import { message } from 'antd'
+import { message, Radio } from 'antd'
 import { RegisterCall } from '../../apiCalls'
 import { useDispatch } from 'react-redux'
 
@@ -12,6 +12,7 @@ export default function Register() {
   const email = useRef()
   const password = useRef()
   const passwordAgain = useRef()
+  const [userType, setUserType] = useState('Customer')
   const history = useHistory()
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -28,6 +29,7 @@ export default function Register() {
         username: username.current.value,
         email: email.current.value,
         password: password.current.value,
+        isVendor: userType === 'Vendor',
         ...keys,
       }
       RegisterCall(user, dispatch)
@@ -44,6 +46,10 @@ export default function Register() {
           message.error(err?.response?.data || 'Something went wrong!')
         })
     }
+  }
+
+  const onChange = (e) => {
+    setUserType(e.target.value)
   }
 
   return (
@@ -89,6 +95,10 @@ export default function Register() {
               className='loginInput'
               type='password'
             />
+            <Radio.Group onChange={onChange} value={userType}>
+              <Radio value={'Customer'}>Customer</Radio>
+              <Radio value={'Vendor'}>Vendor</Radio>
+            </Radio.Group>
             <button className='loginButton' type='submit' disabled={loading}>
               {loading ? (
                 <CircularProgress color='white' size='20px' />

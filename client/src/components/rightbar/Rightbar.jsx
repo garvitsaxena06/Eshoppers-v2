@@ -2,16 +2,11 @@ import './rightbar.css'
 import Online from '../online/Online'
 import { useEffect, useState } from 'react'
 import { message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import { Add, Remove, Edit, Chat } from '@material-ui/icons'
 import UserInfoModal from '../modals/userInfo'
-import {
-  getFriends as getUserFriends,
-  getFriendsByUserName,
-  follow,
-  unfollow,
-} from '../../apiCalls'
+import { follow, unfollow } from '../../apiCalls'
 import { useSelector, useDispatch } from 'react-redux'
 import { followAction, unfollowAction } from '../../store/actions/userActions'
 
@@ -23,7 +18,6 @@ export default function Rightbar({
   loadingUserDetails = false,
   mobileView,
 }) {
-  const [friends, setFriends] = useState([])
   const history = useHistory()
   const dispatch = useDispatch()
   const { user: currentUser } = useSelector((state) => state.user)
@@ -34,27 +28,6 @@ export default function Rightbar({
   useEffect(() => {
     setFollowed(currentUser.followings.includes(user?._id))
   }, [currentUser, user])
-
-  useEffect(() => {
-    const getFriends = async () => {
-      if (user && user.username) {
-        try {
-          const friendList = await getFriendsByUserName(user.username)
-          setFriends(friendList.data)
-        } catch (err) {
-          console.log(err)
-        }
-      } else {
-        try {
-          const friendList = await getUserFriends(currentUser?._id)
-          setFriends(friendList.data)
-        } catch (err) {
-          console.log(err)
-        }
-      }
-    }
-    getFriends()
-  }, [currentUser?._id, user])
 
   const handleClick = async () => {
     try {

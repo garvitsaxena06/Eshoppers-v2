@@ -67,3 +67,21 @@
     word-break: break-all;
   }
 }
+
+.ant-radio-group {
+  margin-bottom: 16px;
+  margin-left: 6px;
+  .ant-radio-wrapper {
+    width: 40%;
+  }
+  .ant-radio-checked .ant-radio-inner,
+  .ant-radio-checked::after {
+    border: 1px solid #0c0c0c;
+  }
+  .ant-radio-checked .ant-radio-inner::after {
+    background-color: #0c0c0c;
+  }
+  .ant-radio-input:focus + .ant-radio-inner {
+    box-shadow: 0 0 0 3px rgb(0 0 0 / 12%);
+  }
+}

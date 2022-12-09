@@ -27,6 +27,11 @@ const UserSchema = new mongoose.Schema(
       required: true,
       min: 6,
     },
+    isVendor: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     profilePicture: {
       type: String,
       default: '',
@@ -66,7 +71,7 @@ const UserSchema = new mongoose.Schema(
     publicKeyJwk: { type: Object },
     privateKeyJwk: { type: Object },
   },
-  { timestamps: true },
+  { timestamps: true }
 )
 
 module.exports = mongoose.model('User', UserSchema)
