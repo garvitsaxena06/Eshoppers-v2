@@ -20,7 +20,6 @@ const Cart = () => {
   const { cartItems } = cart
 
   useEffect(() => {
-    console.log({ prodId, qty })
     dispatch(addToCart(prodId, qty))
   }, [dispatch, prodId, qty])
 
@@ -62,7 +61,8 @@ const Cart = () => {
                         </Link>{' '}
                         <br />
                         <span className='fw-semibold'>
-                          <u>Price:</u> Rs. {item.price} x {item.qty}
+                          <u>Price:</u> Rs.{' '}
+                          {item.price?.toLocaleString('en-IN')} x {item.qty}
                         </span>
                       </Col>
                       <Col md={2}>
@@ -108,9 +108,11 @@ const Cart = () => {
                   </h5>
                   <span className='fw-bold'>
                     Rs.{' '}
-                    {cartItems
-                      .reduce((acc, item) => acc + item.price * item.qty, 0)
-                      .toFixed(2)}
+                    {Number(
+                      cartItems
+                        .reduce((acc, item) => acc + item.price * item.qty, 0)
+                        .toFixed(2)
+                    )?.toLocaleString('en-IN')}
                   </span>
                 </ListGroup.Item>
                 <ListGroup.Item>

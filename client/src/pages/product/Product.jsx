@@ -6,6 +6,7 @@ import Ratings from '../../components/ratings/Ratings'
 import Skeleton from 'react-loading-skeleton'
 import { listProductDetails } from '../../store/actions/productActions'
 import Topbar from '../../components/topbar/Topbar'
+import { getConversationByOfTwoUsers } from '../../apiCalls'
 
 const Product = () => {
   const [qty, setQty] = useState(1)
@@ -14,7 +15,10 @@ const Product = () => {
   const params = useParams()
   const history = useHistory()
 
-  const productDetails = useSelector((state) => state.productDetails)
+  const {
+    productDetails,
+    user: { user },
+  } = useSelector((state) => state)
   const { loading, product } = productDetails
 
   useEffect(() => {
@@ -25,7 +29,13 @@ const Product = () => {
     history.push(`/cart/${params.id}?qty=${qty}`)
   }
 
-  const contactVendorHandler = () => {}
+  const contactVendorHandler = () => {
+    getConversationByOfTwoUsers(user._id, product.user._id)
+      .then((res) => {
+        history.push(`/messenger?q=${product.user._id}`)
+      })
+      .catch((err) => console.log(err))
+  }
 
   return (
     <>
@@ -81,7 +91,16 @@ const Product = () => {
                     />
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <span className='fw-bold'>Price: </span>Rs. {product.price}
+                    <span className='fw-bold'>Brand: </span>
+                    {product?.brand}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <span className='fw-bold'>Seller: </span>
+                    {product.user?.username}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <span className='fw-bold'>Price: </span>Rs.{' '}
+                    {product.price?.toLocaleString('en-IN')}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className='fw-bold'>Description: </span>
@@ -109,7 +128,9 @@ const Product = () => {
                     <ListGroup.Item>
                       <Row>
                         <Col>Price: </Col>
-                        <Col className='fw-bold'>Rs. {product.price}</Col>
+                        <Col className='fw-bold'>
+                          Rs. {product.price?.toLocaleString('en-IN')}
+                        </Col>
                       </Row>
                     </ListGroup.Item>
 

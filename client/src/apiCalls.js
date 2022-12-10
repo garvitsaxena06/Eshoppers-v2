@@ -70,6 +70,10 @@ export const getConversationByOfTwoUsers = async (us1, us2) => {
   return await axios.get(`${CONVERSATIONS_BASE_URL}/find/${us1}/${us2}`)
 }
 
+export const createNewConversation = async (payload) => {
+  return await axios.post(`${CONVERSATIONS_BASE_URL}`, payload)
+}
+
 export const searchUserByUsername = async (q) => {
   return await axios.get(`${USERS_BASE_URL}/search?q=${q}`)
 }

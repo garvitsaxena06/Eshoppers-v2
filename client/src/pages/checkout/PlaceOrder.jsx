@@ -53,15 +53,6 @@ const PlaceOrder = () => {
   }, [history, success])
 
   const placeOrderHandler = () => {
-    console.log({
-      orderItems: cartItems,
-      shippingAddress,
-      paymentMethod,
-      shippingPrice,
-      taxPrice,
-      totalPrice,
-      userId: user._id,
-    })
     dispatch(
       createOrder({
         orderItems: cartItems,
@@ -139,13 +130,17 @@ const PlaceOrder = () => {
                               className='fw-semibold'
                               style={{ fontSize: 12 }}
                             >
-                              <u>Price:</u> Rs. {item.price} x {item.qty} ={' '}
-                              <br />
+                              <u>Price:</u> Rs.{' '}
+                              {item.price?.toLocaleString('en-IN')} x {item.qty}{' '}
+                              = <br />
                               <span
                                 className='fw-bold text-decoration-underline'
                                 style={{ fontSize: 14 }}
                               >
-                                Rs. {(item.qty * item.price).toFixed(2)}
+                                Rs.{' '}
+                                {Number(
+                                  (item.qty * item.price).toFixed(2)
+                                )?.toLocaleString('en-IN')}
                               </span>
                             </span>
                           </Col>
@@ -170,7 +165,9 @@ const PlaceOrder = () => {
                   <Row>
                     <Col>Items</Col>
                     <Col>
-                      <span className='fw-bold'>Rs. {itemsPrice}</span>
+                      <span className='fw-bold'>
+                        Rs. {Number(itemsPrice)?.toLocaleString('en-IN')}
+                      </span>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -178,7 +175,9 @@ const PlaceOrder = () => {
                   <Row>
                     <Col>Shipping</Col>
                     <Col>
-                      <span className='fw-bold'>Rs. {shippingPrice}</span>
+                      <span className='fw-bold'>
+                        Rs. {Number(shippingPrice)?.toLocaleString('en-IN')}
+                      </span>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -186,7 +185,9 @@ const PlaceOrder = () => {
                   <Row>
                     <Col>Tax</Col>
                     <Col>
-                      <span className='fw-bold'>Rs. {taxPrice}</span>
+                      <span className='fw-bold'>
+                        Rs. {Number(taxPrice)?.toLocaleString('en-IN')}
+                      </span>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -194,7 +195,9 @@ const PlaceOrder = () => {
                   <Row>
                     <Col>Total</Col>
                     <Col>
-                      <span className='fw-bold'>Rs. {totalPrice}</span>
+                      <span className='fw-bold'>
+                        Rs. {Number(totalPrice)?.toLocaleString('en-IN')}
+                      </span>
                     </Col>
                   </Row>
                 </ListGroup.Item>

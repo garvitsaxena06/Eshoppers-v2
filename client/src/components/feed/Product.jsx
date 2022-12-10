@@ -26,7 +26,7 @@ const Product = ({ product }) => {
         </Card.Text>
 
         <Card.Text as='h6' className='fw-semibold'>
-          Rs. {product.price}
+          Rs. {product.price?.toLocaleString('en-IN')}
         </Card.Text>
       </Card.Body>
     </Card>

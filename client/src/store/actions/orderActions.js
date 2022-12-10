@@ -74,8 +74,6 @@ export const payOrder =
         },
       }
 
-      console.log({ paymentResult })
-
       const { data } = await axios.put(
         `${BASE_URL}/api/orders/${orderId}/pay`,
         paymentResult,
