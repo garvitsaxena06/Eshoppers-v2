@@ -19,11 +19,11 @@ a {
 }
 
 .ant-switch-checked {
-  background-color: #0c0c0c;
+  background-color: #0a053a;
 }
 
 .MuiFab-primary {
-  background-color: #0c0c0c !important;
+  background-color: #0a053a !important;
 }
 
 .modal-content {
@@ -58,8 +58,8 @@ a {
       font-size: 13px;
       font-weight: 600;
       &.btn-primary {
-        background-color: #0c0c0c;
-        border-color: #0c0c0c;
+        background-color: #0a053a;
+        border-color: #0a053a;
       }
     }
   }
@@ -80,12 +80,26 @@ a {
   }
   .ant-radio-checked .ant-radio-inner,
   .ant-radio-checked::after {
-    border: 1px solid #0c0c0c;
+    border: 1px solid #0a053a;
   }
   .ant-radio-checked .ant-radio-inner::after {
-    background-color: #0c0c0c;
+    background-color: #0a053a;
   }
   .ant-radio-input:focus + .ant-radio-inner {
     box-shadow: 0 0 0 3px rgb(0 0 0 / 12%);
+  }
+}
+
+.cta-btn {
+  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%),
+    0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%);
+  background-color: #0a053a !important;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-color: #0a053a;
+  &:hover {
+    background-color: #535075 !important;
+    border-color: #535075 !important;
   }
 }

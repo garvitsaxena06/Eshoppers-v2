@@ -3,6 +3,7 @@ import Login from './pages/login/Login'
 import Profile from './pages/profile/Profile'
 import Register from './pages/register/Register'
 import Messenger from './pages/messenger/Messenger'
+import Product from './pages/product/Product'
 import {
   BrowserRouter as Router,
   Switch,
@@ -61,6 +62,9 @@ function App() {
         </Route>
         <Route path='/profile/:username'>
           {!user ? <Redirect to='/' /> : <Profile />}
+        </Route>
+        <Route path='/product/:id'>
+          {!user ? <Redirect to='/' /> : <Product />}
         </Route>
       </Switch>
       {user && <Floating />}
