@@ -30,7 +30,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.post(`${BASE_URL}/api/orders`, order, config)
-    dispatch({ type: ORDER_CREATE_SUCCESS, payload: data.data })
+    dispatch({ type: ORDER_CREATE_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
       type: ORDER_CREATE_FAIL,

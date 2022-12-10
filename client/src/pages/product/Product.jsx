@@ -25,6 +25,8 @@ const Product = () => {
     history.push(`/cart/${params.id}?qty=${qty}`)
   }
 
+  const contactVendorHandler = () => {}
+
   return (
     <>
       <Topbar />
@@ -79,10 +81,25 @@ const Product = () => {
                     />
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    Price: <span className='fw-bold'>Rs. {product.price}</span>
+                    <span className='fw-bold'>Price: </span>Rs. {product.price}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    Description: {product.description}
+                    <span className='fw-bold'>Description: </span>
+                    {product.description}
+                  </ListGroup.Item>
+                  <ListGroup.Item className='my-2'>
+                    <span className='fw-bold'>
+                      Have a query? Reach out to us!
+                    </span>
+                    <br />
+                    <Button
+                      className='btn-block cta-btn mt-2'
+                      type='button'
+                      disabled={product.countInStock === 0}
+                      onClick={contactVendorHandler}
+                    >
+                      Contact Vendor
+                    </Button>
                   </ListGroup.Item>
                 </ListGroup>
               </Row>
@@ -116,7 +133,7 @@ const Product = () => {
                     {product.countInStock > 0 && (
                       <ListGroup.Item>
                         <Row>
-                          <Col>Qty</Col>
+                          <Col>Quantity:</Col>
                           <Col>
                             <Form.Control
                               as='select'

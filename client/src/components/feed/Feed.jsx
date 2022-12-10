@@ -19,7 +19,7 @@ export default function Feed() {
   return (
     <div className='feed'>
       <div className='feedWrapper'>
-        <h4 className='fw-semibold text-decoration-underline'>
+        <h4 className='fw-bold text-decoration-underline mt-2'>
           Latest Products
         </h4>
         {!loading ? (

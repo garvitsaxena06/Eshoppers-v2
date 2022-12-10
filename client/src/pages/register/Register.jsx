@@ -41,9 +41,9 @@ export default function Register() {
           history.push('/login')
         })
         .catch((err) => {
-          console.log(err)
+          console.log({ err })
           setLoading(false)
-          message.error(err?.response?.data || 'Something went wrong!')
+          message.error(err?.response?.data?.message || 'Something went wrong!')
         })
     }
   }

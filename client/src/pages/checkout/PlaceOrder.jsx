@@ -14,12 +14,16 @@ import CheckoutSteps from '../../components/checkoutSteps/CheckoutSteps'
 import { createOrder } from '../../store/actions/orderActions'
 import { useHistory } from 'react-router-dom'
 import Topbar from '../../components/topbar/Topbar'
+import { message } from 'antd'
 
 const PlaceOrder = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const cart = useSelector((state) => state.cart)
+  const {
+    cart,
+    user: { user },
+  } = useSelector((state) => state)
   const { cartItems, shippingAddress, paymentMethod } = cart
 
   const addDecimals = (num) => {
@@ -29,7 +33,7 @@ const PlaceOrder = () => {
     cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   const shippingPrice = addDecimals(itemsPrice > 100 ? 0 : 100)
-  const taxPrice = addDecimals(Number((0.15 * itemsPrice).toFixed(2)))
+  const taxPrice = addDecimals(Number((0.1 * itemsPrice).toFixed(2)))
   const totalPrice = (
     Number(itemsPrice) +
     Number(shippingPrice) +
@@ -37,25 +41,36 @@ const PlaceOrder = () => {
   ).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
-  const { order, success } = orderCreate
+  const { success } = orderCreate
 
   useEffect(() => {
     if (success) {
-      history.push(`/order/${order._id}`)
+      // history.push(`/order/${order._id}`)
+      message.success('Order placed successfully!')
+      history.push(`/`)
     }
     // eslint-disable-next-line
   }, [history, success])
 
   const placeOrderHandler = () => {
+    console.log({
+      orderItems: cartItems,
+      shippingAddress,
+      paymentMethod,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
+      userId: user._id,
+    })
     dispatch(
       createOrder({
         orderItems: cartItems,
         shippingAddress,
         paymentMethod,
-        itemsPrice,
         shippingPrice,
         taxPrice,
         totalPrice,
+        userId: user._id,
       })
     )
   }

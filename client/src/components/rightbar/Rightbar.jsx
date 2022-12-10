@@ -67,7 +67,9 @@ export default function Rightbar({
         </div> */}
         <img className='rightbarAd' src='assets/ad.jpg' alt='' />
         {onlineFriends?.length > 0 && (
-          <h4 className='rightbarTitle'>Online Friends</h4>
+          <h4 className='rightbarTitle fw-bold text-decoration-underline'>
+            Online Users
+          </h4>
         )}
         <ul className='rightbarFriendList'>
           {!loadingFriends
