@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Ratings from '../../components/ratings/Ratings'
 import Skeleton from 'react-loading-skeleton'
 import { listProductDetails } from '../../store/actions/productActions'
 import Topbar from '../../components/topbar/Topbar'
 
-const Product = ({ history }) => {
+const Product = () => {
   const [qty, setQty] = useState(1)
 
   const dispatch = useDispatch()
   const params = useParams()
+  const history = useHistory()
 
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, product } = productDetails
@@ -28,7 +29,7 @@ const Product = ({ history }) => {
     <>
       <Topbar />
       <div className='container'>
-        <Link className='btn btn-light my-3' to='/'>
+        <Link className='btn btn-light my-4 cta-btn' to='/'>
           Go Back
         </Link>
         {loading ? (

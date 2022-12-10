@@ -78,7 +78,8 @@ export const payOrder =
 
       const { data } = await axios.put(
         `${BASE_URL}/api/orders/${orderId}/pay`,
-        paymentResult
+        paymentResult,
+        config
       )
       dispatch({ type: ORDER_PAY_SUCCESS, payload: data.data })
     } catch (error) {

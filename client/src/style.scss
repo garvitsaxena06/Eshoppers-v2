@@ -97,9 +97,32 @@ a {
   font-weight: 600;
   font-size: 14px;
   padding: 12px 24px;
+  color: #ffffff;
   border-color: #0a053a;
   &:hover {
     background-color: #535075 !important;
+    border-color: #535075 !important;
+    color: #ffffff !important;
+  }
+  &:disabled {
+    border-color: #535075 !important;
+  }
+}
+.cta-btn-small {
+  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%),
+    0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%);
+  background-color: #0a053a !important;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 16px;
+  color: #ffffff;
+  border-color: #0a053a;
+  &:hover {
+    background-color: #535075 !important;
+    border-color: #535075 !important;
+    color: #ffffff !important;
+  }
+  &:disabled {
     border-color: #535075 !important;
   }
 }

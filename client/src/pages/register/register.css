@@ -63,17 +63,25 @@
 }
 
 .loginInput {
-  border: none;
-  border-bottom: 1px solid rgb(233, 233, 233);
-  font-size: 16px;
-  padding-left: 12px;
-  padding-bottom: 8px;
-  color: rgb(155, 155, 155);
-  margin-bottom: 16px;
+  border: none !important;
+  border-bottom: 1px solid rgb(233, 233, 233) !important;
+  font-size: 14px !important;
+  padding-left: 12px !important;
+  padding-bottom: 8px !important;
+  color: rgb(95, 95, 95) !important;
+  margin-bottom: 16px !important;
+  font-weight: 500 !important;
+}
+
+.loginInput::placeholder {
+  font-size: 14px;
+  color: rgb(161, 161, 161);
+  font-weight: 400 !important;
 }
 
 .loginInput:focus {
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .loginButton {

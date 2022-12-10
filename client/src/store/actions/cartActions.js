@@ -11,7 +11,7 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URL
 export const addToCart = (id, qty) => async (dispatch, getState) => {
   try {
     const { data } = await axios.get(`${BASE_URL}/api/products/${id}`)
-    const result = data.data
+    const result = data
 
     dispatch({
       type: CART_ADD_ITEM,

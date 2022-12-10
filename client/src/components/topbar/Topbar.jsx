@@ -131,6 +131,9 @@ export default function Topbar() {
       <Menu.Item key='Profile'>
         <Link to={`/profile/${user.username}`}>Profile</Link>
       </Menu.Item>
+      <Menu.Item key='Cart'>
+        <Link to={`/cart`}>Cart</Link>
+      </Menu.Item>
       <Menu.Item key='Logout'>
         <div onClick={logoutHandler}>Logout</div>
       </Menu.Item>
@@ -245,11 +248,8 @@ export default function Topbar() {
           <span className='topbarLink' onClick={() => history.push('/')}>
             Shopping
           </span>
-          <span
-            className='topbarLink'
-            onClick={() => history.push(`/profile/${user.username}`)}
-          >
-            Visit Profile
+          <span className='topbarLink' onClick={() => history.push(`/cart`)}>
+            Cart
           </span>
         </div>
 

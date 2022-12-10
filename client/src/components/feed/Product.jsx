@@ -25,7 +25,9 @@ const Product = ({ product }) => {
           </div>
         </Card.Text>
 
-        <Card.Text as='h4'>${product.price}</Card.Text>
+        <Card.Text as='h6' className='fw-semibold'>
+          Rs. {product.price}
+        </Card.Text>
       </Card.Body>
     </Card>
   )

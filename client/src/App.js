@@ -4,6 +4,10 @@ import Profile from './pages/profile/Profile'
 import Register from './pages/register/Register'
 import Messenger from './pages/messenger/Messenger'
 import Product from './pages/product/Product'
+import Cart from './pages/cart/Cart'
+import Shipping from './pages/checkout/Shipping'
+import Payment from './pages/checkout/Payment'
+import PlaceOrder from './pages/checkout/PlaceOrder'
 import {
   BrowserRouter as Router,
   Switch,
@@ -65,6 +69,18 @@ function App() {
         </Route>
         <Route path='/product/:id'>
           {!user ? <Redirect to='/' /> : <Product />}
+        </Route>
+        <Route path='/cart/:id?'>
+          {!user ? <Redirect to='/' /> : <Cart />}
+        </Route>
+        <Route path='/shipping'>
+          {!user ? <Redirect to='/' /> : <Shipping />}
+        </Route>
+        <Route path='/payment'>
+          {!user ? <Redirect to='/' /> : <Payment />}
+        </Route>
+        <Route path='/placeorder'>
+          {!user ? <Redirect to='/' /> : <PlaceOrder />}
         </Route>
       </Switch>
       {user && <Floating />}
