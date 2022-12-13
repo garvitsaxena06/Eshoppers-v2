@@ -175,15 +175,19 @@ export default function Profile() {
                           {', '}
                           {new Date(order.createdAt).toLocaleTimeString()}
                         </p>{' '}
-                        {order?.isDelivered ? (
-                          <p className='fs-6 fw-semibold mb-0 text-success'>
-                            Delivered
-                          </p>
-                        ) : (
-                          <p className='fs-6 fw-semibold mb-0 text-danger'>
-                            Not delivered yet
-                          </p>
-                        )}
+                        <p className='fs-6 fw-semibold mb-0'>
+                          <u>Delivery:</u>{' '}
+                          {order?.isDelivered ? (
+                            <span className='text-success'>Delivered</span>
+                          ) : (
+                            <span className='text-danger'>
+                              Not delivered yet
+                            </span>
+                          )}
+                        </p>
+                        <p className='fs-6 fw-semibold mb-0'>
+                          <u>Paid:</u> {order?.isPaid ? 'Yes' : 'No'}
+                        </p>
                         {order.orderItems.map((item, index) => (
                           <ListGroup.Item className='py-3' key={index}>
                             <Row className='bg-light border py-3 px-4 align-items-center justify-content-between'>
