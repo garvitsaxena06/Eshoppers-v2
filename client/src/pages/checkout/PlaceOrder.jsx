@@ -11,10 +11,11 @@ import {
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import CheckoutSteps from '../../components/checkoutSteps/CheckoutSteps'
-import { createOrder } from '../../store/actions/orderActions'
+import { createOrder, payOrderAction } from '../../store/actions/orderActions'
 import { useHistory } from 'react-router-dom'
 import Topbar from '../../components/topbar/Topbar'
 import { message } from 'antd'
+import logo from '../../assets/logo.png'
 
 const PlaceOrder = () => {
   const dispatch = useDispatch()
@@ -41,16 +42,69 @@ const PlaceOrder = () => {
   ).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
-  const { success } = orderCreate
+  const { success: paySuccess, order: payOrder } = useSelector(
+    (state) => state.orderPay
+  )
+  const { order, success } = orderCreate
 
   useEffect(() => {
-    if (success) {
-      // history.push(`/order/${order._id}`)
+    if (paySuccess && payOrder._id) {
       message.success('Order placed successfully!')
       history.push(`/`)
     }
-    // eslint-disable-next-line
-  }, [history, success])
+  }, [paySuccess, payOrder, history])
+
+  useEffect(() => {
+    if (success && order && order.id) {
+      new Promise((resolve) => {
+        const script = document.createElement('script')
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+        script.onload = () => {
+          resolve(true)
+        }
+        script.onerror = () => {
+          resolve(false)
+        }
+        document.body.appendChild(script)
+      }).then((res) => {
+        const { amount, id: order_id, currency, orderId } = order
+
+        const options = {
+          key: 'rzp_test_hGL6N8M5oGjVNF', // Enter the Key ID generated from the Dashboard
+          amount: amount.toString(),
+          currency: currency,
+          name: 'EShoppers',
+          description:
+            'The next generation of e-commerce platform that you can trust',
+          image: { logo },
+          order_id: order_id,
+          handler: async function (response) {
+            dispatch(
+              payOrderAction(orderId, {
+                orderCreationId: order_id,
+                status: 'success',
+                email: user.email,
+              })
+            )
+          },
+          prefill: {
+            name: user.username,
+            email: user.email,
+            contact: '',
+          },
+          notes: {
+            address: `${shippingAddress.address}, ${shippingAddress.city} ${shippingAddress.postalCode}, ${shippingAddress.country}`,
+          },
+          theme: {
+            color: '#0a053a',
+          },
+        }
+
+        const paymentObject = new window.Razorpay(options)
+        paymentObject.open()
+      })
+    }
+  }, [order, shippingAddress, user, success, history, dispatch])
 
   const placeOrderHandler = () => {
     dispatch(

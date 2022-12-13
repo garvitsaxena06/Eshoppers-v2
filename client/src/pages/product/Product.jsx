@@ -5,8 +5,9 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Ratings from '../../components/ratings/Ratings'
 import Skeleton from 'react-loading-skeleton'
 import { listProductDetails } from '../../store/actions/productActions'
+import { followAction } from '../../store/actions/userActions'
 import Topbar from '../../components/topbar/Topbar'
-import { getConversationByOfTwoUsers } from '../../apiCalls'
+import { follow, getConversationByOfTwoUsers } from '../../apiCalls'
 
 const Product = () => {
   const [qty, setQty] = useState(1)
@@ -30,6 +31,14 @@ const Product = () => {
   }
 
   const contactVendorHandler = () => {
+    follow(product.user._id, user._id)
+      .then((res) => {
+        dispatch(followAction(product.user._id))
+        follow(user._id, product.user._id)
+          .then((res) => {})
+          .catch((err) => console.log(err))
+      })
+      .catch((err) => console.log(err))
     getConversationByOfTwoUsers(user._id, product.user._id)
       .then((res) => {
         history.push(`/messenger?q=${product.user._id}`)

@@ -9,7 +9,8 @@ const CheckoutSteps = ({ step1, step2, step3 }) => {
         {step1 ? (
           <Link to='/shipping'>
             <Nav.Link
-              style={{ color: '#0a053a', fontSize: 20, fontWeight: 700 }}
+              className='checkoutStepText'
+              style={{ fontSize: 20, fontWeight: 700 }}
             >
               Shipping
             </Nav.Link>
@@ -25,7 +26,8 @@ const CheckoutSteps = ({ step1, step2, step3 }) => {
         {step2 ? (
           <Link to='/payment'>
             <Nav.Link
-              style={{ color: '#0a053a', fontSize: 20, fontWeight: 700 }}
+              className='checkoutStepText'
+              style={{ fontSize: 20, fontWeight: 700 }}
             >
               Payment
             </Nav.Link>
@@ -41,7 +43,8 @@ const CheckoutSteps = ({ step1, step2, step3 }) => {
         {step3 ? (
           <Link to='/placeorder'>
             <Nav.Link
-              style={{ color: '#0a053a', fontSize: 20, fontWeight: 700 }}
+              className='checkoutStepText'
+              style={{ fontSize: 20, fontWeight: 700 }}
             >
               Place Order
             </Nav.Link>

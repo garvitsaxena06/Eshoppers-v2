@@ -1,6 +1,7 @@
 $primaryBlack: #000000;
 $secondaryBlack: #0a0c0e;
 $lightBlack: #2c2c2c;
+$cardBlack: #141414;
 $inputBoxBlack: #202327;
 $buttonBlue: #bb86fc;
 $buttonWhite: #e4ebe6;
@@ -287,5 +288,76 @@ $darkShadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
   }
   ::-webkit-scrollbar-thumb {
     background-color: $lightBlack;
+  }
+  .card {
+    background-color: $cardBlack;
+    box-shadow: $darkShadow;
+    border-color: $lightBlack !important;
+    color: $primaryWhite;
+    .card-title,
+    .card-text {
+      color: $primaryWhite;
+    }
+    .list-group {
+      background-color: $cardBlack !important;
+      .list-group-item {
+        background-color: $cardBlack !important;
+        border-color: $lightBlack !important;
+        color: $primaryWhite !important;
+      }
+    }
+  }
+  a {
+    color: $primaryWhite;
+    &:hover {
+      color: #40a9ff !important;
+      .card-title {
+        color: #40a9ff !important;
+      }
+    }
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $primaryWhite;
+  }
+  .list-group {
+    background: $primaryBlack;
+    .list-group-item {
+      background: $primaryBlack;
+      border-color: $lightBlack;
+      color: $primaryWhite;
+    }
+  }
+  .cta-btn {
+    background-color: $buttonBlue !important;
+    border-color: $buttonBlue !important;
+    color: $primaryWhite !important;
+    &:hover {
+      background-color: $buttonBlue !important;
+      border-color: $buttonBlue !important;
+      color: $primaryWhite !important;
+    }
+  }
+  .form-control {
+    background-color: $secondaryBlack;
+    box-shadow: $darkShadow;
+    border-color: $lightBlack !important;
+    color: $primaryWhite;
+  }
+  .bg-light {
+    background-color: $cardBlack !important;
+    box-shadow: $darkShadow;
+    border-color: $lightBlack !important;
+    color: $primaryWhite;
+  }
+  .border-end {
+    border-color: $lightBlack !important;
+  }
+  .checkoutStepText {
+    color: $buttonBlue;
   }
 }

@@ -231,7 +231,7 @@ const Messenger = () => {
             <h5 className='sectionTitle'>Your recent conversations</h5>
             <input
               type='text'
-              placeholder='Search for friends'
+              placeholder='Search for users'
               className='chatMenuInput'
               onChange={handleChange}
             />
@@ -369,7 +369,7 @@ const Messenger = () => {
         </div>
         <div className='chatOnline'>
           <div className='chatOnlineWrapper'>
-            <h5 className='sectionTitle'>Your friends</h5>
+            <h5 className='sectionTitle'>Connections</h5>
             <ChatOnline
               onlineUsers={onlineUsers}
               currentId={user._id}

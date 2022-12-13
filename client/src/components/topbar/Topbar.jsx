@@ -232,8 +232,8 @@ export default function Topbar() {
                 {...params}
                 label={
                   width > 340
-                    ? `Search for friend (by username)`
-                    : `Search for friend`
+                    ? `Search for users (by username)`
+                    : `Search for users`
                 }
                 margin='normal'
                 onChange={(e) => handleSearch(e)}
@@ -361,7 +361,7 @@ export default function Topbar() {
           </div>
         </div>
         <Divider />
-        <h5 className='profileUsername mb-3'>Your friends</h5>
+        <h5 className='profileUsername mb-3'>Contact list</h5>
         {!loadingFriends
           ? friends.map((u) => {
               const online = checkUserOnline(u._id)

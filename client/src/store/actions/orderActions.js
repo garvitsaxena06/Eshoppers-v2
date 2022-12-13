@@ -15,6 +15,7 @@ import {
   ORDER_MY_LIST_FAIL,
   ORDER_DETAILS_RESET,
   ORDER_MY_LIST_RESET,
+  ORDER_CREATE_RESET,
 } from '../constants/orderConstants'
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URL
@@ -63,7 +64,7 @@ export const orderDetailsReset = () => (dispatch) => {
   dispatch({ type: ORDER_DETAILS_RESET })
 }
 
-export const payOrder =
+export const payOrderAction =
   (orderId, paymentResult) => async (dispatch, getState) => {
     try {
       dispatch({ type: ORDER_PAY_REQUEST })
@@ -75,11 +76,12 @@ export const payOrder =
       }
 
       const { data } = await axios.put(
-        `${BASE_URL}/api/orders/${orderId}/pay`,
+        `${BASE_URL}/api/orders/pay/${orderId}`,
         paymentResult,
         config
       )
-      dispatch({ type: ORDER_PAY_SUCCESS, payload: data.data })
+      dispatch({ type: ORDER_PAY_SUCCESS, payload: data })
+      dispatch({ type: ORDER_CREATE_RESET })
     } catch (error) {
       dispatch({
         type: ORDER_PAY_FAIL,
