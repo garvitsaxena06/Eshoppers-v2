@@ -123,7 +123,6 @@ const Product = () => {
                     <Button
                       className='btn-block cta-btn mt-2'
                       type='button'
-                      disabled={product.countInStock === 0}
                       onClick={contactVendorHandler}
                     >
                       Contact Vendor

@@ -28,7 +28,7 @@ import React, { useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { useSelector, useDispatch } from 'react-redux'
 import { changeTheme } from '../../store/actions/themeActions'
-import { getFriends, getUserById, searchUserByUsername } from '../../apiCalls'
+import { getFriends, getUserById } from '../../apiCalls'
 import useWindowSize from '../../utils/windowSize'
 import Online from '../online/Online'
 import useSocket from '../../utils/socket'
@@ -41,6 +41,7 @@ export default function Topbar() {
     theme,
     socket: socketRedux,
     user: userRedux,
+    productList,
   } = useSelector((state) => state)
   const { user } = userRedux
   const { onlineUsers, arrivalMessage } = socketRedux
@@ -74,14 +75,13 @@ export default function Topbar() {
   const handleSearch = (e) => {
     const { value } = e.target
     if (value) {
-      searchUserByUsername(value)
-        .then((res) => {
-          setSearchedItems(res.data)
-        })
-        .catch((err) => {
-          console.log(err)
-          setSearchedItems([])
-        })
+      if (productList && productList.products)
+        setSearchedItems(
+          productList.products.filter((product) =>
+            product.name.toLowerCase().includes(value.toLowerCase())
+          )
+        )
+      else setSearchedItems([])
     } else {
       setSearchedItems([])
     }
@@ -204,17 +204,17 @@ export default function Topbar() {
                 {children}
               </Paper>
             )}
-            getOptionLabel={(option) => option.username}
+            getOptionLabel={(option) => option.name}
             renderOption={(option) => (
               <div
                 className='searchSuggestions'
-                onClick={() => history.push(`/profile/${option.username}`)}
+                onClick={() => history.push(`/product/${option._id}`)}
               >
                 <div className='profilePicture'>
                   <img
                     src={
-                      option.profilePicture
-                        ? option.profilePicture
+                      option.image
+                        ? option.image
                         : 'https://d225jocw4xhwve.cloudfront.net/person/noAvatar.png'
                     }
                     alt=''
@@ -222,8 +222,8 @@ export default function Topbar() {
                   />
                 </div>
                 <div className='searchContent'>
-                  <div className='email'>{option.email}</div>
-                  <div className='username'>{option.username}</div>
+                  <div className='email'>{option.category}</div>
+                  <div className='username'>{option.name}</div>
                 </div>
               </div>
             )}
@@ -231,9 +231,7 @@ export default function Topbar() {
               <TextField
                 {...params}
                 label={
-                  width > 340
-                    ? `Search for users (by username)`
-                    : `Search for users`
+                  width > 340 ? `Search for products` : `Search for products`
                 }
                 margin='normal'
                 onChange={(e) => handleSearch(e)}

@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom'
 import Topbar from '../../components/topbar/Topbar'
 import { message } from 'antd'
 import logo from '../../assets/logo.png'
+import { ORDER_CREATE_RESET } from '../../store/constants/orderConstants'
 
 const PlaceOrder = () => {
   const dispatch = useDispatch()
@@ -46,6 +47,10 @@ const PlaceOrder = () => {
     (state) => state.orderPay
   )
   const { order, success } = orderCreate
+
+  useEffect(() => {
+    dispatch({ type: ORDER_CREATE_RESET })
+  }, [dispatch])
 
   useEffect(() => {
     if (paySuccess && payOrder._id) {

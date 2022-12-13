@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { CART_EMPTY } from '../constants/cartConstants'
 import {
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
@@ -82,6 +83,11 @@ export const payOrderAction =
       )
       dispatch({ type: ORDER_PAY_SUCCESS, payload: data })
       dispatch({ type: ORDER_CREATE_RESET })
+      dispatch({ type: CART_EMPTY })
+      localStorage.setItem(
+        'cartItems',
+        JSON.stringify(getState().cart.cartItems)
+      )
     } catch (error) {
       dispatch({
         type: ORDER_PAY_FAIL,
@@ -97,12 +103,14 @@ export const payOrderReset = () => (dispatch) => {
   dispatch({ type: ORDER_PAY_RESET })
 }
 
-export const getOrderList = () => async (dispatch, getState) => {
+export const getOrderList = (userId) => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_MY_LIST_REQUEST })
 
-    const { data } = await axios.get(`${BASE_URL}/api/orders/myorders`)
-    dispatch({ type: ORDER_MY_LIST_SUCCESS, payload: data.data })
+    const { data } = await axios.get(
+      `${BASE_URL}/api/orders/myorders/${userId}`
+    )
+    dispatch({ type: ORDER_MY_LIST_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
       type: ORDER_MY_LIST_FAIL,
