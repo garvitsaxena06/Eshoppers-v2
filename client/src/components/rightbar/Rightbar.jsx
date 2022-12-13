@@ -141,7 +141,7 @@ export default function Rightbar({
                 <h4 className='rightbarTitle'>User information</h4>
               </div>
               {user.username === currentUser.username && (
-                <button className='editButton' onClick={handleShow}>
+                <button className='editButton mb-3' onClick={handleShow}>
                   <Edit />
                   {'Edit profile'}
                 </button>

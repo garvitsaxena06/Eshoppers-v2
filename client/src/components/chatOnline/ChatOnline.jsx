@@ -80,7 +80,9 @@ const ChatOnline = ({
             </div>
           ))
         ) : (
-          <span className='noChatText'>You don't have any friends yet.</span>
+          <span className='noChatText'>
+            You don't have any conversations yet.
+          </span>
         )
       ) : (
         [...Array(3).keys()].map((el, i) => (
